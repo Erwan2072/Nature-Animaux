@@ -1,22 +1,22 @@
-#!/usr/bin/env python
-"""Django's command-line utility for administrative tasks."""
+#!/usr/bin/env python3
 import os
 import sys
 
+if __name__ == "__main__":
+    # Définit les paramètres Django
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "nature_animaux.settings")
 
-def main():
-    """Run administrative tasks."""
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'nature_animaux.settings')
+    # Ajoute le chemin absolu du dossier backend au PYTHONPATH
+    current_path = os.path.dirname(os.path.abspath(__file__))
+    sys.path.append(os.path.join(current_path, "backend"))
+
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:
         raise ImportError(
-            "Couldn't import Django. Are you sure it's installed and "
-            "available on your PYTHONPATH environment variable? Did you "
-            "forget to activate a virtual environment?"
+            "Impossible d'importer Django. Assurez-vous qu'il est installé et "
+            "disponible sur votre environnement PYTHONPATH. Activez également "
+            "votre environnement virtuel si nécessaire."
         ) from exc
+
     execute_from_command_line(sys.argv)
-
-
-if __name__ == '__main__':
-    main()
