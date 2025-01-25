@@ -10,9 +10,9 @@ from .views import (
 
 urlpatterns = [
     path('', api_overview, name='api-overview'),
-    path('product-list/', product_list, name='product-list'),
-    path('product-detail/<str:pk>/', product_detail, name='product-detail'),
-    path('product-create/', product_create, name='product-create'),
-    path('product-update/<str:pk>/', product_update, name='product-update'),
-    path('product-delete/<str:pk>/', product_delete, name='product-delete'),
+    path('product-list/', product_list, name='product-list'),  # Liste des produits
+    path('product-detail/<str:pk>/', product_detail, name='product-detail'),  # Détails d'un produit
+    path('product-create/', product_create, name='product-create'),  # Création
+    path('product-update/<str:pk>/', product_update, name='product-update'),  # Mise à jour
+    path('product-delete/<str:pk>/', product_delete, name='product-delete'),  # Suppression
 ]
