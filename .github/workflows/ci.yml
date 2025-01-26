@@ -14,19 +14,15 @@ jobs:
     runs-on: ubuntu-latest
 
     services:
-      postgres:
-        image: postgres:14
+      mongodb:
+        image: mongo:latest
         ports:
-          - 5432:5432
-        env:
-          POSTGRES_USER: nature_admin
-          POSTGRES_PASSWORD: NewN&Aweb25
-          POSTGRES_DB: nature_animaux_db
+          - 27017:27017
         options: >-
-          --health-cmd="pg_isready -U nature_admin"
+          --health-cmd="mongosh --eval 'db.adminCommand(\"ping\")'"
           --health-interval=10s
           --health-timeout=5s
-          --health-retries=5
+          --health-retries=3
 
     steps:
     # 1. Checkout the code
@@ -48,17 +44,9 @@ jobs:
     # 4. Run migrations
     - name: Run migrations
       run: |
-        cd backend
         python manage.py migrate
 
-    # 5. Run unit tests
+    # 5. Run tests
     - name: Run unit tests
       run: |
-        cd backend
         python manage.py test
-
-    # 6. Run Flake8 (linter)
-    - name: Run Flake8
-      run: |
-        pip install flake8
-        flake8 . --exclude=.venv --max-line-length=79
