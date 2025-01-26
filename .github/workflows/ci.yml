@@ -38,15 +38,18 @@ jobs:
     # 3. Install dependencies
     - name: Install dependencies
       run: |
+        cd backend
         python -m pip install --upgrade pip
-        pip install -r requirements.txt
+        pip install -r ../requirements.txt
 
     # 4. Run migrations
     - name: Run migrations
       run: |
+        cd backend
         python manage.py migrate
 
     # 5. Run tests
     - name: Run unit tests
       run: |
+        cd backend
         python manage.py test
