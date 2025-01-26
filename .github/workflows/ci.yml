@@ -13,6 +13,21 @@ jobs:
     name: Run Tests and Linting
     runs-on: ubuntu-latest
 
+    services:
+      postgres:
+        image: postgres:14
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: nature_admin
+          POSTGRES_PASSWORD: NewN&Aweb25
+          POSTGRES_DB: nature_animaux_db
+        options: >-
+          --health-cmd="pg_isready -U nature_admin"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
     steps:
     # 1. Checkout the code
     - name: Checkout code
@@ -28,7 +43,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements.txt  # requirements.txt est à la racine
+        pip install -r requirements.txt
 
     # 4. Run migrations
     - name: Run migrations
