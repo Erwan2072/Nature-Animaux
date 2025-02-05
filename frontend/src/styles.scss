@@ -1,1 +1,46 @@
-/* You can add global styles to this file, and also import other style files */
+/* Définition des couleurs globales */
+$primary-color: #8BC34A;  // Vert de la maquette
+$secondary-color: #ffcdce; // Rose pastel
+$background-gradient: linear-gradient(to bottom,rgb(131, 240, 198), #9AD9E2);// Dégradé de fond
+$background-color: #B2F3E1; // Couleur de base pour fallback
+$text-color: #333; // Texte principal
+
+/* Définition de $primary-darken après $primary-color */
+$primary-darken: mix(black, $primary-color, 10%); // Utilisation correcte de mix()
+
+/* Reset de base */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Styles globaux */
+body {
+  font-family: 'Arial', sans-serif;
+  background: $background-gradient;
+  background-color: $background-color; // Fallback si le gradient ne fonctionne pas
+  color: $text-color;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Bouton générique */
+.btn {
+  padding: 12px 20px;
+  font-size: 1.2rem;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s ease;
+  background-color: $primary-color;
+  color: white;
+}
+
+.btn:hover {
+  background-color: $primary-darken;
+  transform: scale(1.05);
+}

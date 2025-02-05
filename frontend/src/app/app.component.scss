@@ -1,0 +1,491 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap');
+
+
+/* ✅ Définition des couleurs locales */
+$primary-color: #8BC34A;  // Vert de la maquette
+$secondary-color: #ffcdce; // Rose pastel
+$background-gradient: linear-gradient(to bottom, #94efff, #cdffd8); // Bleu-vert inversé
+$text-color: #333; // Texte principal
+$shadow-color: rgba(0, 0, 0, 0.2); // Ombre douce
+
+/* ✅ STYLE GÉNÉRAL */
+body {
+  height: 100vh;
+  background: $background-gradient;
+  font-family: 'Arial', sans-serif;
+  color: $text-color;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ✅ LOGO CLIQUABLE AVEC ANIMATION */
+.logo-container {
+  position: absolute;
+  top: 20px;
+  left: 2vw;
+  z-index: 3000;
+  opacity: 0;
+  transform: translateY(-50px);
+  animation: fadeInMove 1.2s ease-out forwards;
+
+  /* ✅ Rend le logo cliquable */
+  cursor: pointer;
+  transition: transform 0.3s ease-out;
+}
+
+.logo-container:hover {
+  transform: scale(1.05); /* Effet léger au survol */
+}
+
+.logo-container:active {
+  transform: scale(0.95); /* Effet au clic */
+}
+
+.logo-container img {
+  max-width: 20vw;
+  min-width: 150px;
+  max-height: 280px;
+  width: auto;
+  height: auto;
+}
+
+/* ✅ TITRE "Nature & Animaux" */
+.site-title {
+  position: absolute;
+  top: 5px; /* Ajustement pour être bien aligné avec le logo */
+  left: 10vw;
+  font-family: 'Dancing Script', cursive; /* Police correspondant au screenshot */
+  font-size: 3rem; /* Ajustement pour correspondre à la taille souhaitée */
+  font-weight: bold;
+  color: white;
+  text-shadow: 4px 4px 6px $shadow-color;
+  z-index: 3100;
+  opacity: 0;
+  transform: translateX(100px);
+  animation: slideIn 1.5s ease-out forwards;
+  text-decoration: none; /* Supprime le soulignement */
+  transition: transform 0.3s ease-out;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+}
+
+/* ✅ RESPONSIVE */
+@media screen and (max-width: 1024px) {
+  .site-title {
+    font-size: 2.5rem;
+    left: 14vw;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .site-title {
+    font-size: 2rem;
+    left: 10vw;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .site-title {
+    font-size: 1.6rem;
+    left: 6vw;
+  }
+}
+
+
+/* ✅ ANIMATION DU LOGO */
+@keyframes fadeInMove {
+  0% {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ✅ ANIMATION DU TITRE */
+@keyframes slideIn {
+  0% {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* ✅ MEDIA QUERIES POUR RESPONSIVE */
+@media screen and (max-width: 1024px) {
+  .logo-container {
+    top: 30px;
+    left: 5vw;
+  }
+  .logo-container img {
+    max-width: 20vw;
+    max-height: 200px;
+  }
+
+  .site-title {
+    font-size: 3rem;
+    left: 10vw;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .logo-container {
+    top: 40px;
+    left: 6vw;
+  }
+  .logo-container img {
+    max-width: 25vw;
+    max-height: 160px;
+  }
+
+  .site-title {
+    font-size: 2.5rem;
+    left: 8vw;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .logo-container {
+    top: 50px;
+    left: 8vw;
+  }
+  .logo-container img {
+    max-width: 32vw;
+    max-height: 120px;
+  }
+
+  .site-title {
+    font-size: 2rem;
+    left: 5vw;
+  }
+}
+
+/* ✅ HEADER */
+.header {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  background-color: $primary-color;
+  padding: 10px 20px;
+  position: fixed;
+  width: 100%;
+  height: 80px;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* ✅ NAVBAR */
+.navbar {
+  display: flex;
+  gap: 15px;
+}
+
+.navbar a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  padding: 10px;
+}
+
+.navbar a:hover {
+  text-decoration: underline;
+}
+
+/* ✅ MAIN CONTAINER */
+.main-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 120px;
+  padding: 20px;
+  align-items: flex-start;
+}
+
+/* ✅ SIDEBAR GAUCHE */
+.left-menu {
+  position: fixed;
+  left: 10px;
+  top: 320px;
+  display: flex;
+  flex-direction: column;
+  width: 250px;
+}
+
+/* ✅ Liste des liens */
+.left-menu ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+/* ✅ Style des boutons */
+.left-menu li {
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.left-menu a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Permet d'aligner le texte à gauche et la flèche à droite */
+  padding: 10px;
+  background-color: $primary-color;
+  color: #310000; /* Couleur identique à celle du texte de la barre de recherche */
+  text-decoration: none;
+  border-radius: 10px;
+  font-weight: bold;
+  width: 100%;
+  text-align: left;
+  padding-left: 15px;
+  position: relative;
+}
+
+.arrow-icon {
+  font-size: 16px;
+  color: #333;
+  margin-left: 8px;
+  transition: transform 0.3s ease-in-out, color 0.3s;
+
+  .left-menu li:hover & {
+    color: #007bff; // Change la couleur au survol
+    transform: translateX(5px); // Déplace légèrement la flèche
+  }
+}
+
+
+/* ✅ MENU BURGER POUR TABLETTE & MOBILE */
+.burger-menu {
+  display: none; /* Caché par défaut */
+  position: fixed;
+  top: 20px;
+  left: 10px;
+  background-color: $primary-color;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  z-index: 4000;
+}
+
+/* ✅ MENU BURGER (CACHÉ PAR DÉFAUT) */
+.menu-burger {
+  display: none; /* Caché par défaut */
+  font-size: 24px;
+  cursor: pointer;
+  color: white;
+  background-color: $primary-color;
+  padding: 10px 15px;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+/* ✅ Affichage du menu burger SEULEMENT sur mobile et tablette */
+@media screen and (max-width: 768px) {
+  .menu-burger {
+    display: block; /* ✅ Apparaît seulement en mode mobile/tablette */
+  }
+
+  /* ✅ Masquer les liens du menu en mobile */
+  .navbar a {
+    display: none;
+  }
+
+  /* ✅ Sidebar cachée par défaut */
+  .left-menu {
+    position: fixed;
+    left: -300px; /* Cachée */
+    top: 80px;
+    width: 250px;
+    height: 100vh;
+    background: $primary-color;
+    box-shadow: 2px 0px 10px rgba(0, 0, 0, 0.2);
+    transition: left 0.3s ease-in-out;
+  }
+
+  /* ✅ Quand la sidebar est ouverte */
+  .left-menu.open {
+    left: 0;
+  }
+}
+
+
+/* ✅ CONTENU CENTRAL */
+.content {
+  flex-grow: 1;
+  margin-left: 270px;
+  margin-right: 270px;
+  padding: 20px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* ✅ SIDEBAR DROITE */
+.right-menu {
+  position: fixed;
+  right: 10px;
+  top: 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 200px;
+}
+
+/* ✅ BARRE DE RECHERCHE */
+.search-container {
+  width: 100%;
+  margin-bottom: 40px;
+  display: flex;
+  justify-content: center;
+}
+
+.search-bar {
+  width: 90%;
+  padding: 10px;
+  border-radius: 10px;
+  border: 3px solid $primary-color; /* Bordure verte */
+  background-color: $secondary-color; /* Fond rose pastel */
+  color: #310000; /* Texte en rouge foncé */
+  font-size: 1rem;
+  font-weight: bold; /* Texte un peu plus visible */
+  outline: none;
+  transition: all 0.3s ease-in-out;
+
+  &::placeholder {
+    color: #310000; /* Placeholder en rouge foncé */
+    font-style: italic;
+  }
+
+  &:focus {
+    border-color: darken($primary-color, 10%);
+    box-shadow: 0 0 10px rgba(0, 128, 0, 0.4); /* Effet lumineux vert */
+  }
+}
+
+
+
+/* ✅ ICONES RÉSEAUX SOCIAUX */
+.social-icons {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  margin-bottom: 40px;
+}
+
+.social-icons a img {
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.social-icons img:hover {
+  transform: scale(1.1);
+}
+
+/* ✅ SECTION NOS MARQUES */
+.marques-section {
+  background: transparent; /* Suppression du rebord rose */
+  padding: 0;
+  border-radius: 10px;
+  text-align: center;
+  margin-bottom: 20px;
+  width: 90%;
+  max-width: 250px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ✅ TITRE "Nos Marques" STYLE BOUTON */
+.marques-section h3 {
+  background: $primary-color; /* Fond vert */
+  padding: 12px;
+  border-radius: 8px;
+  color: white;
+  font-weight: bold;
+  font-size: 1.2rem;
+  text-align: center;
+  width: 100%;
+  margin: 0;
+}
+
+/* ✅ CONTENU DÉFILANT AFFINÉ */
+.marques-content {
+  background: $secondary-color; /* Couleur du logo */
+  border: 3px solid $primary-color; /* Affinement de la bordure verte */
+  padding: 30px; /* Moins d’espace */
+  border-radius: 8px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: bold;
+  color: $text-color;
+  width: 100%;
+  height: 300px; /* Ajustement pour être moins imposant */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ✅ ANIMATION SCROLLING POUR MARQUES */
+@keyframes marquesScroll {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.marques-content p {
+  display: inline-block;
+  animation: marquesScroll 15s linear infinite;
+  min-width: 200%;
+}
+
+
+
+
+/* ✅ BOUTON BESOIN D’AIDE */
+.help-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+}
+
+.help-button a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 15px;
+  background-color: #ffcc00;
+  border-radius: 20px;
+  font-weight: bold;
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.help-button a:hover {
+  transform: scale(1.05);
+}
+
+/* ✅ Corriger le footer pour qu'il reste en bas */
+.footer {
+  background-color: $primary-color; // Même couleur que le header
+  color: white;
+  text-align: center;
+  padding: 15px 0;
+  width: 100%;
+  margin-top: 800px; // Force le footer à rester en bas si la page est courte
+}
