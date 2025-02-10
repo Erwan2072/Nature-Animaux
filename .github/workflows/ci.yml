@@ -48,27 +48,44 @@ jobs:
       with:
         python-version: "3.12"
 
-    # 3. Install dependencies
+    # 3. Install dependencies with Virtual Environment
     - name: Install dependencies
       run: |
         cd backend
+        python -m venv env  # ✅ Création d'un environnement virtuel
+        source env/bin/activate  # ✅ Activation de l'environnement
         python -m pip install --upgrade pip
-        pip install -r ../requirements.txt
+        pip install -r requirements.txt
 
-    # 4. Wait for services to be ready
+    # 4. Check if django-cors-headers is correctly installed
+    - name: Check installed packages
+      run: |
+        source backend/env/bin/activate
+        pip show django-cors-headers || (echo "❌ django-cors-headers non installé !" && exit 1)
+
+    # 5. Wait for PostgreSQL and MongoDB to be ready
     - name: Wait for PostgreSQL and MongoDB
       run: |
         while ! nc -z localhost 5432; do sleep 1; done
         while ! nc -z localhost 27017; do sleep 1; done
 
-    # 5. Run migrations
+    # 6. Run Django check (sanity test)
+    - name: Run Django check
+      run: |
+        source backend/env/bin/activate
+        cd backend
+        python manage.py check  # ✅ Vérifie si Django peut démarrer sans erreurs
+
+    # 7. Run migrations
     - name: Run migrations
       run: |
+        source backend/env/bin/activate
         cd backend
         python manage.py migrate
 
-    # 6. Run tests
+    # 8. Run unit tests
     - name: Run unit tests
       run: |
+        source backend/env/bin/activate
         cd backend
         python manage.py test
