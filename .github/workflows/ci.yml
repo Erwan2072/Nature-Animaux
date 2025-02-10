@@ -51,16 +51,24 @@ jobs:
     # 3. Install dependencies in Virtual Environment
     - name: Install dependencies
       run: |
-        python -m venv env  # ✅ Création d'un environnement virtuel
-        source env/bin/activate  # ✅ Activation de l'environnement
+        set -e  # ✅ Arrête le script en cas d’erreur
+        python -m venv env  # ✅ Création de l'environnement virtuel
+        if [ -f env/bin/activate ]; then
+          . env/bin/activate  # ✅ Activation de l'environnement sur Linux/macOS
+        elif [ -f env\Scripts\activate ]; then
+          env\Scripts\activate  # ✅ Activation de l'environnement sur Windows
+        fi
         python -m pip install --upgrade pip
-        pip install -r requirements.txt  # ✅ Installation depuis la racine du projet
+        if [ -f requirements.txt ]; then
+          pip install -r requirements.txt  # ✅ Vérification avant installation
+        else
+          echo "❌ Fichier requirements.txt introuvable !" && exit 1
+        fi
 
     # 4. Check if django-cors-headers is correctly installed
     - name: Check installed packages
       run: |
-        source env/bin/activate
-        pip show django-cors-headers || (echo "❌ django-cors-headers non installé !" && exit 1)
+        env/bin/python -m pip show django-cors-headers || (echo "❌ django-cors-headers non installé !" && exit 1)
 
     # 5. Wait for PostgreSQL and MongoDB to be ready
     - name: Wait for PostgreSQL and MongoDB
@@ -71,20 +79,14 @@ jobs:
     # 6. Run Django check (sanity test)
     - name: Run Django check
       run: |
-        source env/bin/activate
-        cd backend
-        python manage.py check  # ✅ Vérifie si Django peut démarrer sans erreurs
+        env/bin/python backend/manage.py check || (echo "❌ Django check a échoué !" && exit 1)
 
-    # 7. Run migrations
+    # 7. Run migrations (seulement si Django check passe)
     - name: Run migrations
       run: |
-        source env/bin/activate
-        cd backend
-        python manage.py migrate
+        env/bin/python backend/manage.py migrate
 
     # 8. Run unit tests
     - name: Run unit tests
       run: |
-        source env/bin/activate
-        cd backend
-        python manage.py test
+        env/bin/python backend/manage.py test
