@@ -1,12 +1,12 @@
 /* Définition des couleurs globales */
 $primary-color: #8BC34A;  // Vert de la maquette
 $secondary-color: #ffcdce; // Rose pastel
-$background-gradient: linear-gradient(to bottom,rgb(131, 240, 198), #9AD9E2);// Dégradé de fond
+$background-gradient: linear-gradient(to bottom, rgb(131, 240, 198), #9AD9E2); // Dégradé de fond
 $background-color: #B2F3E1; // Couleur de base pour fallback
 $text-color: #333; // Texte principal
 
 /* Définition de $primary-darken après $primary-color */
-$primary-darken: mix(black, $primary-color, 10%); // Utilisation correcte de mix()
+$primary-darken: mix(black, $primary-color, 10%); // Assombrissement de la couleur principale
 
 /* Reset de base */
 * {
@@ -15,19 +15,29 @@ $primary-darken: mix(black, $primary-color, 10%); // Utilisation correcte de mix
   box-sizing: border-box;
 }
 
-/* Styles globaux */
+/* ✅ Assurer que le fond couvre toute la page */
+html, body {
+  height: 100%;
+  min-height: 100vh;  // ✅ Corrige le problème de répétition en forçant le fond à s'étendre
+  margin: 0;
+  padding: 0;
+  font-family: 'Roboto', "Helvetica Neue", sans-serif;
+}
+
+/* ✅ Appliquer le fond en pleine hauteur */
 body {
-  font-family: 'Arial', sans-serif;
   background: $background-gradient;
-  background-color: $background-color; // Fallback si le gradient ne fonctionne pas
+  background-color: $background-color; // ✅ Fallback si le gradient ne fonctionne pas
+  background-size: cover;  // ✅ Assure que le fond couvre tout l'écran sans répétition
+  background-attachment: fixed; // ✅ Fixe le fond pour éviter qu'il se répète lors du scroll
+  background-repeat: no-repeat;
   color: $text-color;
-  height: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-/* Bouton générique */
+/* ✅ Bouton générique */
 .btn {
   padding: 12px 20px;
   font-size: 1.2rem;

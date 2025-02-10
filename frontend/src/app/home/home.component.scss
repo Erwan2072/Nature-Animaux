@@ -40,6 +40,6 @@ $text-color: #333; // Texte principal
 }
 
 .btn-nouveaute:hover {
-  background-color: darken($primary-color, 10%);
+  background-color: ajust-color($primary-color, 10%);
   transform: scale(1.05);
 }

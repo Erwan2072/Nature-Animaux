@@ -1,0 +1,209 @@
+.admin-products-container {
+    max-width: 1100px;
+    margin: auto;
+    background: linear-gradient(to bottom, #e3f2fd, #bbdefb);
+    padding: 100px;
+    border-radius: 12px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
+    text-align: center;
+}
+
+/* ✅ Onglets */
+.tabs {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 25px;
+
+    button {
+        background-color: #ffcdce;
+        color: #310000;
+        padding: 14px 30px;
+        margin: 0 10px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background 0.3s ease-in-out;
+
+        &:hover {
+            background-color: #ffa4a5;
+        }
+
+        &.active {
+            background-color: #ff8b8c;
+            font-weight: bold;
+        }
+    }
+}
+
+/* ✅ Style global du tableau */
+.product-table,
+.product-delete-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 15px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+
+    th, td {
+        border: 1px solid #ddd;
+        padding: 16px;
+        text-align: left;
+    }
+
+    th {
+        background-color: #8BC34A;
+        color: white;
+        font-size: 15px;
+        text-align: center;
+    }
+
+    input, select, textarea {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 14px;
+    }
+}
+
+.delete-section {
+    width: 100%; /* Ajustement pour éviter le débordement */
+    max-width: 900px; /* Alignement avec les autres sections */
+    margin: 20px auto;
+    padding: 20px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; /* Centre parfaitement */
+}
+
+/* ✅ **Correction Tableau de suppression** */
+.product-delete-table {
+    width: 100%;
+    max-width: 800px; /* Réduction pour un alignement correct */
+    margin-bottom: 20px;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+
+    th, td {
+        padding: 16px;
+        text-align: left;
+        font-size: 16px;
+    }
+
+    .label {
+        background: #e3f2fd;
+        font-weight: bold;
+        text-align: left;
+        width: 50%;
+    }
+
+    .value {
+        text-align: center;
+    }
+}
+
+/* ✅ **Correction du bouton Supprimer** */
+.delete-button-container {
+    text-align: center;
+    margin-top: 15px; /* Ajustement pour un bon espacement */
+}
+
+.delete-button {
+    width: 100%;
+    max-width: 250px; /* Alignement avec le design */
+    padding: 16px;
+    background: #ff4b4b;
+    color: white;
+    border: none;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+    margin-top: 1rem; /* Espacement harmonisé */
+
+    &:hover {
+        background: #c0392b;
+        transform: scale(1.05);
+    }
+
+    &:active {
+        transform: scale(0.98);
+    }
+}
+
+/* ✅ Bouton Valider */
+.validate-button {
+    background-color: #8BC34A;
+    color: #310000;
+    font-size: 18px;
+    padding: 16px 28px;
+    border-radius: 6px;
+    transition: background 0.3s, transform 0.2s;
+    text-align: center;
+
+
+    &:hover {
+        background-color:rgb(98, 228, 105);
+        transform: scale(1.05);
+    }
+
+    &:active {
+        transform: scale(0.98);
+    }
+}
+
+/* ✅ Bouton "Ajouter une variation" */
+.add-variation-button {
+    background-color: #ffcdce;
+    color: #310000;
+    font-size: 16px;
+    padding: 12px 24px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out;
+
+    &:hover {
+        background-color: #689F38;
+    }
+
+    &:active {
+        transform: scale(0.98);
+    }
+}
+
+/* ✅ Style du bouton "Choisir une image" */
+.image-upload-label {
+    background-color: #ffcdce;
+    color: #310000;
+    font-size: 16px;
+    padding: 12px 24px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: inline-block;
+    margin-top: 10px;
+    transition: background 0.3s ease-in-out;
+
+    &:hover {
+        background-color: #689F38;
+    }
+}
+
+/* ✅ Centrage général */
+.center {
+    text-align: center;
+}
+
+.full-width {
+    width: 100%;
+    max-width: 100%; // Empêche le dépassement
+}

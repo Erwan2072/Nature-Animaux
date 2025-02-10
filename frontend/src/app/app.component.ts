@@ -1,54 +1,57 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from './services/api.service';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router, NavigationEnd } from '@angular/router'; // ✅ Import du Router pour détecter les routes
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  standalone: true, // ✅ Confirmer que le composant est standalone
-  imports: [CommonModule, RouterModule] // ✅ Ajoute ici les modules nécessaires comme CommonModule si besoin
+  standalone: true, // ✅ Composant standalone
+  imports: [CommonModule, RouterModule] // ✅ Modules Angular nécessaires
 })
 export class AppComponent implements OnInit {
   title: string = 'Nature & Animaux';
-  data: any[] = []; // ✅ Correction du type de `data`
-  isMenuOpen: boolean = false; // ✅ Ajout d'un état pour le menu burger
+  data: any[] = []; // ✅ Stocke les produits récupérés
+  isMenuOpen: boolean = false; // ✅ État du menu burger
+  isAdminPage: boolean = false; // ✅ Variable pour savoir si on est sur une page admin
 
-  constructor(private apiService: ApiService) {}
+  constructor(private apiService: ApiService, private router: Router) {}
 
   ngOnInit(): void {
-    this.fetchData();
+    this.fetchProducts(); // ✅ Récupère les produits à l'initialisation
+
+    // ✅ Vérifie si on est sur une page admin et met à jour `isAdminPage`
+    this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe((event: any) => {
+        this.isAdminPage = event.url.startsWith('/admin'); // ✅ Masque les sidebars si l'URL commence par /admin
+      });
   }
 
-  fetchData(): void {
-    this.apiService.getData('test') // ⚠️ Vérifie que cet endpoint est bien accessible
+  // ✅ Récupérer les produits depuis l'API
+  fetchProducts(): void {
+    this.apiService.getProducts()
       .subscribe({
         next: (response: any) => {
-          console.log('📥 Données reçues:', response);
-          if (Array.isArray(response)) {
-            this.data = response;
-          } else {
-            console.warn('⚠️ Réponse inattendue, conversion en tableau vide');
-            this.data = [];
-          }
+          console.log('📥 Produits reçus:', response);
+          this.data = Array.isArray(response) ? response : []; // ✅ Vérifie la validité de la réponse
         },
-        error: (error) => {
-          console.error('❌ Erreur lors de la requête:', error);
+        error: (error: any) => {
+          console.error('❌ Erreur lors de la requête API:', error);
         }
       });
   }
 
   // ✅ Fonction pour afficher/cacher le menu burger
   toggleMenu(): void {
+    if (this.isAdminPage) return; // ✅ Empêche le menu de s'ouvrir en mode admin
+
     this.isMenuOpen = !this.isMenuOpen;
     const menu = document.querySelector('.left-menu');
     if (menu) {
-      if (this.isMenuOpen) {
-        menu.classList.add('open');
-      } else {
-        menu.classList.remove('open');
-      }
+      menu.classList.toggle('open', this.isMenuOpen);
     }
   }
 }
