@@ -38,53 +38,47 @@ jobs:
           --health-retries=3
 
     steps:
-    # 1. Checkout the code
+    # 1. Checkout le code du repo
     - name: Checkout code
       uses: actions/checkout@v3
 
-    # 2. Set up Python
+    # 2. Setup Python (GitHub Actions propose déjà un environnement Python)
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
         python-version: "3.12"
 
-    # 3. Install dependencies in Virtual Environment
+    # 3. Installer les dépendances sans créer un venv manuellement
     - name: Install dependencies
       run: |
-        python -m venv env  # ✅ Création de l'environnement virtuel dans la racine
-        source env/bin/activate  # ✅ Activation de l'environnement
         python -m pip install --upgrade pip
-        pip install -r requirements.txt  # ✅ Installation depuis la racine du projet
+        pip install -r requirements.txt  # ✅ Installation depuis la racine
 
-    # 4. Vérification que django-cors-headers est installé
+    # 4. Vérifier si django-cors-headers est bien installé
     - name: Check installed packages
       run: |
-        source env/bin/activate
         pip show django-cors-headers || (echo "❌ django-cors-headers non installé !" && exit 1)
 
-    # 5. Attente que PostgreSQL et MongoDB soient prêts
+    # 5. Attendre que PostgreSQL et MongoDB soient prêts
     - name: Wait for PostgreSQL and MongoDB
       run: |
         while ! nc -z localhost 5432; do sleep 1; done
         while ! nc -z localhost 27017; do sleep 1; done
 
-    # 6. Vérification du projet Django
+    # 6. Vérifier si Django démarre sans erreurs
     - name: Run Django check
       run: |
-        source env/bin/activate
         cd backend
-        python manage.py check  # ✅ Vérifie si Django peut démarrer sans erreurs
+        python manage.py check  # ✅ Vérifie si Django peut démarrer
 
-    # 7. Exécution des migrations
+    # 7. Exécuter les migrations
     - name: Run migrations
       run: |
-        source env/bin/activate
         cd backend
         python manage.py migrate
 
-    # 8. Exécution des tests unitaires
+    # 8. Lancer les tests unitaires
     - name: Run unit tests
       run: |
-        source env/bin/activate
         cd backend
         python manage.py test
