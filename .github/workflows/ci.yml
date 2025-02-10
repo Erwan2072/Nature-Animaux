@@ -51,42 +51,40 @@ jobs:
     # 3. Install dependencies in Virtual Environment
     - name: Install dependencies
       run: |
-        set -e  # ✅ Arrête le script en cas d’erreur
-        python -m venv env  # ✅ Création de l'environnement virtuel
-        if [ -f env/bin/activate ]; then
-          . env/bin/activate  # ✅ Activation de l'environnement sur Linux/macOS
-        elif [ -f env\Scripts\activate ]; then
-          env\Scripts\activate  # ✅ Activation de l'environnement sur Windows
-        fi
+        python -m venv env  # ✅ Création de l'environnement virtuel dans la racine
+        source env/bin/activate  # ✅ Activation de l'environnement
         python -m pip install --upgrade pip
-        if [ -f requirements.txt ]; then
-          pip install -r requirements.txt  # ✅ Vérification avant installation
-        else
-          echo "❌ Fichier requirements.txt introuvable !" && exit 1
-        fi
+        pip install -r requirements.txt  # ✅ Installation depuis la racine du projet
 
-    # 4. Check if django-cors-headers is correctly installed
+    # 4. Vérification que django-cors-headers est installé
     - name: Check installed packages
       run: |
-        env/bin/python -m pip show django-cors-headers || (echo "❌ django-cors-headers non installé !" && exit 1)
+        source env/bin/activate
+        pip show django-cors-headers || (echo "❌ django-cors-headers non installé !" && exit 1)
 
-    # 5. Wait for PostgreSQL and MongoDB to be ready
+    # 5. Attente que PostgreSQL et MongoDB soient prêts
     - name: Wait for PostgreSQL and MongoDB
       run: |
         while ! nc -z localhost 5432; do sleep 1; done
         while ! nc -z localhost 27017; do sleep 1; done
 
-    # 6. Run Django check (sanity test)
+    # 6. Vérification du projet Django
     - name: Run Django check
       run: |
-        env/bin/python backend/manage.py check || (echo "❌ Django check a échoué !" && exit 1)
+        source env/bin/activate
+        cd backend
+        python manage.py check  # ✅ Vérifie si Django peut démarrer sans erreurs
 
-    # 7. Run migrations (seulement si Django check passe)
+    # 7. Exécution des migrations
     - name: Run migrations
       run: |
-        env/bin/python backend/manage.py migrate
+        source env/bin/activate
+        cd backend
+        python manage.py migrate
 
-    # 8. Run unit tests
+    # 8. Exécution des tests unitaires
     - name: Run unit tests
       run: |
-        env/bin/python backend/manage.py test
+        source env/bin/activate
+        cd backend
+        python manage.py test
