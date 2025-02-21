@@ -2,14 +2,15 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.pagination import PageNumberPagination
+from bson import ObjectId, errors
 from .serializers import ProductSerializer
-from .models import Product
+from nature_animaux.mongo_config import products_collection
 import logging
 
-# Configurer le logger pour le débogage
+# Configuration du logger
 logger = logging.getLogger(__name__)
 
-# API Overview
+# ✅ API Overview
 @api_view(['GET'])
 def api_overview(request):
     """Affiche un aperçu des routes disponibles."""
@@ -23,107 +24,149 @@ def api_overview(request):
     return Response(api_urls)
 
 
-# Liste tous les produits
+# ✅ Liste des produits
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def product_list(request):
     """Liste tous les produits avec pagination."""
     try:
-        logger.info("Accès à la liste des produits par l'utilisateur : %s", request.user)
-        products = Product.find_all()
+        logger.info(f"Accès à la liste des produits par l'utilisateur : {request.user}")
+
+        products = list(products_collection.find({}))
+
+        if not products:
+            return Response({"message": "Aucun produit trouvé."}, status=200)
 
         # Pagination
         paginator = PageNumberPagination()
-        paginator.page_size = 10  # Nombre de produits par page
+        paginator.page_size = 10
         paginated_products = paginator.paginate_queryset(products, request)
 
-        # Sérialisation
+        # Sérialisation avec conversion ObjectId en str
+        for product in paginated_products:
+            product["_id"] = str(product["_id"])
+
         serializer = ProductSerializer(paginated_products, many=True)
         return paginator.get_paginated_response(serializer.data)
+
     except Exception as e:
-        logger.error("Erreur lors de la récupération des produits : %s", str(e))
-        return Response({"error": f"Erreur interne : {str(e)}"}, status=500)
+        logger.error(f"Erreur lors de la récupération des produits : {e}")
+        return Response({"error": "Erreur interne du serveur."}, status=500)
 
 
-# Détails d'un produit
+# ✅ Détails d'un produit
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def product_detail(request, pk):
     """Récupère les détails d'un produit."""
     try:
-        logger.info("Accès aux détails du produit %s par l'utilisateur : %s", pk, request.user)
-        product = Product.find(pk)
+        if not ObjectId.is_valid(pk):
+            return Response({"error": "ID invalide."}, status=400)
+
+        product = products_collection.find_one({"_id": ObjectId(pk)})
+
         if not product:
-            logger.warning("Produit non trouvé : %s", pk)
             return Response({"error": "Produit non trouvé."}, status=404)
 
+        product["_id"] = str(product["_id"])
         serializer = ProductSerializer(product)
         return Response(serializer.data)
+
     except Exception as e:
-        logger.error("Erreur lors de la récupération du produit %s : %s", pk, str(e))
-        return Response({"error": f"Erreur interne : {str(e)}"}, status=500)
+        logger.error(f"Erreur lors de la récupération du produit {pk} : {e}")
+        return Response({"error": "Erreur interne du serveur."}, status=500)
 
 
-# Création d'un produit
+# ✅ Création d'un produit
 @api_view(['POST'])
 @permission_classes([IsAdminUser])
 def product_create(request):
     """Crée un nouveau produit."""
     try:
-        logger.info("Création d'un produit par l'administrateur : %s", request.user)
         serializer = ProductSerializer(data=request.data)
+
         if serializer.is_valid():
-            product = Product(**serializer.validated_data)
-            product.save()
-            return Response(ProductSerializer(product).data, status=201)
+            product_data = serializer.validated_data
+            product_data["variations"] = request.data.get("variations", [])
 
-        logger.warning("Échec de la validation : %s", serializer.errors)
+            result = products_collection.insert_one(product_data)
+            product_data["_id"] = str(result.inserted_id)
+
+            return Response(product_data, status=201)
+
         return Response(serializer.errors, status=400)
+
     except Exception as e:
-        logger.error("Erreur lors de la création du produit : %s", str(e))
-        return Response({"error": f"Erreur interne : {str(e)}"}, status=500)
+        logger.error(f"Erreur lors de la création du produit : {e}")
+        return Response({"error": "Erreur interne du serveur."}, status=500)
 
 
-# Mise à jour d'un produit
-@api_view(['POST'])
+# ✅ Mise à jour d'un produit (Correction majeure)
+@api_view(['PUT'])
 @permission_classes([IsAdminUser])
 def product_update(request, pk):
     """Met à jour un produit existant."""
     try:
-        logger.info("Mise à jour du produit %s par l'administrateur : %s", pk, request.user)
-        product = Product.find(pk)
-        if not product:
-            logger.warning("Produit non trouvé pour mise à jour : %s", pk)
+        if not ObjectId.is_valid(pk):
+            return Response({"error": "ID invalide."}, status=400)
+
+        existing_product = products_collection.find_one({"_id": ObjectId(pk)})
+
+        if not existing_product:
             return Response({"error": "Produit non trouvé."}, status=404)
 
-        serializer = ProductSerializer(product, data=request.data)
+        # ✅ Correction ici : utilisation correcte de `partial=True`
+        serializer = ProductSerializer(existing_product, data=request.data, partial=True)
+
         if serializer.is_valid():
-            for attr, value in serializer.validated_data.items():
-                setattr(product, attr, value)
-            product.save()
-            return Response(ProductSerializer(product).data)
+            updated_data = {k: v for k, v in serializer.validated_data.items() if v is not None}
 
-        logger.warning("Échec de la validation pour mise à jour : %s", serializer.errors)
+            # Mise à jour de l'élément dans MongoDB
+            products_collection.update_one({"_id": ObjectId(pk)}, {"$set": updated_data})
+
+            # Récupération du produit mis à jour
+            updated_product = products_collection.find_one({"_id": ObjectId(pk)})
+            updated_product["_id"] = str(updated_product["_id"])
+
+            return Response(updated_product)
+
         return Response(serializer.errors, status=400)
+
+    except errors.InvalidId:
+        return Response({"error": "ID non valide."}, status=400)
     except Exception as e:
-        logger.error("Erreur lors de la mise à jour du produit %s : %s", pk, str(e))
-        return Response({"error": f"Erreur interne : {str(e)}"}, status=500)
+        logger.error(f"Erreur lors de la mise à jour du produit {pk} : {e}")
+        return Response({"error": "Erreur interne du serveur."}, status=500)
 
 
-# Suppression d'un produit
+# ✅ Suppression d'un produit avec debug
 @api_view(['DELETE'])
 @permission_classes([IsAdminUser])
 def product_delete(request, pk):
     """Supprime un produit."""
     try:
-        logger.info("Suppression du produit %s par l'administrateur : %s", pk, request.user)
-        product = Product.find(pk)
-        if not product:
-            logger.warning("Produit non trouvé pour suppression : %s", pk)
+        logger.info(f"Tentative de suppression du produit avec ID : {pk}")
+        print(f"Tentative de suppression du produit avec ID : {pk}")
+
+        if not ObjectId.is_valid(pk):
+            logger.error("ID invalide reçu pour la suppression.")
+            print("ID invalide reçu pour la suppression.")
+            return Response({"error": "ID invalide."}, status=400)
+
+        result = products_collection.delete_one({"_id": ObjectId(pk)})
+        print(f"Résultat de la suppression : {result.deleted_count}")
+
+        if result.deleted_count == 0:
+            logger.warning("Produit non trouvé pour suppression.")
+            print("Produit non trouvé pour suppression.")
             return Response({"error": "Produit non trouvé."}, status=404)
 
-        Product.delete(pk)
-        return Response({"message": "Produit supprimé avec succès."})
+        logger.info("Produit supprimé avec succès.")
+        print("Produit supprimé avec succès.")
+        return Response({"message": "Produit supprimé avec succès."}, status=200)
+
     except Exception as e:
-        logger.error("Erreur lors de la suppression du produit %s : %s", pk, str(e))
-        return Response({"error": f"Erreur interne : {str(e)}"}, status=500)
+        logger.error(f"Erreur lors de la suppression du produit {pk} : {e}")
+        print(f"Erreur lors de la suppression du produit {pk} : {e}")
+        return Response({"error": "Erreur interne du serveur."}, status=500)
+

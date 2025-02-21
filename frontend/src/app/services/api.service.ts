@@ -1,78 +1,98 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, map, switchMap } from 'rxjs/operators';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
-  private baseUrl = 'http://127.0.0.1:8000/products'; // ✅ Correction de l'URL
-  private authToken = '5802752220959a88937f4c87266bc1815b26eaef'; // ✅ Vérifie que ce token est toujours valide
+  private baseUrl = 'http://127.0.0.1:8000/api'; // 🔥 Vérifie que ton backend expose bien `/api/`
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private authService: AuthService) {}
 
-  // ✅ Générer les headers avec Token + Content-Type
-  private getHeaders(): HttpHeaders {
-    return new HttpHeaders({
-      'Authorization': `Token ${this.authToken}`,
-      'Content-Type': 'application/json',
-      'Accept': 'application/json'
-    });
+  // ✅ Récupération asynchrone des headers avec le token
+  private getHeaders(): Observable<HttpHeaders> {
+    return this.authService.getToken().pipe(
+      map(token => {
+        let headers = new HttpHeaders({
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        });
+
+        if (token) {
+          headers = headers.set('Authorization', `Bearer ${token}`);
+          console.log("🔑 Token envoyé dans les headers :", token);
+        } else {
+          console.warn("⚠️ Aucun token d'authentification disponible !");
+        }
+
+        return headers;
+      })
+    );
   }
 
-  // ✅ Récupérer tous les produits depuis `/products/product-list/`
-  getProducts(): Observable<any> {
-    console.log("📡 Envoi de la requête GET vers l'API :", `${this.baseUrl}/product-list/`);
-    return this.http.get(`${this.baseUrl}/product-list/`, { headers: this.getHeaders() }).pipe(
-      catchError(error => {
-        console.error("❌ Erreur lors de la récupération des produits :", error);
-        return throwError(() => new Error("Erreur lors de la récupération des produits"));
-      })
+  // ✅ Gestion centralisée des erreurs API
+  private handleError(error: any): Observable<never> {
+    console.error("❌ Erreur API :", error);
+    if (error.status === 401) {
+      console.warn("🔴 Token expiré ou invalide, déconnexion en cours...");
+      this.authService.logout();
+      // TODO : Rediriger vers la page de connexion si nécessaire
+    }
+    return throwError(() => new Error(error.message || "Erreur API"));
+  }
+
+  // ✅ Récupérer les produits avec pagination
+  getProducts(page: number = 1): Observable<any> {
+    const url = `${this.baseUrl}/products/product-list/`;
+    const params = new HttpParams().set('page', page.toString());
+
+    return this.getHeaders().pipe(
+      switchMap(headers => this.http.get(url, { headers, params })),
+      map((response: any) => ({
+        products: response.results || [],
+        next: response.next || null,
+        previous: response.previous || null
+      })),
+      catchError(this.handleError)
     );
   }
 
   // ✅ Récupérer un produit par ID
   getProductById(id: string): Observable<any> {
-    console.log(`📡 Envoi de la requête GET pour récupérer le produit ID: ${id}`);
-    return this.http.get(`${this.baseUrl}/product-detail/${id}/`, { headers: this.getHeaders() }).pipe(
-      catchError(error => {
-        console.error(`❌ Erreur lors de la récupération du produit ${id} :`, error);
-        return throwError(() => new Error(`Erreur lors de la récupération du produit ${id}`));
-      })
+    const url = `${this.baseUrl}/products/product-detail/${id}/`;
+    return this.getHeaders().pipe(
+      switchMap(headers => this.http.get(url, { headers })),
+      catchError(this.handleError)
     );
   }
 
-  // ✅ Ajouter un nouveau produit
+  // ✅ Ajouter un produit
   addProduct(product: any): Observable<any> {
-    console.log("📡 Envoi de la requête POST pour ajouter un produit :", product);
-    return this.http.post(`${this.baseUrl}/product-create/`, product, { headers: this.getHeaders() }).pipe(
-      catchError(error => {
-        console.error("❌ Erreur lors de l'ajout du produit :", error);
-        return throwError(() => new Error("Erreur lors de l'ajout du produit"));
-      })
+    const url = `${this.baseUrl}/products/product-create/`;
+    return this.getHeaders().pipe(
+      switchMap(headers => this.http.post(url, product, { headers })),
+      catchError(this.handleError)
     );
   }
 
-  // ✅ Modifier un produit existant
+  // ✅ Modifier un produit (PATCH au lieu de PUT)
   updateProduct(id: string, product: any): Observable<any> {
-    console.log(`📡 Envoi de la requête PUT pour modifier le produit ID: ${id}`, product);
-    return this.http.put(`${this.baseUrl}/product-update/${id}/`, product, { headers: this.getHeaders() }).pipe(
-      catchError(error => {
-        console.error(`❌ Erreur lors de la mise à jour du produit ${id} :`, error);
-        return throwError(() => new Error(`Erreur lors de la mise à jour du produit ${id}`));
-      })
+    const url = `${this.baseUrl}/products/product-update/${id}/`;
+    return this.getHeaders().pipe(
+      switchMap(headers => this.http.patch(url, product, { headers })),
+      catchError(this.handleError)
     );
   }
 
   // ✅ Supprimer un produit
   deleteProduct(id: string): Observable<any> {
-    console.log(`📡 Envoi de la requête DELETE pour supprimer le produit ID: ${id}`);
-    return this.http.delete(`${this.baseUrl}/product-delete/${id}/`, { headers: this.getHeaders() }).pipe(
-      catchError(error => {
-        console.error(`❌ Erreur lors de la suppression du produit ${id} :`, error);
-        return throwError(() => new Error(`Erreur lors de la suppression du produit ${id}`));
-      })
+    const url = `${this.baseUrl}/products/product-delete/${id}/`;
+    return this.getHeaders().pipe(
+      switchMap(headers => this.http.delete(url, { headers })),
+      catchError(this.handleError)
     );
   }
 }

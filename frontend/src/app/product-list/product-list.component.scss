@@ -1,0 +1,136 @@
+@use "sass:color";
+
+// 🎨 Palette de couleurs
+$primary-color: #4CAF50;  // Vert nature
+$secondary-color: #FFC107; // Jaune pour les accents
+$background-color: #F5F5F5; // Fond doux et clair
+$text-color: #333;  // Couleur principale du texte
+$border-color: #ddd; // Bordures légères
+
+// 🌱 Style général du composant
+.product-list {
+  max-width: 1200px;
+  margin: auto;
+  padding: 20px;
+  background-color: $background-color;
+  border-radius: 8px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+
+  h2 {
+    text-align: center;
+    color: $primary-color;
+    margin-bottom: 20px;
+    font-size: 2rem;
+    font-weight: bold;
+  }
+
+  // 🔍 Zone de recherche
+  .search-bar {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+
+    input {
+      width: 60%;
+      padding: 10px;
+      font-size: 1rem;
+      border: 2px solid $border-color;
+      border-radius: 5px;
+      outline: none;
+
+      &:focus {
+        border-color: $primary-color;
+      }
+    }
+
+    button {
+      background: $primary-color;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      margin-left: 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s;
+
+      &:hover {
+        background: color.adjust($primary-color, $lightness: -10%);
+      }
+    }
+  }
+
+  // 📦 Liste des produits
+  .products-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+    padding: 10px;
+  }
+
+  .product-card {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+    text-align: center;
+
+    &:hover {
+      transform: scale(1.03);
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+
+    h3 {
+      color: $text-color;
+      font-size: 1.3rem;
+      font-weight: bold;
+      margin: 10px 0;
+    }
+
+    .price {
+      font-size: 1.2rem;
+      color: $secondary-color;
+      font-weight: bold;
+    }
+
+    .actions {
+      margin-top: 10px;
+
+      button {
+        padding: 8px 12px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: bold;
+        transition: 0.3s;
+
+        &.edit {
+          background: #2196F3; // Bleu pour modifier
+          color: white;
+          margin-right: 5px;
+
+          &:hover {
+            background: color.adjust(#2196F3, $lightness: -10%);
+          }
+        }
+
+        &.delete {
+          background: #E53935; // Rouge pour supprimer
+          color: white;
+
+          &:hover {
+            background: color.adjust(#E53935, $lightness: -10%);
+          }
+        }
+      }
+    }
+  }
+}

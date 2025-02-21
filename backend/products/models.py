@@ -6,7 +6,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 class Product:
-    def __init__(self, title=None, category=None, sub_category=None, brand=None, color=None, sku=None, price=None, weight=None, stock=None, description=None, product_id=None):
+    def __init__(self, title=None, category=None, sub_category=None, brand=None, color=None, sku=None, price=None, weight=None, stock=None, description=None, variations=None, product_id=None):
         """Initialisation du produit avec validations."""
         # Validations des champs obligatoires
         if not title or not category or not sub_category or not brand:
@@ -32,6 +32,7 @@ class Product:
         self.weight = weight  # Poids
         self.stock = stock  # Quantité en stock
         self.description = description  # Description
+        self.variations = variations if variations else []  # ✅ Liste des variations
 
     def save(self):
         """Crée ou met à jour un produit dans MongoDB."""
@@ -48,6 +49,7 @@ class Product:
                 "weight": self.weight,
                 "stock": self.stock,
                 "description": self.description,
+                "variations": self.variations,  # ✅ Ajout des variations
             }
 
             if self._id:
@@ -80,12 +82,13 @@ class Product:
                     category=product["category"],
                     sub_category=product["sub_category"],
                     brand=product["brand"],
-                    color=product.get("color"),  # Récupère la couleur (optionnelle)
+                    color=product.get("color"),
                     sku=product.get("sku"),
                     price=product.get("price"),
                     weight=product.get("weight"),
                     stock=product.get("stock"),
                     description=product.get("description"),
+                    variations=product.get("variations", []),  # ✅ Ajout des variations
                     product_id=str(product["_id"]),
                 )
             logger.warning(f"Produit avec l'ID {product_id} introuvable.")
@@ -95,10 +98,10 @@ class Product:
             return None
 
     @staticmethod
-    def find_all(limit=100, sort_by="title"):
-        """Récupère tous les produits de MongoDB triés par un champ spécifié."""
+    def find_all(limit=100):
+        """Récupère tous les produits de MongoDB triés par ID."""
         try:
-            products = products_collection.find().sort("id", 1)
+            products = products_collection.find().limit(limit)
             return [
                 Product(
                     title=prod["title"],
@@ -111,6 +114,7 @@ class Product:
                     weight=prod.get("weight"),
                     stock=prod.get("stock"),
                     description=prod.get("description"),
+                    variations=prod.get("variations", []),  # ✅ Ajout des variations
                     product_id=str(prod["_id"]),
                 )
                 for prod in products

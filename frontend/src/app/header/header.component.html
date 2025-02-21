@@ -1,0 +1,30 @@
+<header class="header">
+	<div class="logo">
+	  <a routerLink="/">🌿 Nature & Animaux</a>
+	</div>
+
+	<nav>
+	  <ul class="nav-links">
+		<li *ngIf="!isAuthenticated">
+		  <button (click)="router.navigate(['/login'])" class="btn">Connexion</button>
+		</li>
+
+		<li *ngIf="isAuthenticated" class="dropdown">
+		  <button class="btn profile-btn">
+			<span class="initials">{{ userInitials }}</span>
+		  </button>
+		  <ul class="dropdown-menu">
+			<li>
+			  <button (click)="router.navigate(['/profile'])">Mon Profil</button>
+			</li>
+			<li *ngIf="isAdmin">
+			  <button (click)="goToAdmin()">Espace Admin</button>
+			</li>
+			<li>
+			  <button (click)="logout()">Déconnexion</button>
+			</li>
+		  </ul>
+		</li>
+	  </ul>
+	</nav>
+  </header>
