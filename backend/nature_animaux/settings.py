@@ -111,7 +111,8 @@ SOCIALACCOUNT_PROVIDERS = {
 }
 
 SITE_ID = 1
-ACCOUNT_AUTHENTICATION_METHOD = "email"  # Utilisation de l'email uniquement
+ACCOUNT_LOGIN_METHODS = ["email"]
+
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False  # Désactiver `username`
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None  # Empêche allauth de chercher `username`
@@ -176,4 +177,6 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
 
-LOGIN_URL = '/admin/login/'
+LOGIN_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
