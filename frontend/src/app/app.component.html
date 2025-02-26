@@ -1,86 +1,37 @@
-<!-- ✅ WRAPPER GLOBAL POUR ASSURER QUE TOUT LE CONTENU PRENNE LA HAUTEUR DE LA PAGE -->
 <div class="wrapper">
 
   <!-- ✅ CONTAINER POUR LE LOGO ET LE TITRE -->
   <div class="container-header">
-    <!-- ✅ LOGO CLIQUABLE REDIRIGEANT VERS L'ACCUEIL -->
     <a href="/" class="logo-container">
       <img src="assets/images/logo.png" alt="Logo Nature & Animaux" class="logo-img">
     </a>
-
-    <!-- ✅ TITRE CLIQUABLE AVEC POLICE PERSONNALISÉE ET ANIMATION -->
     <a href="/" class="site-title">Nature & Animaux</a>
   </div>
 
-  <!-- ✅ HEADER -->
-  <header class="header">
-    <nav class="navbar">
-      <!-- ✅ Bouton Menu Burger (s'affiche uniquement si ce n'est pas une page admin) -->
-      <div class="menu-burger" *ngIf="!isAdminPage" (click)="toggleMenu()">☰</div>
-      <a routerLink="/contact" routerLinkActive="active">Contact</a>
-      <a routerLink="/login" routerLinkActive="active">Connexion</a>
-    </nav>
-  </header>
+  <!-- ✅ HEADER PRINCIPAL -->
+  <app-header></app-header>
+
+<!-- ✅ BARRE DES CATÉGORIES -->
+<div class="category-bar">
+  <a routerLink="/chien" class="category-btn">Chien</a>
+  <a routerLink="/chat" class="category-btn">Chat</a>
+  <a routerLink="/oiseau" class="category-btn">Oiseau</a>
+  <a routerLink="/rongeur" class="category-btn">Rongeur, Lapin, Furet</a>
+  <a routerLink="/bassecour" class="category-btn">Basse cour</a>
+  <a routerLink="/derives" class="category-btn">Produits dérivés</a>
+
+  <!-- ✅ BARRE DE RECHERCHE -->
+  <input type="text" class="category-search" placeholder="🔍 Rechercher...">
+</div>
+
 
   <!-- ✅ STRUCTURE PRINCIPALE -->
   <main class="main-container">
-
-    <!-- ✅ SIDEBARS AFFICHÉES UNIQUEMENT EN MODE CLIENT -->
-    <ng-container *ngIf="!isAdminPage">
-      <!-- ✅ SIDEBAR GAUCHE -->
-      <div class="left-menu">
-        <ul>
-          <li><a routerLink="/chien">🐶 Chien <span class="arrow-icon">→</span></a></li>
-          <li><a routerLink="/chat">🐱 Chat <span class="arrow-icon">→</span></a></li>
-          <li><a routerLink="/oiseau">🦜 Oiseau <span class="arrow-icon">→</span></a></li>
-          <li><a routerLink="/rongeur">🐰 Rongeur, Lapin, Furet <span class="arrow-icon">→</span></a></li>
-          <li><a routerLink="/bassecour">🐔 Basse cour <span class="arrow-icon">→</span></a></li>
-          <li><a routerLink="/jardin">🌿 Jardins aquatiques <span class="arrow-icon">→</span></a></li>
-        </ul>
-      </div>
-
-      <!-- ✅ SIDEBAR DROITE -->
-      <div class="right-menu">
-        <!-- ✅ BARRE DE RECHERCHE -->
-        <div class="search-container">
-          <input type="text" class="search-bar" placeholder="🔍 Rechercher...">
-        </div>
-
-        <!-- ✅ ICONES RÉSEAUX SOCIAUX -->
-        <div class="social-icons">
-          <a href="https://facebook.com" target="_blank">
-            <img src="assets/images/facebook.png" alt="Facebook">
-          </a>
-          <a href="https://instagram.com" target="_blank">
-            <img src="assets/images/instagram.png" alt="Instagram">
-          </a>
-        </div>
-
-        <!-- ✅ SECTION NOS MARQUES -->
-        <div class="marques-section">
-          <h3>Nos Marques</h3>
-          <div class="marques-content">
-            <p>Défilement des marques ici</p>
-          </div>
-        </div>
-
-        <!-- ✅ BOUTON BESOIN D’AIDE -->
-        <div class="help-button">
-          <a routerLink="/help">❓ Besoin d’aide?</a>
-        </div>
-      </div>
-    </ng-container>
-
-    <!-- ✅ CONTENU PRINCIPAL -->
-    <div class="content" [class.admin-container]="isAdminPage">
-      <router-outlet></router-outlet>
-    </div>
-
+    <router-outlet></router-outlet>
   </main>
 
   <!-- ✅ FOOTER -->
   <footer class="footer">
     <p>© 2025 Nature & Animaux - Tous droits réservés</p>
   </footer>
-
-</div> <!-- ✅ FIN DU WRAPPER -->
+</div>

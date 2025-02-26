@@ -1,22 +1,28 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
+import { CommonModule } from '@angular/common'; // ✅ Ajout pour éviter les erreurs *ngIf
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
+  standalone: true,
+  imports: [CommonModule] // ✅ Ajout pour *ngIf et autres directives
 })
 export class HeaderComponent {
   isAuthenticated = false;
   userInitials: string | null = null;
   isAdmin = false;
+  isDropdownOpen = false;
 
-  constructor(private authService: AuthService, private router: Router) {
+  constructor(private authService: AuthService, public router: Router) { // ✅ `router` doit être public pour le template
     this.authService.user$.subscribe(user => {
-      if (user) {
+      console.log("🔍 Utilisateur connecté :", user);
+
+      if (user && user.email) {
         this.isAuthenticated = true;
-        this.userInitials = this.getInitials(user.first_name, user.last_name);
+        this.userInitials = this.getInitialsFromEmail(user.email);
         this.isAdmin = user.is_admin;
       } else {
         this.isAuthenticated = false;
@@ -26,21 +32,37 @@ export class HeaderComponent {
     });
   }
 
-  // 🔥 Fonction pour extraire les initiales de l'utilisateur
-  getInitials(firstName: string, lastName: string): string {
-    return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
+  // ✅ Récupérer les initiales de l'email
+  getInitialsFromEmail(email: string): string {
+    if (!email || email.length < 2) return '??';
+    return email.slice(0, 2).toUpperCase();
   }
 
-  // ✅ Déconnexion utilisateur
+  // ✅ Déconnexion
   logout(): void {
     this.authService.logout();
+    this.isDropdownOpen = false;
     this.router.navigate(['/']);
   }
 
-  // 🔥 Redirection vers la page admin
+  // ✅ Aller à l'espace admin
   goToAdmin(): void {
     if (this.isAdmin) {
       this.router.navigate(['/admin-dashboard']);
+    }
+  }
+
+  // ✅ Ouvrir/fermer le menu déroulant
+  toggleDropdown(): void {
+    this.isDropdownOpen = !this.isDropdownOpen;
+  }
+
+  // ✅ Fermer le menu quand on clique en dehors
+  @HostListener('document:click', ['$event'])
+  closeDropdown(event: Event): void {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.dropdown')) {
+      this.isDropdownOpen = false;
     }
   }
 }

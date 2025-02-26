@@ -88,6 +88,7 @@ export class AuthService {
     this.http.get<any>(`${this.baseUrl}/profile/`, { headers }).subscribe(
       user => {
         if (user) {
+          console.log("✅ Utilisateur récupéré :", user); // 🔥 Ajout pour debug
           this.userSubject.next(user);
         }
       },

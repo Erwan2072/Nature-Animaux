@@ -1,0 +1,143 @@
+@use "sass:color";
+
+
+/* ✅ NAVIGATION (Barre sous le logo et le titre) */
+.nav-bar {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	background-color: #8BC34A;
+	padding: 10px 20px;
+	position: fixed;
+	width: 100%;
+	top: 0;
+	left: 0;
+	z-index: 1000; /* ✅ Augmenté pour éviter tout conflit d'affichage */
+	box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+	height: 80px; /* ✅ Taille optimisée */
+}
+
+/* ✅ Correction pour éviter la superposition de la barre des catégories */
+.category-bar {
+	margin-top: 70px; /* ✅ Ajustement pour qu'elle ne chevauche pas le header */
+}
+
+/* ✅ NAVIGATION CATÉGORIES */
+.nav-left {
+	flex-grow: 1;
+	display: flex;
+	justify-content: center;
+}
+
+.nav-categories ul {
+	list-style: none;
+	display: flex;
+	gap: 15px; /* ✅ Réduction de l’espace */
+	padding: 0;
+	margin: 0;
+}
+
+.nav-categories li a {
+	text-decoration: none;
+	color: white;
+	font-weight: bold;
+	padding: 10px 18px;
+	border-radius: 15px;
+	background-color: #8BC34A;
+	transition: background 0.3s, color 0.3s;
+	font-size: 1rem;
+}
+
+.nav-categories li a:hover {
+	background-color: color.scale(#8BC34A, $lightness: -10%); /* ✅ Correction de la fonction darken() */
+	color: white;
+}
+
+/* ✅ BARRE DE RECHERCHE */
+.nav-center {
+	margin-left: 10px; /* ✅ Correction d’alignement */
+}
+
+.search-container input {
+	padding: 7px 12px;
+	border-radius: 20px;
+	border: 2px solid white;
+	background-color: #ffcdce;
+	color: #333;
+	outline: none;
+	transition: border-color 0.3s;
+	font-size: 1rem;
+	width: 180px; /* ✅ Taille légèrement réduite */
+}
+
+.search-container input::placeholder {
+	color: #333;
+	font-style: italic;
+}
+
+.search-container input:focus {
+	border-color: #fff;
+	box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+}
+
+/* ✅ ICÔNES CONNEXION ET PANIER */
+.nav-right {
+	display: flex;
+	align-items: center;
+	gap: 15px; /* ✅ Espacement réduit */
+}
+
+.btn-cart {
+	background: transparent;
+	border: none;
+	font-size: 1.6rem;
+	cursor: pointer;
+	color: white;
+	transition: transform 0.3s;
+}
+
+.btn-cart:hover {
+	transform: scale(1.1);
+}
+
+.btn {
+	background: white;
+	color: #8BC34A;
+	font-weight: bold;
+	padding: 8px 14px;
+	border-radius: 20px;
+	border: none;
+	cursor: pointer;
+	transition: 0.3s;
+	font-size: 0.9rem;
+}
+
+.btn:hover {
+	background: #fff5;
+}
+
+/* ✅ RESPONSIVE */
+@media screen and (max-width: 1024px) {
+	.nav-categories ul {
+	  gap: 10px;
+	}
+
+	.search-container {
+	  display: none;
+	}
+}
+
+@media screen and (max-width: 768px) {
+	.nav-bar {
+	  flex-direction: column;
+	  height: auto; /* ✅ Meilleure adaptation mobile */
+	}
+
+	.nav-right {
+	  margin-top: 5px;
+	}
+
+	.btn-cart {
+	  font-size: 1.4rem;
+	}
+}
