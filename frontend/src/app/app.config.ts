@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { routes } from './app.routes';
 import { AdminGuard } from './services/admin.guard';
-import { AdminProductsComponent } from './admin-products/admin-products.component';
+import { AdminProductsComponent } from './admin/admin-products/admin-products.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';

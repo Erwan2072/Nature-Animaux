@@ -141,3 +141,75 @@
 	  font-size: 1.4rem;
 	}
 }
+
+/* ✅ CONTAINER DU PROFIL (GARDER EN PLACE) */
+.dropdown {
+	position: relative; /* ✅ Pour éviter que le menu ne déplace le bouton */
+  }
+
+  /* ✅ BOUTON PROFIL (STYLE AMÉLIORÉ) */
+  .profile-btn {
+	background: #8BC34A;
+	color: white;
+	font-weight: bold;
+	padding: 10px 15px;
+	border-radius: 20px;
+	border: none;
+	cursor: pointer;
+	transition: all 0.3s;
+	font-size: 1rem;
+	display: flex;
+	align-items: center;
+	gap: 5px;
+  }
+
+  .profile-btn:hover {
+	background: color.adjust(#8BC34A, $lightness: -10%);
+  }
+
+  /* ✅ STYLE DU MENU DÉROULANT */
+  .dropdown-menu {
+	position: absolute;
+	top: 110%;
+	right: 0;
+	background: white;
+	border-radius: 10px;
+	box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+	padding: 10px 0;
+	width: 180px;
+	display: flex;
+	flex-direction: column;
+	z-index: 9999;
+	opacity: 0;
+	transform: translateY(-10px);
+	transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+
+  /* ✅ Affichage du menu quand il est ouvert */
+  .dropdown-menu.show {
+	opacity: 1;
+	transform: translateY(0);
+  }
+
+  /* ✅ STYLE DES BOUTONS DANS LE MENU */
+  .dropdown-menu li {
+	list-style: none;
+  }
+
+  .dropdown-menu button {
+	background: transparent;
+	border: none;
+	width: 100%;
+	text-align: left;
+	padding: 10px 15px;
+	font-size: 1rem;
+	color: #333;
+	cursor: pointer;
+	transition: background 0.3s;
+  }
+
+  .dropdown-menu button:hover {
+	background: #8BC34A;
+	color: white;
+	border-radius: 5px;
+  }

@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 from datetime import timedelta
 
+# ✅ Base Directory (Garder uniquement cette définition)
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "django-insecure-3#&plqt0d!hvl+q98k8@^i+yy*762!t4ixe_===)(pkn#&4wua")
@@ -111,8 +112,7 @@ SOCIALACCOUNT_PROVIDERS = {
 }
 
 SITE_ID = 1
-ACCOUNT_LOGIN_METHODS = ["email"]
-
+ACCOUNT_AUTHENTICATION_METHOD = "email"
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False  # Désactiver `username`
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None  # Empêche allauth de chercher `username`
@@ -121,10 +121,11 @@ ACCOUNT_EMAIL_VERIFICATION = "optional"
 # ✅ Configuration Django
 ROOT_URLCONF = 'nature_animaux.urls'
 
+# ✅ Configuration TEMPLATES
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
+        'DIRS': [BASE_DIR / "nature_animaux" / "templates"],  # ✅ Correction ici
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -163,6 +164,7 @@ TIME_ZONE = 'Europe/Paris'
 USE_I18N = True
 USE_TZ = True
 
+# ✅ Correction de STATIC_ROOT
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
@@ -180,3 +182,20 @@ AUTHENTICATION_BACKENDS = [
 LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
+
+# Protection contre les attaques XSS
+SECURE_BROWSER_XSS_FILTER = True  # Active le filtre XSS du navigateur
+SECURE_CONTENT_TYPE_NOSNIFF = True  # Empêche le navigateur de deviner le type de contenu
+
+# Protection contre le framing (Clickjacking)
+X_FRAME_OPTIONS = 'DENY'  # Empêche l'intégration du site dans un iframe
+
+# Redirection automatique vers HTTPS (En production uniquement)
+SECURE_SSL_REDIRECT = not DEBUG  # Redirige tout le trafic HTTP vers HTTPS en production
+
+# Cookies sécurisés
+SESSION_COOKIE_SECURE = True  # Envoie les cookies de session uniquement via HTTPS
+CSRF_COOKIE_SECURE = True  # Envoie les cookies CSRF uniquement via HTTPS
+
+# Protection CSRF renforcée
+CSRF_COOKIE_HTTPONLY = True  # Rend le cookie CSRF inaccessible via JavaScript

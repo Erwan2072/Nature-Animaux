@@ -1,14 +1,14 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
-import { CommonModule } from '@angular/common'; // ✅ Ajout pour éviter les erreurs *ngIf
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
   standalone: true,
-  imports: [CommonModule] // ✅ Ajout pour *ngIf et autres directives
+  imports: [CommonModule]
 })
 export class HeaderComponent {
   isAuthenticated = false;
@@ -16,7 +16,7 @@ export class HeaderComponent {
   isAdmin = false;
   isDropdownOpen = false;
 
-  constructor(private authService: AuthService, public router: Router) { // ✅ `router` doit être public pour le template
+  constructor(private authService: AuthService, public router: Router, private eRef: ElementRef) {
     this.authService.user$.subscribe(user => {
       console.log("🔍 Utilisateur connecté :", user);
 
@@ -32,7 +32,7 @@ export class HeaderComponent {
     });
   }
 
-  // ✅ Récupérer les initiales de l'email
+  // ✅ Récupérer les deux premières lettres de l'email
   getInitialsFromEmail(email: string): string {
     if (!email || email.length < 2) return '??';
     return email.slice(0, 2).toUpperCase();
@@ -45,23 +45,27 @@ export class HeaderComponent {
     this.router.navigate(['/']);
   }
 
-  // ✅ Aller à l'espace admin
+  // ✅ Aller à l'espace admin (route corrigée)
   goToAdmin(): void {
+    console.log("🔍 Tentative d'accès à l'admin - isAdmin:", this.isAdmin);
+
     if (this.isAdmin) {
-      this.router.navigate(['/admin-dashboard']);
+      this.router.navigate(['/admin']); // ✅ Redirection Angular
+    } else {
+      console.error("🚨 Accès refusé : l'utilisateur n'est pas admin");
     }
   }
+
 
   // ✅ Ouvrir/fermer le menu déroulant
   toggleDropdown(): void {
     this.isDropdownOpen = !this.isDropdownOpen;
   }
 
-  // ✅ Fermer le menu quand on clique en dehors
+  // ✅ Fermer le menu déroulant lorsqu'on clique en dehors
   @HostListener('document:click', ['$event'])
   closeDropdown(event: Event): void {
-    const target = event.target as HTMLElement;
-    if (!target.closest('.dropdown')) {
+    if (!this.eRef.nativeElement.contains(event.target)) {
       this.isDropdownOpen = false;
     }
   }

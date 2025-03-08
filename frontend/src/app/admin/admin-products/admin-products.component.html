@@ -1,0 +1,162 @@
+<div class="admin-products-container">
+    <!-- ✅ Onglets pour naviguer entre les sections -->
+    <div class="tabs">
+        <button [class.active]="activeTab === 'add'" (click)="setActiveTab('add')">Ajout</button>
+        <button [class.active]="activeTab === 'edit'" (click)="setActiveTab('edit')">Modification</button>
+        <button [class.active]="activeTab === 'delete'" (click)="setActiveTab('delete')">Suppression</button>
+    </div>
+
+    <h2>Produits</h2>
+
+    <!-- ✅ SECTION AJOUT & MODIFICATION -->
+    <div *ngIf="activeTab !== 'delete'">
+        <table class="product-table">
+            <tbody>
+                <!-- ✅ Autocomplétion pour Titre du produit -->
+                <tr>
+                    <td><strong>Titre du produit</strong></td>
+                    <td colspan="3">
+                        <mat-form-field appearance="outline" class="full-width">
+                            <mat-label>Nom du produit</mat-label>
+                            <input type="text" matInput [formControl]="productTitleControl" [matAutocomplete]="auto">
+                            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="product.title = $event.option.viewValue">
+                                <mat-option *ngFor="let title of filteredProducts | async" [value]="title">
+                                    {{ title }}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td><strong>Animaux</strong></td>
+                    <td colspan="3">
+                        <select [(ngModel)]="product.animal" name="animal" required>
+                            <option *ngFor="let animal of animals" [value]="animal">{{ animal }}</option>
+                        </select>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td><strong>Catégorie</strong></td>
+                    <td colspan="3">
+                        <select [(ngModel)]="product.category" name="category" required>
+                            <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+                        </select>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td><strong>Sous-Catégorie</strong></td>
+                    <td colspan="3">
+                        <select [(ngModel)]="product.subCategory" name="subCategory" required>
+                            <option *ngFor="let subCategory of subCategories" [value]="subCategory">{{ subCategory }}</option>
+                        </select>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td><strong>Marque</strong></td>
+                    <td colspan="3">
+                        <select [(ngModel)]="product.brand" name="brand" required>
+                            <option *ngFor="let brand of brands" [value]="brand">{{ brand }}</option>
+                        </select>
+                    </td>
+                </tr>
+
+                <!-- ✅ Section Variations -->
+                <tr>
+                    <td colspan="5"><h3>Variations</h3></td>
+                </tr>
+                <tr>
+                    <th>SKU</th>
+                    <th>Prix (€)</th>
+                    <th>Poids (kg)</th>
+                    <th style="width: 80px;">Stock</th>
+                    <th style="width: 50px;">Actions</th>
+                </tr>
+
+                <tr *ngFor="let variation of product.variations; let i = index; trackBy: trackByIndex">
+                    <td><input type="text" placeholder="SKU" [(ngModel)]="variation.sku" name="sku" required></td>
+                    <td><input type="number" placeholder="Prix" [(ngModel)]="variation.price" name="price" min="0" required></td>
+                    <td>
+                        <select [(ngModel)]="variation.weight" name="weight" required>
+                            <option *ngFor="let weight of weights" [value]="weight">{{ weight }}</option>
+                        </select>
+                    </td>
+                    <td><input type="number" placeholder="Stock" [(ngModel)]="variation.stock" name="stock" min="0" required></td>
+                    <td>
+                        <button *ngIf="product.variations.length > 1" (click)="removeVariation(i)">❌</button>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan="5" class="center">
+                        <button class="add-variation-button" (click)="addVariation()">+ Ajouter une variation</button>
+                    </td>
+                </tr>
+
+                <!-- ✅ Section Image -->
+                <tr>
+                    <td colspan="5"><h3>Photo du produit</h3></td>
+                </tr>
+                <tr>
+                    <td colspan="5" class="center">
+                        <label for="image-upload" class="image-upload-label">📷 Choisir une image</label>
+                        <input type="file" id="image-upload" (change)="onFileSelected($event)" accept="image/png, image/jpeg" hidden>
+                        <br>
+                        <img *ngIf="imagePreview" [src]="imagePreview" alt="Prévisualisation" class="image-preview">
+                    </td>
+                </tr>
+
+                <!-- ✅ Section Description -->
+                <tr>
+                    <td colspan="5"><h3>Description du produit</h3></td>
+                </tr>
+                <tr>
+                    <td colspan="5">
+                        <textarea placeholder="Ceci est une description" [(ngModel)]="product.description" name="description" required></textarea>
+                    </td>
+                </tr>
+
+                <!-- ✅ Bouton Valider Centré -->
+                <tr>
+                    <td colspan="5" class="center">
+                        <button class="validate-button" (click)="saveProduct()">✅ Valider</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ✅ SECTION SUPPRESSION -->
+    <div *ngIf="activeTab === 'delete'" class="delete-section">
+        <table class="product-table">
+            <tbody>
+                <tr>
+                    <td><strong>Titre du produit</strong></td>
+                    <td>
+                      <mat-form-field appearance="outline" class="full-width">
+                        <mat-label>Sélectionner un produit</mat-label>
+                        <input type="text" matInput [formControl]="selectedProductControl" [matAutocomplete]="auto" (input)="updateSelectedProductSKU()">
+                        <mat-autocomplete #auto="matAutocomplete">
+                          <mat-option *ngFor="let title of filteredProductTitles | async" [value]="title">
+                            {{ title }}
+                          </mat-option>
+                        </mat-autocomplete>
+                      </mat-form-field>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><strong>SKU</strong></td>
+                    <td>{{ selectedProductSKU || 'N/A' }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- ✅ Bouton Supprimer Centré et stylisé -->
+        <div class="center">
+            <button class="delete-button" (click)="deleteProduct()">🗑️ Supprimer</button>
+        </div>
+    </div>
+</div>

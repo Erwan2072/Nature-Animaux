@@ -9,7 +9,7 @@
 		<button class="btn profile-btn" (click)="toggleDropdown()">
 		  <span class="initials">{{ userInitials }}</span> ⏷
 		</button>
-		<ul class="dropdown-menu" *ngIf="isDropdownOpen">
+		<ul class="dropdown-menu" [class.show]="isDropdownOpen">
 		  <li><button (click)="router.navigate(['/profile'])">👤 Mon Profil</button></li>
 		  <li *ngIf="isAdmin"><button (click)="goToAdmin()">⚙️ Espace Admin</button></li>
 		  <li><button (click)="logout()">🚪 Déconnexion</button></li>
