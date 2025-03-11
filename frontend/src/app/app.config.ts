@@ -5,7 +5,6 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { routes } from './app.routes';
 import { AdminGuard } from './services/admin.guard';
-import { AdminProductsComponent } from './admin/admin-products/admin-products.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -18,10 +17,14 @@ import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { provideAuth, getAuth } from '@angular/fire/auth';
 import { environment } from '../environments/environment';
 
-// ✅ Définition des routes avec protection AdminGuard
+// ✅ Définition des routes avec Lazy Loading
 const updatedRoutes: Routes = [
   ...routes,
-  { path: 'admin-products', component: AdminProductsComponent, canActivate: [AdminGuard] }
+  {
+    path: 'admin-products',
+    canActivate: [AdminGuard],
+    loadComponent: () => import('./admin/admin-products/admin-products.component').then(m => m.AdminProductsComponent)
+  }
 ];
 
 export const appConfig: ApplicationConfig = {
@@ -38,8 +41,8 @@ export const appConfig: ApplicationConfig = {
       MatButtonModule,
       ReactiveFormsModule
     ),
-    provideFirebaseApp(() => initializeApp(environment.firebaseConfig)), // ✅ Correction : Firebase doit être en dehors d'importProvidersFrom
-    provideAuth(() => getAuth()), // ✅ Correction : Firebase Auth doit aussi être en dehors
+    provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
+    provideAuth(() => getAuth()),
     provideAnimationsAsync(),
   ],
 };

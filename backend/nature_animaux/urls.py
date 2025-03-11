@@ -7,7 +7,6 @@ from drf_yasg import openapi
 from rest_framework.permissions import AllowAny
 from .views import home  # ✅ Importer la vue home
 
-
 # ✅ Configuration de Swagger & Redoc
 schema_view = get_schema_view(
     openapi.Info(
@@ -23,16 +22,16 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
-     # ✅ Route racine
-    path('', home, name="home"),  # ✅ Ajout de la route racine
+    path('', home, name="home"),  # ✅ Route racine
+
     # ✅ Admin Panel Django
     path('admin/', admin.site.urls),
 
-    # ✅ Produits (produits stockés en MongoDB)
-    path('products/', include(('products.urls', 'products'), namespace='products')),
+    # ✅ Lazy loading pour les produits
+    path('products/', include('products.urls', namespace='products')),
 
-    # ✅ Authentification & Utilisateurs
-    path('api/', include(('users.urls', 'users'), namespace='users')),  # Auth & users API
+    # ✅ Lazy loading pour l'authentification & les utilisateurs
+    path('api/', include('users.urls', namespace='users')),
 
     # ✅ Documentation Swagger & Redoc
     path('swagger.json', schema_view.without_ui(cache_timeout=0), name='schema-json'),
@@ -45,5 +44,3 @@ urlpatterns = [
 # ✅ Servir les fichiers statiques en mode développement
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-
-

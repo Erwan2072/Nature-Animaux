@@ -24,7 +24,7 @@ def check_mongo_connection():
 def api_overview(request):
     """Affiche un aperçu des routes disponibles."""
     api_urls = {
-        'List': '/product-list/',
+        'List': '/products/',
         'Detail': '/product-detail/<str:pk>/',
         'Create': '/product-create/',
         'Update': '/product-update/<str:pk>/',
@@ -32,52 +32,30 @@ def api_overview(request):
     }
     return Response(api_urls)
 
-# ✅ Liste des produits (accessible à tous)
-@api_view(['GET'])
-@permission_classes([AllowAny])  # 🔥 Permet à tous les utilisateurs d'afficher les produits
-def product_list(request):
-    """Liste tous les produits avec pagination."""
-    if not check_mongo_connection():
-        return Response({"error": "Base de données MongoDB non accessible."}, status=500)
-
-    try:
-        logger.info(f"📦 Récupération des produits")
-
-        products = list(products_collection.find({}))
-        if not products:
-            return Response({"message": "Aucun produit trouvé."}, status=200)
-
-        # ✅ Pagination
-        paginator = PageNumberPagination()
-        paginator.page_size = 10
-        paginated_products = paginator.paginate_queryset(products, request)
-
-        # ✅ Sérialisation propre
-        for product in paginated_products:
-            product["_id"] = str(product["_id"])
-
-        serializer = ProductSerializer(paginated_products, many=True)
-        return paginator.get_paginated_response(serializer.data)
-
-    except Exception as e:
-        logger.error(f"❌ Erreur lors de la récupération des produits : {e}")
-        return Response({"error": "Erreur interne du serveur."}, status=500)
-
 # ✅ Détails d'un produit (accessible à tous)
 @api_view(['GET'])
-@permission_classes([AllowAny])  # 🔥 Permet à tous les utilisateurs d'afficher un produit
+@permission_classes([AllowAny])
 def product_detail(request, pk):
     """Récupère les détails d'un produit."""
     if not check_mongo_connection():
         return Response({"error": "Base de données MongoDB non accessible."}, status=500)
 
     try:
+        logger.info(f"ID brut reçu : '{pk}'")  # 🔍 Ajoute ce log
+
+        # Suppression des espaces ou caractères invisibles
+        pk = pk.strip()
+
+        # Vérification si l'ID est un ObjectId valide
         if not ObjectId.is_valid(pk):
+            logger.error(f"ID non valide après strip : {pk}")
             return Response({"error": "ID invalide."}, status=400)
 
+        # Recherche du produit dans la base MongoDB
         product = products_collection.find_one({"_id": ObjectId(pk)})
 
         if not product:
+            logger.warning(f"Produit avec l'ID {pk} introuvable.")
             return Response({"error": "Produit non trouvé."}, status=404)
 
         product["_id"] = str(product["_id"])
@@ -86,6 +64,34 @@ def product_detail(request, pk):
 
     except Exception as e:
         logger.error(f"❌ Erreur lors de la récupération du produit {pk} : {e}")
+        return Response({"error": "Erreur interne du serveur."}, status=500)
+
+# ✅ Liste des produits avec pagination optimisée
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def product_list(request):
+    """Liste tous les produits avec pagination optimisée."""
+    if not check_mongo_connection():
+        return Response({"error": "Base de données MongoDB non accessible."}, status=500)
+
+    try:
+        logger.info(f"📦 Récupération des produits")
+
+        paginator = PageNumberPagination()
+        paginator.page_size = 10
+        page = paginator.paginate_queryset(list(products_collection.find({})), request)
+
+        if not page:
+            return Response({"message": "Aucun produit trouvé."}, status=200)
+
+        for product in page:
+            product["_id"] = str(product["_id"])
+
+        serializer = ProductSerializer(page, many=True)
+        return paginator.get_paginated_response(serializer.data)
+
+    except Exception as e:
+        logger.error(f"❌ Erreur lors de la récupération des produits : {e}")
         return Response({"error": "Erreur interne du serveur."}, status=500)
 
 # ✅ Création d'un produit (réservé aux admins)
@@ -132,11 +138,10 @@ def product_update(request, pk):
         if not existing_product:
             return Response({"error": "Produit non trouvé."}, status=404)
 
-        serializer = ProductSerializer(existing_product, data=request.data, partial=True)
+        serializer = ProductSerializer(data=request.data, partial=True)
 
         if serializer.is_valid():
             updated_data = {k: v for k, v in serializer.validated_data.items() if v is not None}
-
             products_collection.update_one({"_id": ObjectId(pk)}, {"$set": updated_data})
 
             updated_product = products_collection.find_one({"_id": ObjectId(pk)})
@@ -147,8 +152,6 @@ def product_update(request, pk):
 
         return Response(serializer.errors, status=400)
 
-    except errors.InvalidId:
-        return Response({"error": "ID non valide."}, status=400)
     except Exception as e:
         logger.error(f"❌ Erreur lors de la mise à jour du produit {pk} : {e}")
         return Response({"error": "Erreur interne du serveur."}, status=500)

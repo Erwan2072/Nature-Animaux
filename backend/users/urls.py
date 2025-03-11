@@ -1,10 +1,12 @@
 from django.urls import path
-from .views import RegisterUserView, ProfileView, LoginView, LogoutView, GoogleLogin
+from . import views
+
+app_name = 'users'
 
 urlpatterns = [
-    path('register/', RegisterUserView.as_view(), name='register'),
-    path('login/', LoginView.as_view(), name='login'),  # ✅ Uniformisation
-    path('logout/', LogoutView.as_view(), name='logout'),
-    path('profile/', ProfileView.as_view(), name='profile'),
-    path('google/', GoogleLogin.as_view(), name='google_login'),  # ✅ Uniformisation
+    path('register/', views.RegisterUserView.as_view(), name='register'),
+    path('login/', views.LoginView.as_view(), name='login'),  # ✅ Uniformisation
+    path('logout/', views.LogoutView.as_view(), name='logout'),
+    path('profile/', views.ProfileView.as_view(), name='profile'),
+    path('google/', views.GoogleLogin.as_view(), name='google_login'),  # ✅ Uniformisation
 ]

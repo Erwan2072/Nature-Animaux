@@ -13,7 +13,7 @@ export const AdminGuard: CanActivateFn = (): Observable<boolean> => {
     tap(isAdmin => {
       if (!isAdmin) {
         console.warn('🚫 Accès refusé : Vous devez être administrateur pour accéder à cette page.');
-        router.navigate(['/home']); // 🔥 Redirige vers la page d'accueil au lieu de login
+        router.navigate(['/home'], { queryParams: { unauthorized: 'true' } }); // 🔥 Redirige vers la page d'accueil au lieu de login
       }
     })
   );

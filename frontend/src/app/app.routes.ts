@@ -1,29 +1,43 @@
 import { Routes } from '@angular/router';
-import { HomeComponent } from './home/home.component';
-import { AboutComponent } from './about/about.component';
-import { AdminProductsComponent } from './admin/admin-products/admin-products.component';
-import { ProductListComponent } from './product-list/product-list.component';
-import { LoginComponent } from './login/login.component';
-import { AdminGuard } from './services/admin.guard'; // ✅ Ajout du guard admin
-import { AdminComponent } from './admin/admin.component';
-import { UsersComponent } from './admin/users/users.component';
-import { OrdersComponent } from './admin/orders/orders.component';
-
+import { AdminGuard } from './services/admin.guard';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'home', pathMatch: 'full' }, // ✅ Redirection vers home par défaut
-  { path: 'home', component: HomeComponent }, // Page d'accueil
-  { path: 'about', component: AboutComponent }, // Page À propos
-  { path: 'products', component: ProductListComponent }, // Liste des produits
-  { path: 'login', component: LoginComponent }, // Page de connexion
-  { path: 'admin', component: AdminComponent, canActivate: [AdminGuard] },
-  { path: 'admin/products', component: AdminProductsComponent, canActivate: [AdminGuard] },
-  { path: 'admin/users', component: UsersComponent, canActivate: [AdminGuard] },
-  { path: 'admin/orders', component: OrdersComponent, canActivate: [AdminGuard] },
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
   {
-    path: 'admin-products',
-    component: AdminProductsComponent,
-    canActivate: [AdminGuard] // ✅ Protège l'accès admin
+    path: 'home',
+    loadComponent: () => import('./home/home.component').then(m => m.HomeComponent)
   },
-  { path: '**', redirectTo: 'home' }, // Redirection en cas d'URL inconnue
+  {
+    path: 'about',
+    loadComponent: () => import('./about/about.component').then(m => m.AboutComponent)
+  },
+  {
+    path: 'products',
+    loadComponent: () => import('./product-list/product-list.component').then(m => m.ProductListComponent)
+  },
+  {
+    path: 'login',
+    loadComponent: () => import('./login/login.component').then(m => m.LoginComponent)
+  },
+  {
+    path: 'admin',
+    loadComponent: () => import('./admin/admin.component').then(m => m.AdminComponent),
+    canActivate: [AdminGuard]
+  },
+  {
+    path: 'admin/products',
+    loadComponent: () => import('./admin/admin-products/admin-products.component').then(m => m.AdminProductsComponent),
+    canActivate: [AdminGuard]
+  },
+  {
+    path: 'admin/users',
+    loadComponent: () => import('./admin/users/users.component').then(m => m.UsersComponent),
+    canActivate: [AdminGuard]
+  },
+  {
+    path: 'admin/orders',
+    loadComponent: () => import('./admin/orders/orders.component').then(m => m.OrdersComponent),
+    canActivate: [AdminGuard]
+  },
+  { path: '**', redirectTo: 'home' }
 ];

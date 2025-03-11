@@ -8,7 +8,7 @@ import { AuthService } from './auth.service';
   providedIn: 'root'
 })
 export class ApiService {
-  private baseUrl = 'http://127.0.0.1:8000/api'; // 🔥 Vérifie que ton backend expose bien `/api/`
+  private baseUrl = 'http://127.0.0.1:8000'; // ✅ Mise à jour de l'URL de base
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 
@@ -46,7 +46,7 @@ export class ApiService {
 
   // ✅ Récupérer les produits avec pagination
   getProducts(page: number = 1): Observable<any> {
-    const url = `${this.baseUrl}/products/product-list/`;
+    const url = `${this.baseUrl}/products/`; // 🔥 Utilise uniquement /products/ pour le lazy loading
     const params = new HttpParams().set('page', page.toString());
 
     return this.getHeaders().pipe(
@@ -71,14 +71,14 @@ export class ApiService {
 
   // ✅ Ajouter un produit
   addProduct(product: any): Observable<any> {
-    const url = `${this.baseUrl}/products/product-create/`;
+    const url = `${this.baseUrl}/products/`;
     return this.getHeaders().pipe(
       switchMap(headers => this.http.post(url, product, { headers })),
       catchError(this.handleError)
     );
   }
 
-  // ✅ Modifier un produit (PATCH au lieu de PUT)
+  // ✅ Modifier un produit
   updateProduct(id: string, product: any): Observable<any> {
     const url = `${this.baseUrl}/products/product-update/${id}/`;
     return this.getHeaders().pipe(

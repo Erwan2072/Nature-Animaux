@@ -22,11 +22,11 @@ class LoginSerializer(serializers.Serializer):
     password = serializers.CharField(write_only=True)
 
     def validate(self, data):
-        email = data.get("email")
-        password = data.get("password")
+        email = data.get('email')
+        password = data.get('password')
 
         user = authenticate(username=email, password=password)
         if user is None:
-            raise serializers.ValidationError("Identifiants incorrects")
+            raise serializers.ValidationError('Identifiants incorrects')
 
-        return {"user": user}
+        return {'user': user}
