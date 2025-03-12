@@ -1,0 +1,81 @@
+.page-container {
+    max-width: 1100px;
+    margin: 50px auto;
+    background: linear-gradient(to bottom, #e3f2fd, #bbdefb);
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
+    text-align: center;
+}
+
+.page-content {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+
+    /* ✅ Justification du texte */
+    text-align: justify;
+}
+
+/* ✅ Assurer que tous les textes sont bien justifiés */
+.page-content p,
+.page-content div,
+.page-content ul,
+.page-content li {
+    text-align: justify;
+}
+
+.page-title {
+    font-size: 26px;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+h2 {
+    font-size: 20px;
+    font-weight: bold;
+    color: #444;
+    margin-top: 20px;
+    text-decoration: underline;
+}
+
+p {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #555;
+}
+
+a {
+    color: #007bff;
+    text-decoration: none;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+.contact-button {
+    display: block;
+    margin: 30px auto;
+    background-color: #ff8b8c;
+    color: white;
+    font-size: 16px;
+    padding: 12px 24px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out;
+
+    &:hover {
+        background-color: #ff4b4b;
+    }
+}
+
+/* ✅ Ajout d'une justification globale sur le composant */
+:host {
+    display: block;
+}
+

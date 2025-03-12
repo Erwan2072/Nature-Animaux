@@ -9,5 +9,8 @@ export const environment = {
 	  appId: "1:953921558549:web:415b6553efbffeda58d61c",
 	  measurementId: "G-2FXBB87RQ6"
 	},
-	googleClientId: "953921558549-kla8eq3g9d64js11l93t2i75m8vepqo2.apps.googleusercontent.com"
+	googleClientId: "953921558549-kla8eq3g9d64js11l93t2i75m8vepqo2.apps.googleusercontent.com",
+
+	// ✅ Ajout de la clé API Google Maps
+	googleMapsApiKey: "TA_CLE_API_GOOGLE_MAPS_ICI"
   };

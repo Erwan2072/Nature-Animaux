@@ -84,8 +84,12 @@
 .nav-right {
 	display: flex;
 	align-items: center;
-	gap: 15px; /* ✅ Espacement réduit */
-}
+	gap: 15px; /* Espacement entre les boutons */
+	position: absolute;
+	right: 20px; /* Positionnement à droite */
+	top: 50%;
+	transform: translateY(-50%); /* Centre verticalement */
+  }
 
 .btn-cart {
 	background: transparent;

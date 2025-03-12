@@ -32,7 +32,7 @@ body {
 
 /* ✅ LOGO CLIQUABLE AVEC ANIMATION */
 .logo-container {
-  position: absolute;
+  position: fixed;
   top: 20px;
   left: 2vw;
   z-index: 3000;
@@ -63,7 +63,7 @@ body {
 
 /* ✅ TITRE "Nature & Animaux" */
 .site-title {
-  position: absolute;
+  position: fixed;
   top: 5px; /* Ajustement pour être bien aligné avec le logo */
   left: 10vw;
   font-family: 'Dancing Script', cursive; /* Police correspondant au screenshot */
@@ -216,12 +216,14 @@ body {
 .main-container {
   display: flex;
   flex-direction: column;
-  align-items: center; /* ✅ Centre horizontalement */
-  justify-content: center; /* ✅ Centre verticalement si besoin */
-  width: 100%; /* ✅ Prend toute la largeur */
-  padding: 60px 0; /* ✅ Espacement en haut et en bas */
-  margin-top: 120px; /* ✅ Ajuste l’espace sous la barre verte */
+  align-items: center;
+  justify-content: center;
+  max-width: 1000px !important; /* ✅ Limite la largeur */
+  width: 90vw !important;
+  padding: 270px 0;
+  margin: 0 auto; /* ✅ Centre la page */
 }
+
 
 
 /* ✅ SIDEBAR GAUCHE */
@@ -335,16 +337,14 @@ body {
 .content {
   display: flex;
   flex-direction: column;
-  align-items: center; /* ✅ Centre le contenu horizontalement */
-  justify-content: center; /* ✅ Centre verticalement si besoin */
-  width: 80%; /* ✅ Ajuste la largeur du contenu */
-  max-width: 800px; /* ✅ Limite la largeur pour un bon rendu */
-  margin: 0 auto; /* ✅ Centre horizontalement */
+  align-items: center;
+  justify-content: center;
+  max-width: 800px;
+  width: 70vw !important;
+  margin: 0 auto;
   padding: 20px;
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
+
 
 
 /* ✅ BOUTON BESOIN D’AIDE */
@@ -404,14 +404,29 @@ body {
 
 /* ✅ CONTENEUR DES CATÉGORIES */
 .category-bar {
+  position: fixed; /* Fixe la barre en haut */
+  top: 60px; /* Ajuste en fonction du header et du logo */
+  left: 50%;
+  transform: translateX(-50%); /* Centre horizontalement */
+  z-index: 2000; /* Assure qu'elle est au-dessus du contenu */
   display: flex;
-  justify-content: flex-start; /* Centre les boutons et la barre de recherche */
+  justify-content: center;
   align-items: center;
-  gap: 5px; /* Espacement plus homogène */
-  margin: 150px auto 20px 200px; /* Centrage horizontal */
-  padding: 10px 0;
+  gap: 10px; /* Espacement entre les boutons */
+  background-color: transparent;
+  padding: 40px 30px;
   width: 90%;
-  flex-wrap: wrap; /* Permet un bon affichage sur petit écran */
+  border-radius: 20px;
+  box-shadow: 0px 0px 0px rgba(0, 0, 0, 0.2);
+}
+
+/* Ajuste la barre pour mobile */
+@media screen and (max-width: 768px) {
+  .category-bar {
+    top: 120px; /* Décale légèrement vers le bas pour éviter les chevauchements */
+    flex-wrap: wrap; /* Permet l'affichage sur plusieurs lignes */
+    width: 95%;
+  }
 }
 
 /* ✅ STYLE DES BOUTONS DES CATÉGORIES */

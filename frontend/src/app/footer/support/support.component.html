@@ -1,0 +1,24 @@
+<div class="page-container">
+	<div class="page-content">
+	  <h1 class="page-title">Contactez-nous</h1>
+
+	  <form [formGroup]="contactForm" (ngSubmit)="onSubmit()">
+		<div class="form-group">
+		  <input type="text" formControlName="prenom" placeholder="Prénom">
+		  <input type="text" formControlName="nom" placeholder="Nom de famille">
+		</div>
+		<div class="form-group">
+		  <input type="email" formControlName="email" placeholder="E-mail">
+		  <input type="text" formControlName="telephone" placeholder="Téléphone">
+		</div>
+		<input type="text" formControlName="adresse" placeholder="Adresse">
+		<textarea formControlName="message" placeholder="Rédigez votre message ici"></textarea>
+
+		<button type="submit" [disabled]="contactForm.invalid">Envoyer</button>
+	  </form>
+
+	  <p *ngIf="isSubmitted" class="success-message">Votre message a été envoyé avec succès !</p>
+
+	  <h2>Notre localisation</h2>
+	</div>
+  </div>

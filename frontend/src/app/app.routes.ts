@@ -9,7 +9,7 @@ export const routes: Routes = [
   },
   {
     path: 'about',
-    loadComponent: () => import('./about/about.component').then(m => m.AboutComponent)
+    loadComponent: () => import('./footer/about/about.component').then(m => m.AboutComponent)
   },
   {
     path: 'products',
@@ -38,6 +38,19 @@ export const routes: Routes = [
     path: 'admin/orders',
     loadComponent: () => import('./admin/orders/orders.component').then(m => m.OrdersComponent),
     canActivate: [AdminGuard]
+  },
+  // ✅ Ajout des pages liées au footer avec lazy loading
+  {
+    path: 'terms',
+    loadComponent: () => import('./footer/terms/terms.component').then(m => m.TermsComponent)
+  },
+  {
+    path: 'legal',
+    loadComponent: () => import('./footer/legal/legal.component').then(m => m.LegalComponent)
+  },
+  {
+    path: 'support',
+    loadComponent: () => import('./footer/support/support.component').then(m => m.SupportComponent)
   },
   { path: '**', redirectTo: 'home' }
 ];

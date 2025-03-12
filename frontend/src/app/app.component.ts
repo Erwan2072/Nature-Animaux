@@ -4,13 +4,14 @@ import { RouterModule, Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { AuthService } from './services/auth.service';
 import { HeaderComponent } from './header/header.component'; // ✅ Import du HeaderComponent
+import { FooterComponent } from './footer/footer.component';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
   standalone: true,
-  imports: [CommonModule, RouterModule, HeaderComponent] // ✅ Ajout du HeaderComponent
+  imports: [CommonModule, RouterModule, HeaderComponent, FooterComponent] // ✅ Ajout du HeaderComponent
 })
 export class AppComponent implements OnInit {
   title: string = 'Nature & Animaux';

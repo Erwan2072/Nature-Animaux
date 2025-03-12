@@ -1,13 +1,32 @@
 <!-- ✅ Section d'accueil -->
 <section class="home">
-	<div class="banner">
-	  <h1>Bienvenue sur <span>Nature & Animaux</span></h1>
-	  <p>Bienvenue sur notre boutique en ligne.
-
-		Vous trouverez des articles de qualité pour tous vos compagnons.
-
-		​Vous ne trouvez pas ce que vous recherchez ? N'hésitez pas à nous contactez !</p>
+	<!-- ✅ Image au-dessus du texte de bienvenue -->
+	<div class="home-image">
+	  <img src="assets/images/logo_N&A.jpg" alt="Bienvenue sur Nature & Animaux">
 	</div>
 
-	
-  </section>
+	<!-- ✅ Texte d'accueil -->
+	<div class="banner">
+	  <h1>Bienvenue sur <span>Nature & Animaux</span></h1>
+	  <p>
+		Bienvenue sur notre boutique en ligne.<br>
+		Vous trouverez des articles de qualité pour tous vos compagnons.<br>
+		​Vous ne trouvez pas ce que vous recherchez ? N'hésitez pas à nous contacter !
+	  </p>
+	</div>
+
+	<!-- ✅ Bandeau animé -->
+	<div class="banner-container">
+		<div class="banner-text fade-text">Livraison gratuite en local</div>
+		<div class="banner-text fade-text">Concarneau, Rosporden, Scäer, Quimperlé, Lorient et alentours</div>
+	</div>
+
+	<!-- ✅ Carrousel en 3D -->
+	<div class="carousel-container">
+		<div class="carousel">
+			<div class="carousel-item" *ngFor="let img of images; let i = index" [ngStyle]="{'transform': getRotation(i)}">
+				<img [src]="img" alt="Carrousel Image">
+			</div>
+		</div>
+	</div>
+</section>
