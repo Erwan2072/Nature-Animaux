@@ -1,5 +1,5 @@
 import { ApplicationConfig, importProvidersFrom } from '@angular/core';
-import { provideRouter, withComponentInputBinding, Routes } from '@angular/router';
+import { provideRouter, withComponentInputBinding, Routes, withInMemoryScrolling } from '@angular/router';
 import { provideHttpClient, HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -29,7 +29,10 @@ const updatedRoutes: Routes = [
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideRouter(updatedRoutes, withComponentInputBinding()),
+    provideRouter(updatedRoutes,
+      withComponentInputBinding(),
+      withInMemoryScrolling({ scrollPositionRestoration: 'top' }) // ✅ Fonctionne bien sous Angular 19
+    ),
     provideHttpClient(),
     importProvidersFrom(
       CommonModule,
@@ -44,6 +47,5 @@ export const appConfig: ApplicationConfig = {
     provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
     provideAuth(() => getAuth()),
     provideAnimationsAsync(),
-
   ]
 };

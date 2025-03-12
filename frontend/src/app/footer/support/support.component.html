@@ -1,24 +1,56 @@
 <div class="page-container">
-	<div class="page-content">
-	  <h1 class="page-title">Contactez-nous</h1>
+    <div class="page-content">
 
-	  <form [formGroup]="contactForm" (ngSubmit)="onSubmit()">
-		<div class="form-group">
-		  <input type="text" formControlName="prenom" placeholder="Prénom">
-		  <input type="text" formControlName="nom" placeholder="Nom de famille">
-		</div>
-		<div class="form-group">
-		  <input type="email" formControlName="email" placeholder="E-mail">
-		  <input type="text" formControlName="telephone" placeholder="Téléphone">
-		</div>
-		<input type="text" formControlName="adresse" placeholder="Adresse">
-		<textarea formControlName="message" placeholder="Rédigez votre message ici"></textarea>
+        <!-- ✅ Ajout des liens vers les réseaux sociaux -->
+        <div class="social-links">
+            <a href="mailto:boutique.natureetanimaux&#64;gmail.com" target="_blank" rel="noopener noreferrer">
+                <img src="./assets/images/mail.svg" alt="Email">
+                <span>boutique.natureetanimaux&#64;gmail.com</span>
+            </a>
 
-		<button type="submit" [disabled]="contactForm.invalid">Envoyer</button>
-	  </form>
+            <a href="tel:0689350889">
+                <img src="./assets/images/phone.svg" alt="Téléphone">
+                <span>0689350889</span>
+            </a>
 
-	  <p *ngIf="isSubmitted" class="success-message">Votre message a été envoyé avec succès !</p>
+            <a href="https://www.facebook.com/scaernatureetanimaux" target="_blank" rel="noopener noreferrer">
+                <img src="./assets/images/facebook.svg" alt="Facebook">
+                <span>&#64;scaernatureetanimaux</span>
+            </a>
 
-	  <h2>Notre localisation</h2>
-	</div>
-  </div>
+            <a href="https://www.instagram.com/nature_animaux29" target="_blank" rel="noopener noreferrer">
+                <img src="./assets/images/instagram.svg" alt="Instagram">
+                <span>nature_animaux29</span>
+            </a>
+        </div>
+
+        <h1 class="page-title">Contactez-nous</h1>
+
+        <form [formGroup]="contactForm" (ngSubmit)="onSubmit()">
+            <div class="form-group">
+                <input type="text" formControlName="prenom" placeholder="Prénom">
+                <input type="text" formControlName="nom" placeholder="Nom de famille">
+            </div>
+            <div class="form-group">
+                <input type="email" formControlName="email" placeholder="E-mail">
+                <input type="text" formControlName="telephone" placeholder="Téléphone">
+            </div>
+            <input type="text" formControlName="adresse" placeholder="Adresse">
+            <textarea formControlName="message" placeholder="Rédigez votre message ici"></textarea>
+
+            <button type="submit" [disabled]="contactForm.invalid">Envoyer</button>
+        </form>
+
+        <p *ngIf="isSubmitted" class="success-message">Votre message a été envoyé avec succès !</p>
+        <br>
+        <h2>Notre localisation</h2>
+
+        <!-- ✅ Ajout de l'image cliquable pour Google Maps -->
+        <div class="map-container">
+            <a href="https://www.google.com/maps/dir/48.154969,-1.5729528/Coadigou,+29390+Scaër/@47.9481983,-3.993886,8z/data=!3m1!4b1!4m9!4m8!1m1!4e1!1m5!1m1!1s0x4810e024c101a8ab:0x894f8848bad0134e!2m2!1d-3.776713!2d48.011313?entry=ttu&g_ep=EgoyMDI1MDMwOC4wIKXMDSoASAFQAw%3D%3D"
+               target="_blank" rel="noopener noreferrer">
+                <img src="./assets/images/google-map.png" alt="Carte de localisation Nature & Animaux">
+            </a>
+        </div>
+    </div>
+</div>
