@@ -1,219 +1,245 @@
 @use "sass:color";
 
-
 /* ✅ NAVIGATION (Barre sous le logo et le titre) */
 .nav-bar {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	background-color: #8BC34A;
-	padding: 10px 20px;
-	position: fixed;
-	width: 100%;
-	top: 0;
-	left: 0;
-	z-index: 1000; /* ✅ Augmenté pour éviter tout conflit d'affichage */
-	box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
-	height: 80px; /* ✅ Taille optimisée */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #8BC34A;
+  padding: 10px 20px;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+  height: 80px;
+  flex-wrap: wrap;
 }
 
-/* ✅ Correction pour éviter la superposition de la barre des catégories */
+/* ✅ Catégories ajustées sous la barre de navigation */
 .category-bar {
-	margin-top: 70px; /* ✅ Ajustement pour qu'elle ne chevauche pas le header */
+  margin-top: 70px;
 }
 
 /* ✅ NAVIGATION CATÉGORIES */
 .nav-left {
-	flex-grow: 1;
-	display: flex;
-	justify-content: center;
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
 }
 
 .nav-categories ul {
-	list-style: none;
-	display: flex;
-	gap: 15px; /* ✅ Réduction de l’espace */
-	padding: 0;
-	margin: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  padding: 0;
+  margin: 0;
 }
 
 .nav-categories li a {
-	text-decoration: none;
-	color: white;
-	font-weight: bold;
-	padding: 10px 18px;
-	border-radius: 15px;
-	background-color: #8BC34A;
-	transition: background 0.3s, color 0.3s;
-	font-size: 1rem;
+  text-decoration: none;
+  color: white;
+  font-weight: bold;
+  padding: 10px 18px;
+  border-radius: 15px;
+  background-color: #8BC34A;
+  transition: background 0.3s, color 0.3s;
+  font-size: 1rem;
 }
 
 .nav-categories li a:hover {
-	background-color: color.scale(#8BC34A, $lightness: -10%); /* ✅ Correction de la fonction darken() */
-	color: white;
+  background-color: color.scale(#8BC34A, $lightness: -10%);
+  color: white;
 }
 
 /* ✅ BARRE DE RECHERCHE */
 .nav-center {
-	margin-left: 10px; /* ✅ Correction d’alignement */
+  margin-left: 10px;
 }
 
 .search-container input {
-	padding: 7px 12px;
-	border-radius: 20px;
-	border: 2px solid white;
-	background-color: #ffcdce;
-	color: #333;
-	outline: none;
-	transition: border-color 0.3s;
-	font-size: 1rem;
-	width: 180px; /* ✅ Taille légèrement réduite */
+  padding: 7px 12px;
+  border-radius: 20px;
+  border: 2px solid white;
+  background-color: #ffcdce;
+  color: #333;
+  outline: none;
+  transition: border-color 0.3s;
+  font-size: 1rem;
+  width: 180px;
 }
 
 .search-container input::placeholder {
-	color: #333;
-	font-style: italic;
+  color: #333;
+  font-style: italic;
 }
 
 .search-container input:focus {
-	border-color: #fff;
-	box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+  border-color: #fff;
+  box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
 }
 
 /* ✅ ICÔNES CONNEXION ET PANIER */
 .nav-right {
-	display: flex;
-	align-items: center;
-	gap: 15px; /* Espacement entre les boutons */
-	position: absolute;
-	right: 20px; /* Positionnement à droite */
-	top: 50%;
-	transform: translateY(-50%); /* Centre verticalement */
-  }
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+}
 
 .btn-cart {
-	background: transparent;
-	border: none;
-	font-size: 1.6rem;
-	cursor: pointer;
-	color: white;
-	transition: transform 0.3s;
+  background: transparent;
+  border: none;
+  font-size: 1.6rem;
+  cursor: pointer;
+  color: white;
+  transition: transform 0.3s;
 }
 
 .btn-cart:hover {
-	transform: scale(1.1);
+  transform: scale(1.1);
 }
 
 .btn {
-	background: white;
-	color: #8BC34A;
-	font-weight: bold;
-	padding: 8px 14px;
-	border-radius: 20px;
-	border: none;
-	cursor: pointer;
-	transition: 0.3s;
-	font-size: 0.9rem;
+  background: white;
+  color: #8BC34A;
+  font-weight: bold;
+  padding: 8px 14px;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s;
+  font-size: 0.9rem;
 }
 
 .btn:hover {
-	background: #fff5;
+  background: #fff5;
 }
 
 /* ✅ RESPONSIVE */
 @media screen and (max-width: 1024px) {
-	.nav-categories ul {
-	  gap: 10px;
-	}
-
-	.search-container {
-	  display: none;
-	}
+  .nav-bar {
+    flex-direction: column;
+    height: auto;
+  }
+  .nav-right {
+    margin-top: 5px;
+  }
+  .search-container {
+    display: none;
+  }
 }
 
 @media screen and (max-width: 768px) {
+  .nav-bar {
+    padding: 10px;
+  }
+  .nav-categories ul {
+    flex-direction: column;
+    align-items: center;
+  }
+  .btn-cart {
+    font-size: 1.4rem;
+  }
+}
+
+/* ✅ CONTAINER DU PROFIL */
+.dropdown {
+  position: relative;
+}
+
+.profile-btn {
+  background: #8BC34A;
+  color: white;
+  font-weight: bold;
+  padding: 10px 15px;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.profile-btn:hover {
+  background: color.adjust(#8BC34A, $lightness: -10%);
+}
+
+/* ✅ STYLE DU MENU DÉROULANT */
+.dropdown-menu {
+  position: absolute;
+  top: 110%;
+  right: 0;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  padding: 10px 0;
+  width: 180px;
+  display: flex;
+  flex-direction: column;
+  z-index: 9999;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* ✅ Affichage du menu quand il est ouvert */
+.dropdown-menu.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ✅ STYLE DES BOUTONS DANS LE MENU */
+.dropdown-menu li {
+  list-style: none;
+}
+
+.dropdown-menu button {
+  background: transparent;
+  border: none;
+  width: 100%;
+  text-align: left;
+  padding: 10px 15px;
+  font-size: 1rem;
+  color: #333;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.dropdown-menu button:hover {
+  background: #8BC34A;
+  color: white;
+  border-radius: 5px;
+}
+
+
+/* ✅ Fixe la hauteur de la barre de navigation */
+.nav-bar {
+	min-height: 80px; /* ✅ Assure une hauteur minimale */
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
+  }
+
+  /* ✅ Empêche la barre de se réduire en version mobile */
+  @media screen and (max-width: 768px) {
 	.nav-bar {
-	  flex-direction: column;
-	  height: auto; /* ✅ Meilleure adaptation mobile */
+	  height: 80px !important; /* ✅ Empêche toute réduction */
+	  flex-wrap: nowrap; /* ✅ Empêche le changement de ligne */
 	}
 
 	.nav-right {
-	  margin-top: 5px;
+	  position: absolute;
+	  right: 20px;
+	  top: 50%;
+	  transform: translateY(-50%);
 	}
-
-	.btn-cart {
-	  font-size: 1.4rem;
-	}
-}
-
-/* ✅ CONTAINER DU PROFIL (GARDER EN PLACE) */
-.dropdown {
-	position: relative; /* ✅ Pour éviter que le menu ne déplace le bouton */
-  }
-
-  /* ✅ BOUTON PROFIL (STYLE AMÉLIORÉ) */
-  .profile-btn {
-	background: #8BC34A;
-	color: white;
-	font-weight: bold;
-	padding: 10px 15px;
-	border-radius: 20px;
-	border: none;
-	cursor: pointer;
-	transition: all 0.3s;
-	font-size: 1rem;
-	display: flex;
-	align-items: center;
-	gap: 5px;
-  }
-
-  .profile-btn:hover {
-	background: color.adjust(#8BC34A, $lightness: -10%);
-  }
-
-  /* ✅ STYLE DU MENU DÉROULANT */
-  .dropdown-menu {
-	position: absolute;
-	top: 110%;
-	right: 0;
-	background: white;
-	border-radius: 10px;
-	box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-	padding: 10px 0;
-	width: 180px;
-	display: flex;
-	flex-direction: column;
-	z-index: 9999;
-	opacity: 0;
-	transform: translateY(-10px);
-	transition: opacity 0.3s ease, transform 0.3s ease;
-  }
-
-  /* ✅ Affichage du menu quand il est ouvert */
-  .dropdown-menu.show {
-	opacity: 1;
-	transform: translateY(0);
-  }
-
-  /* ✅ STYLE DES BOUTONS DANS LE MENU */
-  .dropdown-menu li {
-	list-style: none;
-  }
-
-  .dropdown-menu button {
-	background: transparent;
-	border: none;
-	width: 100%;
-	text-align: left;
-	padding: 10px 15px;
-	font-size: 1rem;
-	color: #333;
-	cursor: pointer;
-	transition: background 0.3s;
-  }
-
-  .dropdown-menu button:hover {
-	background: #8BC34A;
-	color: white;
-	border-radius: 5px;
   }
