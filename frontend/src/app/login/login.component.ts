@@ -5,22 +5,23 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { environment } from '../../environments/environment'; // ✅ Import du fichier d'env
+import { environment } from '../../environments/environment';
+import { RouterModule } from '@angular/router'; // ✅ Ajouté ici
 
-declare const google: any; // ✅ Évite les erreurs TypeScript
+declare const google: any;
 
 @Component({
   selector: 'app-login',
   standalone: true,
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
-  imports: [CommonModule, ReactiveFormsModule, FormsModule]
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, RouterModule] // ✅ Ajout de RouterModule ici
 })
 export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
   loginForm: FormGroup;
   errorMessage: string | null = null;
   private userSubscription: Subscription | null = null;
-  private googleButtonInitialized = false; // ✅ Empêche l'affichage multiple du bouton Google
+  private googleButtonInitialized = false;
 
   constructor(
     private authService: AuthService,
@@ -34,7 +35,6 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    // ✅ Écoute l'état de connexion de l'utilisateur et redirige après login
     this.userSubscription = this.authService.user$.subscribe(user => {
       if (user) {
         this.redirectUser(user);
@@ -43,14 +43,13 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
-    this.initGoogleSignIn(); // ✅ Initialise Google Sign-In après l'affichage du DOM
+    setTimeout(() => this.initGoogleSignIn(), 500);
   }
 
   ngOnDestroy(): void {
-    this.userSubscription?.unsubscribe(); // ✅ Évite les fuites mémoire
+    this.userSubscription?.unsubscribe();
   }
 
-  // ✅ Connexion normale avec email/mot de passe
   login(): void {
     if (this.loginForm.invalid) {
       return;
@@ -60,7 +59,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
     this.authService.login(email, password).subscribe({
       next: () => {
         console.log("✅ Connexion réussie !");
-        this.authService.fetchAndStoreUserInfo(); // 🔥 Récupérer les infos utilisateur après connexion
+        this.authService.fetchAndStoreUserInfo();
       },
       error: (error) => {
         console.error('❌ Erreur de connexion :', error);
@@ -69,7 +68,6 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  // ✅ Connexion avec Google
   loginWithGoogle(): void {
     if (!google?.accounts?.id) {
       console.error('❌ Google Sign-In non chargé.');
@@ -77,10 +75,9 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
       return;
     }
 
-    google.accounts.id.prompt(); // ✅ Affiche la popup Google Sign-In
+    google.accounts.id.prompt();
   }
 
-  // ✅ Redirection après connexion selon le rôle utilisateur
   private redirectUser(user: any): void {
     console.log("🔀 Redirection en fonction du rôle utilisateur :", user);
     if (user.is_admin) {
@@ -90,7 +87,6 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  // ✅ Initialisation de Google Sign-In
   private initGoogleSignIn(): void {
     if (!google?.accounts?.id) {
       console.error('❌ Google Sign-In non disponible.');
@@ -98,7 +94,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     google.accounts.id.initialize({
-      client_id: environment.googleClientId, // ✅ Utilisation correcte du Client ID
+      client_id: environment.googleClientId,
       callback: (response: any) => this.handleGoogleCallback(response)
     });
 
@@ -108,14 +104,25 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
         theme: 'outline',
         size: 'large'
       });
-      this.googleButtonInitialized = true; // ✅ Empêche d'afficher plusieurs boutons
+
+      this.googleButtonInitialized = true;
+
+      setTimeout(() => {
+        const googleInnerButton = googleButton.querySelector('div') as HTMLElement;
+        if (googleInnerButton) {
+          googleInnerButton.style.width = '100%';
+          googleInnerButton.style.display = 'flex';
+          googleInnerButton.style.justifyContent = 'center';
+          googleInnerButton.style.padding = '12px';
+          googleInnerButton.style.borderRadius = '8px';
+        }
+      }, 500);
     } else if (!this.googleButtonInitialized) {
       console.warn('⚠️ Élément Google Sign-In introuvable. Affichage forcé de la popup.');
       google.accounts.id.prompt();
     }
   }
 
-  // ✅ Traitement du callback de Google Sign-In
   private handleGoogleCallback(response: any): void {
     const token = response.credential;
     if (!token) {

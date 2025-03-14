@@ -171,3 +171,63 @@ $border-color: #ddd;
   left: 0;
   margin-top: auto; /* ✅ Permet au footer de rester collé */
 }
+
+/* ✅ Responsive Design */
+@media screen and (max-width: 1024px) {
+  .product-list {
+    padding: 10px; /* Réduction du padding pour optimiser l'affichage */
+  }
+
+  .products-container {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Adaptation du nombre de colonnes */
+    gap: 15px; /* Réduction de l’espace entre les produits */
+  }
+
+  .product-card {
+    padding: 10px;
+  }
+
+  .filters-container {
+    position: static; /* Empêche les filtres d’être fixes */
+    width: 100%;
+    text-align: center;
+    margin-bottom: 15px;
+    background: transparent;
+    padding: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .products-container {
+    grid-template-columns: 1fr; /* Une seule colonne en mode mobile */
+  }
+
+  .filters-container {
+    text-align: center;
+    padding: 10px;
+  }
+
+  .filters-container h3 {
+    font-size: 1rem; /* Réduction de la taille du texte */
+  }
+
+  .filters-container label {
+    font-size: 0.9rem; /* Ajustement de la taille des labels */
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .product-card h3 {
+    font-size: 1rem; /* Réduction de la taille des titres des produits */
+  }
+
+  .product-card .product-price {
+    font-size: 0.9rem; /* Ajustement du prix pour le rendre plus lisible */
+  }
+
+  .filters-container {
+    font-size: 0.9rem;
+  }
+}

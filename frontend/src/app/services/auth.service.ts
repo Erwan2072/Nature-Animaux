@@ -58,6 +58,20 @@ export class AuthService {
     );
   }
 
+  // ✅ Inscription d'un nouvel utilisateur
+  register(email: string, password: string): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/register/`, { email, password }).pipe(
+      map(response => {
+        console.log('✅ Utilisateur créé avec succès:', response);
+        return response;
+      }),
+      catchError(error => {
+        console.error('❌ Erreur d’inscription :', error);
+        return throwError(() => new Error("L'inscription a échoué."));
+      })
+    );
+  }
+
   // ✅ Connexion via Google
   loginWithGoogle(token: string): Observable<any> {
     return this.http.post<any>(`${this.baseUrl}/auth/google/`, { token }).pipe(

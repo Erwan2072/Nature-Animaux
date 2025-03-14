@@ -1,0 +1,54 @@
+<div class="register-container">
+	<h2>Inscription</h2>
+
+	<form [formGroup]="registerForm" (ngSubmit)="register()">
+	  <div>
+		<label for="email">Email</label>
+		<input
+		  id="email"
+		  type="email"
+		  formControlName="email"
+		  placeholder="Votre email"
+		  required
+		/>
+		<div *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched" class="error">
+		  Email invalide
+		</div>
+	  </div>
+
+	  <div>
+		<label for="password">Mot de passe</label>
+		<input
+		  id="password"
+		  type="password"
+		  formControlName="password"
+		  placeholder="Votre mot de passe"
+		  required
+		/>
+		<div *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched" class="error">
+		  Mot de passe trop court
+		</div>
+	  </div>
+
+	  <div>
+		<label for="confirmPassword">Confirmer le mot de passe</label>
+		<input
+		  id="confirmPassword"
+		  type="password"
+		  formControlName="confirmPassword"
+		  placeholder="Confirmez votre mot de passe"
+		  required
+		/>
+		<div *ngIf="registerForm.get('confirmPassword')?.invalid && registerForm.get('confirmPassword')?.touched" class="error">
+		  Vous devez confirmer votre mot de passe
+		</div>
+		<div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+	  </div>
+
+	  <button type="submit" [disabled]="registerForm.invalid">S'inscrire</button>
+	</form>
+
+	<p class="login-link">
+	  Vous avez déjà un compte ? <a routerLink="/login">Connectez-vous ici</a>
+	</p>
+  </div>

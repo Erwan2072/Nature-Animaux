@@ -34,6 +34,12 @@ export const routes: Routes = [
     loadComponent: () => import('./login/login.component').then(m => m.LoginComponent)
   },
 
+  // ✅ Page d'inscription (Ajouté avec lazy loading)
+  {
+    path: 'register',
+    loadComponent: () => import('./login/register/register.component').then(m => m.RegisterComponent)
+  },
+
   // ✅ Pages Admin (Protégées par `AdminGuard`)
   {
     path: 'admin',
