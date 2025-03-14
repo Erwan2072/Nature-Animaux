@@ -1,19 +1,30 @@
 <div class="product-list">
-	<h2>Liste des Produits</h2>
 
 	<div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
 
-	<div *ngIf="products.length > 0; else noProducts">
-	  <div *ngFor="let product of products" class="product-card">
-		<h3>{{ product.title }}</h3>
-		<p>{{ product.description }}</p>
-		<p><strong>Catégorie:</strong> {{ product.category }}</p>
-		<p><strong>Marque:</strong> {{ product.brand }}</p>
-		<button (click)="deleteProduct(product.id)">🗑️ Supprimer</button>
+	<!-- ✅ Filtres déplacés sous le logo -->
+	<div class="filters-container">
+		<h3>Filtrer par catégorie</h3>
+		<div *ngFor="let category of categories">
+			<input type="checkbox"
+			       [checked]="selectedCategories.includes(category)"
+			       (change)="toggleCategoryFilter(category)">
+			<label>{{ category }}</label>
+		</div>
+	</div>
+
+	<!-- ✅ Affichage des produits -->
+	<div *ngIf="filteredProducts.length > 0; else noProducts" class="products-container">
+	  <div *ngFor="let product of filteredProducts; trackBy: trackByProductId"
+	       class="product-card">
+	    <img [src]="product.imageUrl" alt="{{ product.title }}" class="product-image">
+	    <h3>{{ product.title }}</h3>
+	    <p class="product-price" *ngIf="product.price !== 'rupture'">À partir de {{ product.price }} €</p>
+	    <p class="product-outofstock" *ngIf="product.price === 'rupture'">Rupture de stock</p>
 	  </div>
 	</div>
 
 	<ng-template #noProducts>
-	  <p>Aucun produit disponible.</p>
+	  <p>Aucun produit disponible pour cette catégorie.</p>
 	</ng-template>
-  </div>
+</div>

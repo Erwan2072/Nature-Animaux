@@ -1,0 +1,13 @@
+<div class="product-detail" *ngIf="product; else errorTemplate">
+	<h2>{{ product.title }}</h2>
+	<img [src]="product.image" alt="{{ product.title }}">
+	<p><strong>Description:</strong> {{ product.description }}</p>
+	<p><strong>Catégorie:</strong> {{ product.category }}</p>
+	<p><strong>Marque:</strong> {{ product.brand }}</p>
+	<p><strong>Prix:</strong> {{ product.price }} €</p>
+	<button (click)="goBack()">⬅ Retour</button>
+  </div>
+
+  <ng-template #errorTemplate>
+	<p class="error">Produit introuvable.</p>
+  </ng-template>

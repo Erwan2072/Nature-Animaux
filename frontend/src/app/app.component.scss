@@ -1,62 +1,53 @@
 @use "sass:color";
 @import url('https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap');
 
-
 /* ✅ Définition des couleurs locales */
-$primary-color: #8BC34A;  // Vert de la maquette
-$secondary-color: #ffcdce; // Rose pastel
-$background-gradient: linear-gradient(to bottom, #94efff, #cdffd8); // Bleu-vert inversé
-$text-color: #333; // Texte principal
-$shadow-color: rgba(0, 0, 0, 0.2); // Ombre douce
+$primary-color: #8BC34A;
+$secondary-color: #ffcdce;
+$background-gradient: linear-gradient(to bottom, #94efff, #cdffd8);
+$text-color: #333;
+$shadow-color: rgba(0, 0, 0, 0.2);
 
 html, body {
   height: 100%;
   margin: 0;
   padding: 0;
   display: flex;
-  flex-direction: column; // ✅ Permet de structurer correctement la page
+  flex-direction: column;
 }
 
 body {
-  background: $background-gradient; /* Dégradé */
-  background-attachment: fixed; /* Empêche la répétition en défilement */
-  background-size: cover; /* S'assure que le fond prend toute la taille */
-  background-repeat: no-repeat; /* Évite toute répétition */
+  background: $background-gradient;
+  background-attachment: fixed;
+  background-size: cover;
+  background-repeat: no-repeat;
   font-family: 'Arial', sans-serif;
   color: $text-color;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  min-height: 100vh; /* Pour s'assurer qu'il occupe toute la hauteur */
 }
-
 
 /* ✅ LOGO CLIQUABLE AVEC ANIMATION */
 .logo-container {
   position: fixed;
   top: 20px;
   left: 2vw;
-  z-index: 3000;
-  opacity: 0;
-  transform: translateY(-50px);
-  animation: fadeInMove 1.2s ease-out forwards;
-
-  /* ✅ Rend le logo cliquable */
+  z-index: 1001;
   cursor: pointer;
-  transition: transform 0.3s ease-out;
+  transform: translateY(-50px);
+  opacity: 0;
+  animation: fadeInDown 1s ease-out forwards;
 }
 
 .logo-container:hover {
-  transform: scale(1.05); /* Effet léger au survol */
-}
-
-.logo-container:active {
-  transform: scale(0.95); /* Effet au clic */
+  transform: scale(1.05);
 }
 
 .logo-container img {
-  max-width: 20vw;
-  min-width: 150px;
-  max-height: 280px;
+  max-width: 50vw;
+  min-width: 300px;
+  max-height: 320px;
   width: auto;
   height: auto;
 }
@@ -64,119 +55,38 @@ body {
 /* ✅ TITRE "Nature & Animaux" */
 .site-title {
   position: fixed;
-  top: 5px; /* Ajustement pour être bien aligné avec le logo */
+  top: 5px;
   left: 10vw;
-  font-family: 'Dancing Script', cursive; /* Police correspondant au screenshot */
-  font-size: 3rem; /* Ajustement pour correspondre à la taille souhaitée */
+  font-family: 'Dancing Script', cursive;
+  font-size: 3rem;
   font-weight: bold;
   color: white;
   text-shadow: 4px 4px 6px $shadow-color;
-  z-index: 3100;
+  z-index: 1001;
+  text-decoration: none;
+  transform: translateX(100px);
+  opacity: 0;
+  animation: fadeInRight 1.2s ease-out forwards;
+}
+
+.site-title:hover {
+  transform: scale(1.05);
+}
+
+/* ✅ SOUS-TITRE FIXÉ SOUS LE TITRE */
+.site-subtitle {
+  position: fixed;
+  font-size: 1.1rem;
+  font-weight: bold;
+  font-style: italic;
+  color: #310000;
+  font-family: 'Dancing Script', cursive;
+  top: 60px;
+  left: 18vw;
+  z-index: 1001;
   opacity: 0;
   transform: translateX(100px);
-  animation: slideIn 1.5s ease-out forwards;
-  text-decoration: none; /* Supprime le soulignement */
-  transition: transform 0.3s ease-out;
-
-  &:hover {
-    transform: scale(1.05);
-  }
-}
-
-/* ✅ RESPONSIVE */
-@media screen and (max-width: 1024px) {
-  .site-title {
-    font-size: 2.5rem;
-    left: 14vw;
-  }
-}
-
-@media screen and (max-width: 768px) {
-  .site-title {
-    font-size: 2rem;
-    left: 10vw;
-  }
-}
-
-@media screen and (max-width: 480px) {
-  .site-title {
-    font-size: 1.6rem;
-    left: 6vw;
-  }
-}
-
-
-/* ✅ ANIMATION DU LOGO */
-@keyframes fadeInMove {
-  0% {
-    opacity: 0;
-    transform: translateY(-50px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* ✅ ANIMATION DU TITRE */
-@keyframes slideIn {
-  0% {
-    opacity: 0;
-    transform: translateX(100px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-/* ✅ MEDIA QUERIES POUR RESPONSIVE */
-@media screen and (max-width: 1024px) {
-  .logo-container {
-    top: 30px;
-    left: 5vw;
-  }
-  .logo-container img {
-    max-width: 20vw;
-    max-height: 200px;
-  }
-
-  .site-title {
-    font-size: 3rem;
-    left: 10vw;
-  }
-}
-
-@media screen and (max-width: 768px) {
-  .logo-container {
-    top: 40px;
-    left: 6vw;
-  }
-  .logo-container img {
-    max-width: 25vw;
-    max-height: 160px;
-  }
-
-  .site-title {
-    font-size: 2.5rem;
-    left: 8vw;
-  }
-}
-
-@media screen and (max-width: 480px) {
-  .logo-container {
-    top: 50px;
-    left: 8vw;
-  }
-  .logo-container img {
-    max-width: 32vw;
-    max-height: 120px;
-  }
-
-  .site-title {
-    font-size: 2rem;
-    left: 5vw;
-  }
+  animation: fadeInRight 1.4s ease-out forwards;
 }
 
 /* ✅ HEADER */
@@ -195,297 +105,88 @@ body {
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* ✅ NAVBAR */
+/* ✅ NAVBAR RESPONSIVE (Menu burger pour mobile) */
 .navbar {
   display: flex;
-  gap: 15px;
-}
-
-.navbar a {
-  color: white;
-  text-decoration: none;
-  font-weight: bold;
-  padding: 10px;
-}
-
-.navbar a:hover {
-  text-decoration: underline;
-}
-
-/* ✅ CENTRAGE DU MAIN CONTAINER */
-.main-container {
-  display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
-  max-width: 1000px !important; /* ✅ Limite la largeur */
-  width: 90vw !important;
-  padding: 270px 0;
-  margin: 0 auto; /* ✅ Centre la page */
+  padding: 10px 20px;
 }
 
-
-
-/* ✅ SIDEBAR GAUCHE */
-.left-menu {
-  position: fixed;
-  left: 10px;
-  top: 320px;
-  display: flex;
-  flex-direction: column;
-  width: 250px;
-}
-
-/* ✅ Liste des liens */
-.left-menu ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-/* ✅ Style des boutons */
-.left-menu li {
-  margin-bottom: 10px;
-  width: 100%;
-}
-
-.left-menu a {
-  display: flex;
-  align-items: center;
-  justify-content: space-between; /* Permet d'aligner le texte à gauche et la flèche à droite */
-  padding: 10px;
-  background-color: $primary-color;
-  color: #310000; /* Couleur identique à celle du texte de la barre de recherche */
-  text-decoration: none;
-  border-radius: 10px;
-  font-weight: bold;
-  width: 100%;
-  text-align: left;
-  padding-left: 15px;
-  position: relative;
-}
-
-.arrow-icon {
-  font-size: 16px;
-  color: #333;
-  margin-left: 8px;
-  transition: transform 0.3s ease-in-out, color 0.3s;
-
-  .left-menu li:hover & {
-    color: #007bff; // Change la couleur au survol
-    transform: translateX(5px); // Déplace légèrement la flèche
-  }
-}
-
-
-/* ✅ MENU BURGER POUR TABLETTE & MOBILE */
-.burger-menu {
+.menu-toggle {
   display: none; /* Caché par défaut */
-  position: fixed;
-  top: 20px;
-  left: 10px;
-  background-color: $primary-color;
-  padding: 10px;
-  border-radius: 5px;
   cursor: pointer;
-  z-index: 4000;
 }
 
-/* ✅ MENU BURGER (CACHÉ PAR DÉFAUT) */
-.menu-burger {
-  display: none; /* Caché par défaut */
-  font-size: 24px;
-  cursor: pointer;
-  color: white;
-  background-color: $primary-color;
-  padding: 10px 15px;
-  border-radius: 5px;
-  font-weight: bold;
+.menu-toggle div {
+  width: 30px;
+  height: 3px;
+  background: white;
+  margin: 6px 0;
+  transition: 0.4s;
 }
 
-/* ✅ Affichage du menu burger SEULEMENT sur mobile et tablette */
-@media screen and (max-width: 768px) {
-  .menu-burger {
-    display: block; /* ✅ Apparaît seulement en mode mobile/tablette */
+/* ✅ RESPONSIVE */
+@media screen and (max-width: 1024px) {
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
   }
 
-  /* ✅ Masquer les liens du menu en mobile */
-  .navbar a {
+  .menu-toggle {
+    display: block; /* Visible en mobile */
+  }
+
+  .menu-items {
     display: none;
-  }
-
-  /* ✅ Sidebar cachée par défaut */
-  .left-menu {
-    position: fixed;
-    left: -300px; /* Cachée */
-    top: 80px;
-    width: 250px;
-    height: 100vh;
+    flex-direction: column;
+    width: 100%;
     background: $primary-color;
-    box-shadow: 2px 0px 10px rgba(0, 0, 0, 0.2);
-    transition: left 0.3s ease-in-out;
   }
 
-  /* ✅ Quand la sidebar est ouverte */
-  .left-menu.open {
-    left: 0;
+  .menu-items.show {
+    display: flex;
   }
 }
 
-
-/* ✅ CONTENU CENTRAL */
-/* ✅ CENTRAGE DU CONTENU PRINCIPAL */
-.content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  max-width: 800px;
-  width: 70vw !important;
-  margin: 0 auto;
-  padding: 20px;
-}
-
-
-
-/* ✅ BOUTON BESOIN D’AIDE */
-.help-button {
-  position: fixed;
-  bottom: 30px;
-  right: 20px;
-}
-
-.help-button a {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 10px 15px;
-  background-color: #ffcc00;
-  border-radius: 30px;
-  font-weight: bold;
-  color: black;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-.help-button a:hover {
-  transform: scale(1.05);
-}
-
-//* ✅ FOOTER CORRIGÉ */
+/* ✅ FOOTER COLLÉ EN BAS DU CONTENU */
 .footer {
-  background-color: $primary-color;  // ✅ Même couleur que le header
+  background-color: $primary-color;
   color: white;
   text-align: center;
   padding: 15px 0;
-  width: 100%;  // ✅ Prend toute la largeur
-  height: 40px;  // ✅ Hauteur fixe pour éviter qu'il ne soit trop petit
-  position: fixed;  // ✅ Fixé en bas de la page
-  bottom: 0;
-  left: 0;
-  z-index: 1000;  // ✅ Assure qu'il est au-dessus des autres éléments
-}
-
-/* ✅ Ajustement du body pour éviter que le contenu soit masqué */
-body {
-  padding-bottom: 60px;  // ✅ Ajoute un espace pour ne pas que le contenu soit caché sous le footer
-}
-
-
-/* ✅ Appliquer un style différent en mode admin */
-.admin-container {
   width: 100%;
-  max-width: 1200px;
-  margin: 0 auto; /* ✅ Centrage automatique */
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  height: auto;
+  position: relative;
+  margin-top: auto;
 }
 
-/* ✅ CONTENEUR DES CATÉGORIES */
-.category-bar {
-  position: fixed; /* Fixe la barre en haut */
-  top: 60px; /* Ajuste en fonction du header et du logo */
-  left: 50%;
-  transform: translateX(-50%); /* Centre horizontalement */
-  z-index: 2000; /* Assure qu'elle est au-dessus du contenu */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px; /* Espacement entre les boutons */
-  background-color: transparent;
-  padding: 40px 30px;
-  width: 90%;
-  border-radius: 20px;
-  box-shadow: 0px 0px 0px rgba(0, 0, 0, 0.2);
+/* ✅ ASSURE QUE LE CONTENU PREND TOUT L'ESPACE DISPONIBLE */
+.main-container {
+  margin-top: 300px;
+  flex-grow: 1;
 }
 
-/* Ajuste la barre pour mobile */
-@media screen and (max-width: 768px) {
-  .category-bar {
-    top: 120px; /* Décale légèrement vers le bas pour éviter les chevauchements */
-    flex-wrap: wrap; /* Permet l'affichage sur plusieurs lignes */
-    width: 95%;
+/* ✅ ANIMATIONS */
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-/* ✅ STYLE DES BOUTONS DES CATÉGORIES */
-.category-btn {
-  background-color: $primary-color;
-  color: black;
-  font-weight: bold;
-  font-style: italic;
-  border: 2px solid color.adjust($primary-color, $lightness: -10%);
-  padding: 8px 18px;
-  border-radius: 20px;
-  cursor: pointer;
-  transition: all 0.3s ease-in-out;
-  text-decoration: none;
-  font-size: 1rem;
-  position: relative; /* Pour gérer l'effet d'ombre */
-  box-shadow: 4px 4px 0px $secondary-color; /* Ombre rose pastel */
-}
-
-/* ✅ Effet au survol */
-.category-btn:hover {
-  background-color: color.adjust($primary-color, $lightness: -10%);
-  transform: translateY(-2px); /* Légère élévation */
-  box-shadow: 6px 6px 0px $secondary-color; /* Ombre plus marquée */
-}
-
-.category-btn:hover {
-  background-color: color.adjust($primary-color, $lightness: -10%);
-  transform: scale(1.05);
-}
-
-/* ✅ STYLE DE LA BARRE DE RECHERCHE */
-.category-search {
-  margin-left: 5px; /* Rapproche la barre de recherche des boutons */
-  padding: 8px 15px;
-  border-radius: 20px;
-  border: 2px solid color.adjust($primary-color, $lightness: -10%);
-  background-color: $secondary-color;
-  font-size: 1rem;
-  outline: none;
-  width: 180px; /* Réduit la largeur pour mieux s'intégrer */
-}
-
-.category-search::placeholder {
-  color: #555;
-  font-style: italic;
-}
-
-/* ✅ RESPONSIVE DESIGN */
-@media screen and (max-width: 768px) {
-  .category-bar {
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(100px);
   }
-
-  .category-search {
-    width: 90%;
-    text-align: center;
-    margin-left: 0; /* Annule le margin-left pour mobile */
+  to {
+    opacity: 1;
+    transform: translateX(0);
   }
 }
