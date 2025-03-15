@@ -30,20 +30,19 @@ export class AdminProductsComponent implements OnInit {
   productTitleControl = new FormControl('');
   filteredProducts!: Observable<string[]>;
 
-  // ✅ Suppression des contraintes obligatoires
+  // ✅ Ajout du champ `image_url`
   product: any = {
     title: '',
-    animal: '',
+    image_url: '',  // ✅ Nouveau champ pour stocker l'URL de l'image
     category: '',
     subCategory: '',
     brand: '',
-    variations: [{ sku: '', price: null, weight: '', stock: 0 }], // ✅ Seuls `price`, `stock`, et `weight` sont vérifiés
+    variations: [{ sku: '', price: null, weight: '', stock: 0 }],
     description: '',
-    image: null
   };
 
   animals = ['Chien', 'Chat', 'Oiseau', 'Rongeur, Lapin, Furet', 'Basse cour', 'Jardins aquatiques'];
-  categories = ['Alimentation sèches', 'Alimentation humides', 'Friandises', 'Accessoires', 'Hygiènes & Soins', 'Jouets'];
+  categories = ['Alimentation sèche', 'Alimentation humide', 'Friandises', 'Accessoires', 'Hygiènes & Soins', 'Jouets'];
   subCategories = ['A définir'];
   brands = ['Winner', 'Ownat', 'Authentics'];
   weights = ['1kg', '2.5kg', '5kg', '10kg', '3kg', '7kg', '15kg', '20kg', '25kg', '30kg'];
@@ -150,23 +149,26 @@ export class AdminProductsComponent implements OnInit {
       const reader = new FileReader();
       reader.onload = () => {
         this.imagePreview = reader.result as string;
+        this.product.image_url = this.imagePreview;  // ✅ Stocke l'URL de l'image
       };
       reader.readAsDataURL(file);
-      this.product.image = file;
     }
   }
 
   isValidProduct(): boolean {
-    return this.product.variations.every((variation: any) =>
-      variation.sku.trim() !== '' &&
-      Number(variation.price) > 0 &&
-      Number(variation.stock) >= 0
-  );
+    return (
+      this.product.title.trim() !== '' &&
+      this.product.variations.every((variation: any) =>
+        variation.sku.trim() !== '' &&
+        Number(variation.price) > 0 &&
+        Number(variation.stock) >= 0
+      )
+    );
   }
 
   saveProduct() {
     if (!this.isValidProduct()) {
-      alert("Le prix et le stock doivent être valides.");
+      alert("Veuillez remplir tous les champs obligatoires avant d'enregistrer.");
       return;
     }
 
@@ -182,6 +184,7 @@ export class AdminProductsComponent implements OnInit {
             alert("Produit enregistré avec succès !");
             this.getProducts();
             this.productTitleControl.setValue('');
+            this.imagePreview = null;  // ✅ Réinitialisation de l'aperçu de l'image
           }
         }
       });

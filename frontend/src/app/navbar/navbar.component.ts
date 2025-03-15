@@ -20,8 +20,8 @@ export class NavbarComponent {
       name: 'chien',
       label: 'Chien',
       categories: [
-        { label: 'Alimentation sèches', link: 'alimentationseches' },
-        { label: 'Alimentation humides', link: 'alimentationhumides' },
+        { label: 'Alimentation sèche', link: 'alimentationseche' },
+        { label: 'Alimentation humide', link: 'alimentationhumide' },
         { label: 'Friandises', link: 'friandises' },
         { label: 'Accessoires', link: 'accessoires' },
         { label: 'Hygiènes & soins', link: 'hygienesetsoins' },
@@ -32,8 +32,8 @@ export class NavbarComponent {
       name: 'chat',
       label: 'Chat',
       categories: [
-        { label: 'Alimentation sèche', link: 'alimentationseches' },
-        { label: 'Alimentation humide', link: 'alimentationhumides' },
+        { label: 'Alimentation sèche', link: 'alimentationseche' },
+        { label: 'Alimentation humide', link: 'alimentationhumide' },
         { label: 'Friandises', link: 'friandises' },
         { label: 'Accessoires', link: 'accessoires' },
         { label: 'Hygiènes & soins', link: 'hygienesetsoins' },

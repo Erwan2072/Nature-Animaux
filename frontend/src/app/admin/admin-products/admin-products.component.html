@@ -12,22 +12,18 @@
     <div *ngIf="activeTab !== 'delete'">
         <table class="product-table">
             <tbody>
-                <!-- ✅ Autocomplétion pour Titre du produit -->
+                <!-- ✅ Champ Titre avec gestion du fallback -->
                 <tr>
                     <td><strong>Titre du produit</strong></td>
                     <td colspan="3">
                         <mat-form-field appearance="outline" class="full-width">
                             <mat-label>Nom du produit</mat-label>
-                            <input type="text" matInput [formControl]="productTitleControl" [matAutocomplete]="auto">
-                            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="product.title = $event.option.viewValue">
-                                <mat-option *ngFor="let title of filteredProducts | async" [value]="title">
-                                    {{ title }}
-                                </mat-option>
-                            </mat-autocomplete>
+                            <input type="text" matInput [(ngModel)]="product.title" [placeholder]="'Produit sans titre'">
                         </mat-form-field>
                     </td>
                 </tr>
 
+                <!-- ✅ Sélection des catégories -->
                 <tr>
                     <td><strong>Animaux</strong></td>
                     <td colspan="3">
@@ -78,13 +74,13 @@
 
                 <tr *ngFor="let variation of product.variations; let i = index; trackBy: trackByIndex">
                     <td><input type="text" placeholder="SKU" [(ngModel)]="variation.sku" name="sku"></td>
-                    <td><input type="number" placeholder="Prix" [(ngModel)]="variation.price" name="price" min="0" required></td>
+                    <td><input type="number" placeholder="Prix" [(ngModel)]="variation.price" name="price" min="0"></td>
                     <td>
-                        <select [(ngModel)]="variation.weight" name="weight" required>
+                        <select [(ngModel)]="variation.weight" name="weight">
                             <option *ngFor="let weight of weights" [value]="weight">{{ weight }}</option>
                         </select>
                     </td>
-                    <td><input type="number" placeholder="Stock" [(ngModel)]="variation.stock" name="stock" min="0" required></td>
+                    <td><input type="number" placeholder="Stock" [(ngModel)]="variation.stock" name="stock" min="0"></td>
                     <td>
                         <button *ngIf="product.variations.length > 1" (click)="removeVariation(i)">❌</button>
                     </td>
@@ -96,7 +92,7 @@
                     </td>
                 </tr>
 
-                <!-- ✅ Section Image -->
+                <!-- ✅ Section Image avec prévisualisation -->
                 <tr>
                     <td colspan="5"><h3>Photo du produit</h3></td>
                 </tr>
@@ -146,8 +142,8 @@
                         </mat-autocomplete>
                       </mat-form-field>
                     </td>
-                  </tr>
-                  <tr>
+                </tr>
+                <tr>
                     <td><strong>SKU</strong></td>
                     <td>{{ selectedProductSKU || 'N/A' }}</td>
                 </tr>

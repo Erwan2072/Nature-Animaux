@@ -13,10 +13,9 @@ export class ProductListComponent implements OnInit {
   products: any[] = [];
   filteredProducts: any[] = [];
   categories: string[] = [];
-  selectedCategories: string[] = []; // ✅ Liste des catégories cochées
+  selectedCategories: string[] = [];
   errorMessage: string = '';
 
-  // ✅ Gestion du menu burger
   burgerMenuOpen: boolean = false;
   activeMenu: string | null = null;
 
@@ -26,15 +25,23 @@ export class ProductListComponent implements OnInit {
     this.fetchProducts();
   }
 
-  // ✅ Récupère uniquement les produits demandés
+  // ✅ Récupère les produits de l'API et applique les corrections
   fetchProducts(): void {
     this.apiService.getProducts().subscribe({
       next: (data) => {
-        this.products = data.products || [];
+        this.products = (data.products || []).map((product: any) => ({
+          ...product,
+          title: product.title && product.title.trim() !== '' ? product.title : 'Produit sans titre',
+          category: product.category && product.category.trim() !== '' ? product.category : 'Catégorie inconnue',
+          price: product.price !== undefined && product.price !== null ? product.price : 'Prix non disponible'
+        }));
+
         this.filteredProducts = [...this.products];
 
-        // ✅ Récupérer toutes les catégories uniques
-        this.categories = [...new Set(this.products.map(p => p.category))];
+        // ✅ Récupérer toutes les catégories uniques (filtrage)
+        this.categories = [...new Set(this.products.map((p: any) => p.category).filter(Boolean))];
+
+        console.log("📦 Produits récupérés :", this.products); // 🔥 Debug: Vérifie les données API
       },
       error: (err) => {
         this.errorMessage = "Erreur lors de la récupération des produits.";
@@ -43,57 +50,61 @@ export class ProductListComponent implements OnInit {
     });
   }
 
-  // ✅ Gère le filtrage avec cases à cocher
+
+  // ✅ Fonction pour récupérer le prix minimum des variations
+  getMinPrice(product: any): number | null {
+    if (!product.variations || product.variations.length === 0) {
+      return null; // ✅ Pas de variations → prix non disponible
+    }
+
+    // ✅ On extrait les prix disponibles et on prend le minimum
+    const prices = product.variations
+      .map((v: any) => v.price)
+      .filter((p: any) => p !== null && p !== undefined);
+
+    return prices.length > 0 ? Math.min(...prices) : null;
+  }
+
+  // ✅ Gestion du filtrage des produits par catégorie
   toggleCategoryFilter(category: string): void {
     if (this.selectedCategories.includes(category)) {
       this.selectedCategories = this.selectedCategories.filter(c => c !== category);
     } else {
       this.selectedCategories.push(category);
     }
-
     this.applyFilters();
   }
 
-  // ✅ Applique les filtres sur les produits affichés
+  // ✅ Applique les filtres
   applyFilters(): void {
     if (this.selectedCategories.length > 0) {
       this.filteredProducts = this.products.filter(p => this.selectedCategories.includes(p.category));
     } else {
-      this.filteredProducts = [...this.products]; // Affiche tout si rien n'est coché
+      this.filteredProducts = [...this.products]; // Afficher tous les produits
     }
   }
 
   // ✅ Optimisation *ngFor avec trackBy
   trackByProductId(index: number, product: any): string {
-    return product.id;
+    return product._id || index.toString(); // ✅ MongoDB utilise `_id`
   }
 
-  /* === ✅ GESTION DU MENU BURGER & SOUS-MENUS === */
+  /* === ✅ GESTION DU MENU BURGER === */
 
-  // ✅ Ouvre ou ferme le menu burger
   toggleBurgerMenu(): void {
     this.burgerMenuOpen = !this.burgerMenuOpen;
-    if (!this.burgerMenuOpen) {
-      this.activeMenu = null; // Ferme aussi les sous-menus
-    }
+    if (!this.burgerMenuOpen) this.activeMenu = null;
   }
 
-  // ✅ Ouvre ou ferme un sous-menu spécifique
   toggleMenu(category: string): void {
-    if (this.activeMenu === category) {
-      this.activeMenu = null; // ✅ Ferme le menu s'il est déjà ouvert
-    } else {
-      this.activeMenu = category; // ✅ Ouvre le menu sélectionné
-    }
+    this.activeMenu = this.activeMenu === category ? null : category;
   }
 
-  // ✅ Ferme tout lorsque l'utilisateur clique en dehors
   closeMenu(): void {
     this.activeMenu = null;
     this.burgerMenuOpen = false;
   }
 
-  // ✅ Détecte les clics en dehors du menu et le ferme automatiquement
   onClickOutside(event: Event): void {
     const target = event.target as HTMLElement;
     if (
