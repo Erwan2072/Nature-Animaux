@@ -71,7 +71,7 @@ export class ApiService {
 
   // ✅ Ajouter un produit
   addProduct(product: any): Observable<any> {
-    const url = `${this.baseUrl}/products/`;
+    const url = `${this.baseUrl}/products/product-create/`;
     return this.getHeaders().pipe(
       switchMap(headers => this.http.post(url, product, { headers })),
       catchError(this.handleError)

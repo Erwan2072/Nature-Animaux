@@ -17,70 +17,6 @@
   flex-wrap: wrap;
 }
 
-/* ✅ Catégories ajustées sous la barre de navigation */
-.category-bar {
-  margin-top: 70px;
-}
-
-/* ✅ NAVIGATION CATÉGORIES */
-.nav-left {
-  flex-grow: 1;
-  display: flex;
-  justify-content: center;
-}
-
-.nav-categories ul {
-  list-style: none;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
-  padding: 0;
-  margin: 0;
-}
-
-.nav-categories li a {
-  text-decoration: none;
-  color: white;
-  font-weight: bold;
-  padding: 10px 18px;
-  border-radius: 15px;
-  background-color: #8BC34A;
-  transition: background 0.3s, color 0.3s;
-  font-size: 1rem;
-}
-
-.nav-categories li a:hover {
-  background-color: color.scale(#8BC34A, $lightness: -10%);
-  color: white;
-}
-
-/* ✅ BARRE DE RECHERCHE */
-.nav-center {
-  margin-left: 10px;
-}
-
-.search-container input {
-  padding: 7px 12px;
-  border-radius: 20px;
-  border: 2px solid white;
-  background-color: #ffcdce;
-  color: #333;
-  outline: none;
-  transition: border-color 0.3s;
-  font-size: 1rem;
-  width: 180px;
-}
-
-.search-container input::placeholder {
-  color: #333;
-  font-style: italic;
-}
-
-.search-container input:focus {
-  border-color: #fff;
-  box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
-}
-
 /* ✅ ICÔNES CONNEXION ET PANIER */
 .nav-right {
   display: flex;
@@ -105,15 +41,16 @@
   transform: scale(1.1);
 }
 
+/* ✅ Style du bouton Connexion avec liseré rose */
 .btn {
   background: white;
   color: #8BC34A;
   font-weight: bold;
   padding: 8px 14px;
   border-radius: 20px;
-  border: none;
+  border: 2px solid #ffcdce; /* ✅ Liseré rose */
   cursor: pointer;
-  transition: 0.3s;
+  transition: all 0.3s;
   font-size: 0.9rem;
 }
 
@@ -121,34 +58,7 @@
   background: #fff5;
 }
 
-/* ✅ RESPONSIVE */
-@media screen and (max-width: 1024px) {
-  .nav-bar {
-    flex-direction: column;
-    height: auto;
-  }
-  .nav-right {
-    margin-top: 5px;
-  }
-  .search-container {
-    display: none;
-  }
-}
-
-@media screen and (max-width: 768px) {
-  .nav-bar {
-    padding: 10px;
-  }
-  .nav-categories ul {
-    flex-direction: column;
-    align-items: center;
-  }
-  .btn-cart {
-    font-size: 1.4rem;
-  }
-}
-
-/* ✅ CONTAINER DU PROFIL */
+/* ✅ STYLE DU PROFIL (Bouton + Menu) */
 .dropdown {
   position: relative;
 }
@@ -177,11 +87,12 @@
   position: absolute;
   top: 110%;
   right: 0;
-  background: white;
+  background: #ffcdce; /* ✅ Fond rose */
+  border: 2px solid #8BC34A; /* ✅ Liseré vert */
   border-radius: 10px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
   padding: 10px 0;
-  width: 180px;
+  width: 190px;
   display: flex;
   flex-direction: column;
   z-index: 9999;
@@ -201,6 +112,7 @@
   list-style: none;
 }
 
+/* ✅ Couleur du texte + Ajout du bouton "Vos commandes" */
 .dropdown-menu button {
   background: transparent;
   border: none;
@@ -208,7 +120,7 @@
   text-align: left;
   padding: 10px 15px;
   font-size: 1rem;
-  color: #333;
+  color: #310000; /* ✅ Texte en #310000 */
   cursor: pointer;
   transition: background 0.3s;
 }
@@ -219,27 +131,53 @@
   border-radius: 5px;
 }
 
-
 /* ✅ Fixe la hauteur de la barre de navigation */
 .nav-bar {
-	min-height: 80px; /* ✅ Assure une hauteur minimale */
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	width: 100%;
+  min-height: 80px; /* ✅ Assure une hauteur minimale */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+/* ✅ Responsive */
+@media screen and (max-width: 1024px) {
+  .nav-bar {
+    flex-direction: column;
+    height: auto;
+  }
+  .nav-right {
+    margin-top: 5px;
+  }
+  .search-container {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .nav-bar {
+    padding: 10px;
+  }
+  .nav-categories ul {
+    flex-direction: column;
+    align-items: center;
+  }
+  .btn-cart {
+    font-size: 1.4rem;
+  }
+}
+
+/* ✅ Empêche la barre de se réduire en version mobile */
+@media screen and (max-width: 768px) {
+  .nav-bar {
+    height: 80px !important; /* ✅ Empêche toute réduction */
+    flex-wrap: nowrap; /* ✅ Empêche le changement de ligne */
   }
 
-  /* ✅ Empêche la barre de se réduire en version mobile */
-  @media screen and (max-width: 768px) {
-	.nav-bar {
-	  height: 80px !important; /* ✅ Empêche toute réduction */
-	  flex-wrap: nowrap; /* ✅ Empêche le changement de ligne */
-	}
-
-	.nav-right {
-	  position: absolute;
-	  right: 20px;
-	  top: 50%;
-	  transform: translateY(-50%);
-	}
+  .nav-right {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
   }
+}

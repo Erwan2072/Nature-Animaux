@@ -31,7 +31,7 @@
                 <tr>
                     <td><strong>Animaux</strong></td>
                     <td colspan="3">
-                        <select [(ngModel)]="product.animal" name="animal" required>
+                        <select [(ngModel)]="product.animal" name="animal">
                             <option *ngFor="let animal of animals" [value]="animal">{{ animal }}</option>
                         </select>
                     </td>
@@ -40,7 +40,7 @@
                 <tr>
                     <td><strong>Catégorie</strong></td>
                     <td colspan="3">
-                        <select [(ngModel)]="product.category" name="category" required>
+                        <select [(ngModel)]="product.category" name="category">
                             <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
                         </select>
                     </td>
@@ -49,7 +49,7 @@
                 <tr>
                     <td><strong>Sous-Catégorie</strong></td>
                     <td colspan="3">
-                        <select [(ngModel)]="product.subCategory" name="subCategory" required>
+                        <select [(ngModel)]="product.subCategory" name="subCategory">
                             <option *ngFor="let subCategory of subCategories" [value]="subCategory">{{ subCategory }}</option>
                         </select>
                     </td>
@@ -58,7 +58,7 @@
                 <tr>
                     <td><strong>Marque</strong></td>
                     <td colspan="3">
-                        <select [(ngModel)]="product.brand" name="brand" required>
+                        <select [(ngModel)]="product.brand" name="brand">
                             <option *ngFor="let brand of brands" [value]="brand">{{ brand }}</option>
                         </select>
                     </td>
@@ -77,7 +77,7 @@
                 </tr>
 
                 <tr *ngFor="let variation of product.variations; let i = index; trackBy: trackByIndex">
-                    <td><input type="text" placeholder="SKU" [(ngModel)]="variation.sku" name="sku" required></td>
+                    <td><input type="text" placeholder="SKU" [(ngModel)]="variation.sku" name="sku"></td>
                     <td><input type="number" placeholder="Prix" [(ngModel)]="variation.price" name="price" min="0" required></td>
                     <td>
                         <select [(ngModel)]="variation.weight" name="weight" required>
@@ -115,7 +115,7 @@
                 </tr>
                 <tr>
                     <td colspan="5">
-                        <textarea placeholder="Ceci est une description" [(ngModel)]="product.description" name="description" required></textarea>
+                        <textarea placeholder="Ceci est une description" [(ngModel)]="product.description" name="description"></textarea>
                     </td>
                 </tr>
 

@@ -30,13 +30,14 @@ export class AdminProductsComponent implements OnInit {
   productTitleControl = new FormControl('');
   filteredProducts!: Observable<string[]>;
 
-  product = {
+  // ✅ Suppression des contraintes obligatoires
+  product: any = {
     title: '',
     animal: '',
     category: '',
     subCategory: '',
     brand: '',
-    variations: [{ sku: '', price: 0, weight: '', stock: 0 }],
+    variations: [{ sku: '', price: null, weight: '', stock: 0 }], // ✅ Seuls `price`, `stock`, et `weight` sont vérifiés
     description: '',
     image: null
   };
@@ -44,8 +45,8 @@ export class AdminProductsComponent implements OnInit {
   animals = ['Chien', 'Chat', 'Oiseau', 'Rongeur, Lapin, Furet', 'Basse cour', 'Jardins aquatiques'];
   categories = ['Alimentation sèches', 'Alimentation humides', 'Friandises', 'Accessoires', 'Hygiènes & Soins', 'Jouets'];
   subCategories = ['A définir'];
-  brands = ['Dr Clauder_s', 'Ownat', 'Authentics'];
-  weights = ['1kg', '2.5kg', '5kg', '10kg'];
+  brands = ['Winner', 'Ownat', 'Authentics'];
+  weights = ['1kg', '2.5kg', '5kg', '10kg', '3kg', '7kg', '15kg', '20kg', '25kg', '30kg'];
 
   imagePreview: string | null = null;
 
@@ -132,7 +133,7 @@ export class AdminProductsComponent implements OnInit {
   }
 
   addVariation() {
-    this.product.variations.push({ sku: '', price: 0, weight: '', stock: 0 });
+    this.product.variations.push({ sku: '', price: null, weight: '', stock: 0 });
   }
 
   removeVariation(index: number) {
@@ -156,24 +157,16 @@ export class AdminProductsComponent implements OnInit {
   }
 
   isValidProduct(): boolean {
-    return (
-      this.product.title.trim() !== '' &&
-      this.product.animal.trim() !== '' &&
-      this.product.category.trim() !== '' &&
-      this.product.subCategory.trim() !== '' &&
-      this.product.brand.trim() !== '' &&
-      this.product.variations.length > 0 &&
-      this.product.variations.every(variation =>
-        variation.sku.trim() !== '' &&
-        Number(variation.price) > 0 &&
-        Number(variation.stock) >= 0
-      )
-    );
+    return this.product.variations.every((variation: any) =>
+      variation.sku.trim() !== '' &&
+      Number(variation.price) > 0 &&
+      Number(variation.stock) >= 0
+  );
   }
 
   saveProduct() {
     if (!this.isValidProduct()) {
-      alert("Veuillez remplir tous les champs obligatoires avant d'enregistrer.");
+      alert("Le prix et le stock doivent être valides.");
       return;
     }
 

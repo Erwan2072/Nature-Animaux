@@ -4,13 +4,14 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service'; // ✅ Adapter le chemin si besoin
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-register',
   standalone: true,
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss'],
-  imports: [CommonModule, ReactiveFormsModule, FormsModule]
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, RouterModule]
 })
 export class RegisterComponent implements OnInit {
   registerForm: FormGroup;

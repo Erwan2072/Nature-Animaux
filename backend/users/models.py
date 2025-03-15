@@ -44,6 +44,20 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(_("staff status"), default=False)
     date_joined = models.DateTimeField(_("date joined"), default=timezone.now)  # ✅ Ajout de la date d'inscription
 
+    # ✅ Ajout des champs d'Adresse
+    country = models.CharField(_("country"), max_length=100, blank=True, null=True)
+    address = models.TextField(_("address"), blank=True, null=True)
+    address_complement = models.CharField(_("address complement"), max_length=255, blank=True, null=True)
+    intercom = models.CharField(_("intercom"), max_length=50, blank=True, null=True)
+    zip_code = models.CharField(_("zip code"), max_length=20, blank=True, null=True)
+    city = models.CharField(_("city"), max_length=100, blank=True, null=True)
+    region = models.CharField(_("region"), max_length=100, blank=True, null=True)
+
+    # ✅ Ajout des informations de Paiement (Ne pas stocker les numéros de carte !)
+    card_last4 = models.CharField(_("last 4 digits"), max_length=4, blank=True, null=True)
+    card_name = models.CharField(_("card name"), max_length=255, blank=True, null=True)
+    card_expiry = models.CharField(_("card expiry"), max_length=7, blank=True, null=True)  # Format MM/YYYY
+
     objects = UserManager()
 
     USERNAME_FIELD = 'email'

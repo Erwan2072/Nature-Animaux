@@ -1,0 +1,161 @@
+.account-container {
+	max-width: 800px;
+	margin: auto;
+	background: linear-gradient(to bottom, #e3f2fd, #bbdefb);
+	padding: 80px;
+	border-radius: 12px;
+	box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
+	text-align: center;
+}
+
+/* ✅ Onglets style Excel */
+.tabs {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 25px;
+	border-bottom: 3px solid #8BC34A; /* ✅ Séparation nette */
+	padding-bottom: 5px;
+
+	button {
+		flex-grow: 1;
+		background-color: #ffcdce;
+		color: #310000;
+		padding: 14px 20px;
+		margin: 0 5px;
+		border: none;
+		border-radius: 8px 8px 0 0;
+		cursor: pointer;
+		font-size: 16px;
+		transition: background 0.3s ease-in-out, font-weight 0.3s;
+
+		&:hover {
+			background-color: #ffa4a5;
+		}
+
+		&.active {
+			background-color: #ff8b8c;
+			font-weight: bold;
+			border-bottom: 3px solid #310000;
+		}
+	}
+}
+
+/* ✅ Contenu des onglets */
+.tab-content {
+	background: white;
+	padding: 20px;
+	border-radius: 12px;
+	box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+	margin-top: 15px;
+	text-align: left;
+}
+
+/* ✅ Labels des formulaires */
+label {
+	display: block;
+	margin-top: 10px;
+	font-weight: bold;
+	color: #310000;
+}
+
+/* ✅ Inputs & Select */
+input, select {
+	width: 100%;
+	padding: 12px;
+	border: 2px solid #ccc;
+	border-radius: 5px;
+	font-size: 14px;
+	transition: border-color 0.3s ease-in-out;
+
+	&:focus {
+		border-color: #8BC34A;
+		box-shadow: 0 0 5px rgba(139, 195, 74, 0.5);
+		outline: none;
+	}
+}
+
+/* ✅ Bouton de validation */
+.validate-button {
+	background-color: #8BC34A;
+	color: #310000;
+	font-size: 18px;
+	padding: 16px 28px;
+	border-radius: 6px;
+	transition: background 0.3s, transform 0.2s;
+	text-align: center;
+	display: block;
+	width: 100%;
+	margin-top: 20px;
+	font-weight: bold;
+
+	&:hover {
+		background-color: rgb(98, 228, 105);
+		transform: scale(1.05);
+	}
+
+	&:active {
+		transform: scale(0.98);
+	}
+}
+
+.saved-cards-container {
+	margin-top: 20px;
+	padding: 15px;
+	background: #f8f9fa;
+	border-radius: 10px;
+	box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .saved-card {
+	background: white;
+	padding: 10px;
+	border-radius: 8px;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+	margin-bottom: 10px;
+	text-align: center;
+  }
+
+  .edit-button {
+	background: #ffa500;
+	color: white;
+	padding: 8px;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+  }
+
+  .delete-button {
+	background: #ff4b4b;
+	color: white;
+	padding: 8px;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+  }
+
+/* ✅ Gestion responsive */
+@media screen and (max-width: 768px) {
+	.account-container {
+		padding: 30px;
+	}
+
+	.tabs {
+		flex-direction: column;
+		align-items: center;
+
+		button {
+			width: 100%;
+			margin-bottom: 5px;
+			border-radius: 8px;
+		}
+	}
+
+	.form-row {
+		flex-direction: column;
+	}
+
+	.validate-button {
+		font-size: 16px;
+		padding: 12px;
+	}
+}

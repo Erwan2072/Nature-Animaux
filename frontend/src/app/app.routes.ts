@@ -75,6 +75,14 @@ export const routes: Routes = [
     path: 'support',
     loadComponent: () => import('./footer/support/support.component').then(m => m.SupportComponent)
   },
+  {
+    path: 'account',
+    loadComponent: () => import('./header/account/account.component').then(m => m.AccountComponent)
+  },
+  {
+    path: 'orders',
+    loadComponent: () => import('./header/orders/orders.component').then(m => m.OrdersComponent)
+  },
 
   // ✅ Redirection en cas de route inconnue
   { path: '**', redirectTo: 'home' }

@@ -30,3 +30,19 @@ class LoginSerializer(serializers.Serializer):
             raise serializers.ValidationError('Identifiants incorrects')
 
         return {'user': user}
+
+class AddressSerializer(serializers.Serializer):
+    """Serializer pour l'adresse utilisateur"""
+    country = serializers.CharField()
+    address = serializers.CharField()
+    address_complement = serializers.CharField(required=False, allow_blank=True)
+    intercom = serializers.CharField(required=False, allow_blank=True)
+    zip_code = serializers.CharField()
+    city = serializers.CharField()
+    region = serializers.CharField(required=False, allow_blank=True)
+
+class PaymentSerializer(serializers.Serializer):
+    """Serializer pour les informations de paiement"""
+    last4 = serializers.CharField()
+    card_name = serializers.CharField()
+    card_expiry = serializers.CharField()

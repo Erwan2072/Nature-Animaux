@@ -7,9 +7,9 @@ logger = logging.getLogger(__name__)
 
 class Product:
     def __init__(self, title=None, category=None, sub_category=None, brand=None, color=None, sku=None, price=None, weight=None, stock=None, description=None, variations=None, product_id=None):
-        """Initialisation du produit avec validations."""
-        if not title or not category or not sub_category or not brand:
-            raise ValueError("Les champs 'title', 'category', 'sub_category', et 'brand' sont obligatoires.")
+        """Initialisation du produit avec validation pour le prix, le stock et le poids."""
+
+        # ✅ Vérifications uniquement pour price, stock, et weight
         if price is not None and (not isinstance(price, (int, float)) or price < 0):
             raise ValueError("Le prix doit être un nombre positif.")
         if stock is not None and (not isinstance(stock, int) or stock < 0):
@@ -33,17 +33,17 @@ class Product:
     def save(self):
         try:
             product_data = {
-                "title": self.title,
-                "category": self.category,
-                "sub_category": self.sub_category,
-                "brand": self.brand,
-                "color": self.color,
-                "sku": self.sku,
-                "price": self.price,
-                "weight": self.weight,
-                "stock": self.stock,
-                "description": self.description,
-                "variations": self.variations,
+                "title": self.title if self.title else None,
+                "category": self.category if self.category else None,
+                "sub_category": self.sub_category if self.sub_category else None,
+                "brand": self.brand if self.brand else None,
+                "color": self.color if self.color else None,
+                "sku": self.sku if self.sku else None,
+                "price": self.price if self.price is not None else None,
+                "weight": self.weight if self.weight is not None else None,
+                "stock": self.stock if self.stock is not None else None,
+                "description": self.description if self.description else None,
+                "variations": self.variations if self.variations else []
             }
 
             if self._id:

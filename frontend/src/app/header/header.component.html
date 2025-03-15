@@ -9,9 +9,10 @@
 		  <span class="initials">{{ userInitials }}</span> ⏷
 		</button>
 		<ul class="dropdown-menu" [class.show]="isDropdownOpen">
-		  <li><button (click)="router.navigate(['/profile'])">👤 Mon Profil</button></li>
-		  <li *ngIf="isAdmin"><button (click)="goToAdmin()">⚙️ Espace Admin</button></li>
-		  <li><button (click)="logout()">🚪 Déconnexion</button></li>
+		  <li><button (click)="router.navigate(['/account'])"> Votre compte </button></li>
+		  <li><button (click)="router.navigate(['/orders'])"> Vos commandes</button></li>
+		  <li *ngIf="isAdmin"><button (click)="goToAdmin()"> Espace Admin</button></li>
+		  <li><button (click)="logout()"> Déconnexion</button></li>
 		</ul>
 	  </div>
 	</div>
