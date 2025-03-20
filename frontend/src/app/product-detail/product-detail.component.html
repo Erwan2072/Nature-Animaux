@@ -1,13 +1,53 @@
-<div class="product-detail" *ngIf="product; else errorTemplate">
-	<h2>{{ product.title }}</h2>
-	<img [src]="product.image" alt="{{ product.title }}">
-	<p><strong>Description:</strong> {{ product.description }}</p>
-	<p><strong>Catégorie:</strong> {{ product.category }}</p>
-	<p><strong>Marque:</strong> {{ product.brand }}</p>
-	<p><strong>Prix:</strong> {{ product.price }} €</p>
-	<button (click)="goBack()">⬅ Retour</button>
+<div class="product-detail" *ngIf="product; else loadingOrError">
+
+	<div class="product-top">
+	  <!-- Image produit -->
+	  <img [src]="product.imageUrl?.trim() !== '' ? product.imageUrl : 'assets/default-product.jpg'"
+		   [alt]="product.title || 'Produit sans titre'"
+		   class="product-detail-image">
+
+	  <!-- Infos produit -->
+	  <div class="product-info">
+		<h2>{{ product.title || 'Produit sans titre' }}</h2>
+
+		<p *ngIf="getMinPrice() !== null" class="price">
+		  À partir de {{ getMinPrice() }} €
+		</p>
+		<p *ngIf="getMinPrice() === null" class="price">
+		  Prix non disponible
+		</p>
+
+		<!-- Sélecteur poids -->
+		<label>Poids</label>
+		<select [(ngModel)]="selectedVariationId">
+		  <option *ngFor="let variation of product.variations" [value]="variation.id">
+			{{ variation.weight }} - {{ variation.price }} €
+		  </option>
+		</select>
+
+		<!-- Quantité -->
+		<label>Quantité</label>
+		<input type="number" min="1" [(ngModel)]="quantity" />
+
+		<!-- Bouton -->
+		<button class="add-to-cart-btn" (click)="addToCart()">
+		  Ajouter au panier 🛒
+		</button>
+	  </div>
+	</div>
+
+	<!-- Affiche le SKU -->
+	<p *ngIf="getSelectedVariation()" class="sku">
+	Réf : {{ getSelectedVariation().sku }}
+  	</p>
+
+
+	<!-- Description longue formatée -->
+	<div class="long-description">
+	  <p [innerHTML]="formatDescription(product.description)"></p>
+	</div>
   </div>
 
-  <ng-template #errorTemplate>
-	<p class="error">Produit introuvable.</p>
+  <ng-template #loadingOrError>
+	<p>{{ errorMessage || 'Chargement du produit...' }}</p>
   </ng-template>

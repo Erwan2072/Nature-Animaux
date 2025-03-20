@@ -230,4 +230,13 @@ $border-color: #ddd;
   .filters-container {
     font-size: 0.9rem;
   }
+  .product-image {
+    width: 150px; /* 🔧 Ajuste la taille selon ton besoin */
+    height: auto;
+    border-radius: 10px;
+    object-fit: contain; /* ou cover si tu veux remplir */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
+  }
+
 }

@@ -12,14 +12,16 @@
             <label>{{ category }}</label>
         </div>
     </div>
-
+    
     <!-- ✅ Affichage des produits -->
     <div *ngIf="filteredProducts.length > 0; else noProducts" class="products-container">
         <div *ngFor="let product of filteredProducts; trackBy: trackByProductId"
-             class="product-card">
+             class="product-card"
+             (click)="goToProduct(product.id)"
+             style="cursor: pointer;">
 
             <!-- ✅ Vérifie et affiche l'image du produit -->
-            <img [src]="product.imageUrl && product.imageUrl.trim() !== '' ? product.imageUrl : 'assets/default-product.jpg'"
+            <img [src]="product.image_url && product.image_url.trim() !== '' ? product.image_url : 'assets/default-product.jpg'"
                  [alt]="product.title || 'Produit sans titre'"
                  class="product-image">
 
@@ -41,4 +43,3 @@
     </ng-template>
 
 </div>
-

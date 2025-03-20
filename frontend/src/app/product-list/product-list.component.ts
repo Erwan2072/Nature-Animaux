@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ApiService } from '../services/api.service';
+import { Router } from '@angular/router'; // 🔧 Ajout import Router pour navigation
 
 @Component({
   selector: 'app-product-list',
@@ -19,29 +20,33 @@ export class ProductListComponent implements OnInit {
   burgerMenuOpen: boolean = false;
   activeMenu: string | null = null;
 
-  constructor(private apiService: ApiService) {}
+  constructor(private apiService: ApiService, private router: Router) {} // 🔧 Ajout Router
 
   ngOnInit(): void {
     this.fetchProducts();
   }
 
-  // ✅ Récupère les produits de l'API et applique les corrections
   fetchProducts(): void {
     this.apiService.getProducts().subscribe({
       next: (data) => {
-        this.products = (data.products || []).map((product: any) => ({
-          ...product,
-          title: product.title && product.title.trim() !== '' ? product.title : 'Produit sans titre',
-          category: product.category && product.category.trim() !== '' ? product.category : 'Catégorie inconnue',
-          price: product.price !== undefined && product.price !== null ? product.price : 'Prix non disponible'
-        }));
+        this.products = (data.products || []).map((product: any) => {
+          // 🔧 Copie image_url vers imageUrl (Angular attend imageUrl dans HTML)
+          const imageUrl = product.image_url?.trim() !== '' ? product.image_url : 'assets/default-product.jpg';
+
+          return {
+            ...product,
+            imageUrl: imageUrl, // 🔥 Ajout clé imageUrl ici
+            title: product.title?.trim() || 'Produit sans titre',
+            category: product.category?.trim() || 'Catégorie inconnue',
+            price: product.price ?? 'Prix non disponible'
+          };
+        });
 
         this.filteredProducts = [...this.products];
 
-        // ✅ Récupérer toutes les catégories uniques (filtrage)
         this.categories = [...new Set(this.products.map((p: any) => p.category).filter(Boolean))];
 
-        console.log("📦 Produits récupérés :", this.products); // 🔥 Debug: Vérifie les données API
+        console.log("📦 Produits récupérés :", this.products);
       },
       error: (err) => {
         this.errorMessage = "Erreur lors de la récupération des produits.";
@@ -51,13 +56,11 @@ export class ProductListComponent implements OnInit {
   }
 
 
-  // ✅ Fonction pour récupérer le prix minimum des variations
   getMinPrice(product: any): number | null {
     if (!product.variations || product.variations.length === 0) {
-      return null; // ✅ Pas de variations → prix non disponible
+      return null;
     }
 
-    // ✅ On extrait les prix disponibles et on prend le minimum
     const prices = product.variations
       .map((v: any) => v.price)
       .filter((p: any) => p !== null && p !== undefined);
@@ -65,7 +68,6 @@ export class ProductListComponent implements OnInit {
     return prices.length > 0 ? Math.min(...prices) : null;
   }
 
-  // ✅ Gestion du filtrage des produits par catégorie
   toggleCategoryFilter(category: string): void {
     if (this.selectedCategories.includes(category)) {
       this.selectedCategories = this.selectedCategories.filter(c => c !== category);
@@ -75,18 +77,16 @@ export class ProductListComponent implements OnInit {
     this.applyFilters();
   }
 
-  // ✅ Applique les filtres
   applyFilters(): void {
     if (this.selectedCategories.length > 0) {
       this.filteredProducts = this.products.filter(p => this.selectedCategories.includes(p.category));
     } else {
-      this.filteredProducts = [...this.products]; // Afficher tous les produits
+      this.filteredProducts = [...this.products];
     }
   }
 
-  // ✅ Optimisation *ngFor avec trackBy
   trackByProductId(index: number, product: any): string {
-    return product._id || index.toString(); // ✅ MongoDB utilise `_id`
+    return product._id || index.toString();
   }
 
   /* === ✅ GESTION DU MENU BURGER === */
@@ -114,5 +114,10 @@ export class ProductListComponent implements OnInit {
     ) {
       this.closeMenu();
     }
+  }
+
+  // ✅ Ajout : redirection vers la page produit
+  goToProduct(productId: string): void {
+    this.router.navigate(['/product', productId]);
   }
 }

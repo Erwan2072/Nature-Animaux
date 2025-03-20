@@ -84,6 +84,12 @@ export const routes: Routes = [
     loadComponent: () => import('./header/orders/orders.component').then(m => m.OrdersComponent)
   },
 
+  // ✅ Route dynamique pour les détails d'un produit
+  {
+    path: 'product/:id',
+    loadComponent: () => import('./product-detail/product-detail.component').then(m => m.ProductDetailComponent)
+  },
+
   // ✅ Redirection en cas de route inconnue
   { path: '**', redirectTo: 'home' }
 ];
