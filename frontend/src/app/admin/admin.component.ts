@@ -1,18 +1,18 @@
 import { Component } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { AdminProductsComponent } from './admin-products/admin-products.component'; // ✅ Chemin et nom corrigés
 
 @Component({
     selector: 'app-admin',
     templateUrl: './admin.component.html',
     styleUrls: ['./admin.component.scss'],
     standalone: true,
-    imports: [CommonModule, RouterModule]
+    imports: [CommonModule, AdminProductsComponent] // ✅ même nom
 })
 export class AdminComponent {
-    constructor(private router: Router) {}
+    activeTab: string = 'products';
 
-    goTo(path: string): void {
-        this.router.navigate([`/${path}`]);
+    selectTab(tab: string): void {
+        this.activeTab = tab;
     }
 }

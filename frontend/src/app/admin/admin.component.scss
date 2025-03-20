@@ -1,0 +1,33 @@
+.admin-buttons {
+	display: flex;
+	justify-content: center;
+	margin: 20px 0;
+
+	button {
+	  margin: 0 10px;
+	  padding: 10px 20px;
+	  background-color: #ffcccb;
+	  border: none;
+	  border-radius: 20px;
+	  cursor: pointer;
+	  transition: 0.3s;
+
+	  &.active {
+		background-color: #90ee90;
+		font-weight: bold;
+	  }
+
+	  &:hover {
+		background-color: #add8e6;
+	  }
+	}
+  }
+
+  .admin-content {
+	text-align: center;
+	padding: 200px;
+	background-color: transparent;
+	border-radius: 10px;
+	margin: 0 200px;
+	box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  }
