@@ -1,5 +1,5 @@
 <div class="admin-products-container">
-    <!-- ✅ Onglets pour naviguer entre les sections -->
+    <!-- ✅ Onglets -->
     <div class="tabs">
         <button [class.active]="activeTab === 'add'" (click)="setActiveTab('add')">Ajout</button>
         <button [class.active]="activeTab === 'edit'" (click)="setActiveTab('edit')">Modification</button>
@@ -8,12 +8,28 @@
 
     <h2>Produits</h2>
 
-    <!-- ✅ SECTION AJOUT & MODIFICATION -->
+    <!-- ✅ AJOUT / MODIF -->
     <div *ngIf="activeTab !== 'delete'">
         <table class="product-table">
             <tbody>
-                <!-- ✅ Champ Titre avec gestion du fallback -->
-                <tr>
+                <!-- ✅ Champ Titre avec suggestions pour MODIFICATION -->
+                <tr *ngIf="activeTab === 'edit'">
+                    <td><strong>Sélectionner un produit</strong></td>
+                    <td colspan="3">
+                        <mat-form-field appearance="outline" class="full-width">
+                            <mat-label>Nom du produit</mat-label>
+                            <input type="text" matInput [formControl]="editProductControl" [matAutocomplete]="editAuto">
+                            <mat-autocomplete #editAuto="matAutocomplete" (optionSelected)="loadProductDetails($event.option.value)">
+                                <mat-option *ngFor="let title of filteredEditTitles | async" [value]="title">
+                                    {{ title }}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                    </td>
+                </tr>
+
+                <!-- ✅ Titre manuel pour AJOUT -->
+                <tr *ngIf="activeTab === 'add'">
                     <td><strong>Titre du produit</strong></td>
                     <td colspan="3">
                         <mat-form-field appearance="outline" class="full-width">
@@ -23,44 +39,41 @@
                     </td>
                 </tr>
 
-                <!-- ✅ Sélection des catégories -->
+                <!-- ✅ Sélections -->
                 <tr>
                     <td><strong>Animaux</strong></td>
                     <td colspan="3">
-                        <select [(ngModel)]="product.animal" name="animal">
+                        <select [(ngModel)]="product.animal">
                             <option *ngFor="let animal of animals" [value]="animal">{{ animal }}</option>
                         </select>
                     </td>
                 </tr>
-
                 <tr>
                     <td><strong>Catégorie</strong></td>
                     <td colspan="3">
-                        <select [(ngModel)]="product.category" name="category">
+                        <select [(ngModel)]="product.category">
                             <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
                         </select>
                     </td>
                 </tr>
-
                 <tr>
                     <td><strong>Sous-Catégorie</strong></td>
                     <td colspan="3">
-                        <select [(ngModel)]="product.subCategory" name="subCategory">
+                        <select [(ngModel)]="product.subCategory">
                             <option *ngFor="let subCategory of subCategories" [value]="subCategory">{{ subCategory }}</option>
                         </select>
                     </td>
                 </tr>
-
                 <tr>
                     <td><strong>Marque</strong></td>
                     <td colspan="3">
-                        <select [(ngModel)]="product.brand" name="brand">
+                        <select [(ngModel)]="product.brand">
                             <option *ngFor="let brand of brands" [value]="brand">{{ brand }}</option>
                         </select>
                     </td>
                 </tr>
 
-                <!-- ✅ Section Variations -->
+                <!-- ✅ Variations -->
                 <tr>
                     <td colspan="5"><h3>Variations</h3></td>
                 </tr>
@@ -71,28 +84,24 @@
                     <th style="width: 80px;">Stock</th>
                     <th style="width: 50px;">Actions</th>
                 </tr>
-
                 <tr *ngFor="let variation of product.variations; let i = index; trackBy: trackByIndex">
-                    <td><input type="text" placeholder="SKU" [(ngModel)]="variation.sku" name="sku"></td>
-                    <td><input type="number" placeholder="Prix" [(ngModel)]="variation.price" name="price" min="0"></td>
+                    <td><input type="text" placeholder="SKU" [(ngModel)]="variation.sku"></td>
+                    <td><input type="number" placeholder="Prix" [(ngModel)]="variation.price" min="0"></td>
                     <td>
-                        <select [(ngModel)]="variation.weight" name="weight">
+                        <select [(ngModel)]="variation.weight">
                             <option *ngFor="let weight of weights" [value]="weight">{{ weight }}</option>
                         </select>
                     </td>
-                    <td><input type="number" placeholder="Stock" [(ngModel)]="variation.stock" name="stock" min="0"></td>
-                    <td>
-                        <button *ngIf="product.variations.length > 1" (click)="removeVariation(i)">❌</button>
-                    </td>
+                    <td><input type="number" placeholder="Stock" [(ngModel)]="variation.stock" min="0"></td>
+                    <td><button *ngIf="product.variations.length > 1" (click)="removeVariation(i)">❌</button></td>
                 </tr>
-
                 <tr>
                     <td colspan="5" class="center">
                         <button class="add-variation-button" (click)="addVariation()">+ Ajouter une variation</button>
                     </td>
                 </tr>
 
-                <!-- ✅ Section Image avec prévisualisation -->
+                <!-- ✅ Image -->
                 <tr>
                     <td colspan="5"><h3>Photo du produit</h3></td>
                 </tr>
@@ -105,17 +114,17 @@
                     </td>
                 </tr>
 
-                <!-- ✅ Section Description -->
+                <!-- ✅ Description -->
                 <tr>
                     <td colspan="5"><h3>Description du produit</h3></td>
                 </tr>
                 <tr>
                     <td colspan="5">
-                        <textarea placeholder="Ceci est une description" [(ngModel)]="product.description" name="description"></textarea>
+                        <textarea placeholder="Ceci est une description" [(ngModel)]="product.description"></textarea>
                     </td>
                 </tr>
 
-                <!-- ✅ Bouton Valider Centré -->
+                <!-- ✅ Valider -->
                 <tr>
                     <td colspan="5" class="center">
                         <button class="validate-button" (click)="saveProduct()">✅ Valider</button>
@@ -125,7 +134,7 @@
         </table>
     </div>
 
-    <!-- ✅ SECTION SUPPRESSION -->
+    <!-- ✅ SUPPRESSION INCHANGÉE -->
     <div *ngIf="activeTab === 'delete'" class="delete-section">
         <table class="product-table">
             <tbody>
@@ -149,8 +158,6 @@
                 </tr>
             </tbody>
         </table>
-
-        <!-- ✅ Bouton Supprimer Centré et stylisé -->
         <div class="center">
             <button class="delete-button" (click)="deleteProduct()">🗑️ Supprimer</button>
         </div>

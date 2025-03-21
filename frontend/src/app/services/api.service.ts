@@ -8,11 +8,11 @@ import { AuthService } from './auth.service';
   providedIn: 'root'
 })
 export class ApiService {
-  private baseUrl = 'http://127.0.0.1:8000'; // ✅ Mise à jour de l'URL de base
+  private baseUrl = 'http://127.0.0.1:8000'; // ✅ URL de base Django
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 
-  // ✅ Récupération asynchrone des headers avec le token
+  // ✅ Générer les headers avec le token JWT
   private getHeaders(): Observable<HttpHeaders> {
     return this.authService.getToken().pipe(
       map(token => {
@@ -23,9 +23,9 @@ export class ApiService {
 
         if (token) {
           headers = headers.set('Authorization', `Bearer ${token}`);
-          console.log("🔑 Token envoyé dans les headers :", token);
+          console.log("🔑 Token envoyé :", token);
         } else {
-          console.warn("⚠️ Aucun token d'authentification disponible !");
+          console.warn("⚠️ Aucun token trouvé.");
         }
 
         return headers;
@@ -33,34 +33,37 @@ export class ApiService {
     );
   }
 
-  // ✅ Gestion centralisée des erreurs API
+  // ✅ Gestion centralisée des erreurs
   private handleError(error: any): Observable<never> {
     console.error("❌ Erreur API :", error);
     if (error.status === 401) {
-      console.warn("🔴 Token expiré ou invalide, déconnexion en cours...");
+      console.warn("🔴 Token expiré, déconnexion...");
       this.authService.logout();
-      // TODO : Rediriger vers la page de connexion si nécessaire
     }
     return throwError(() => new Error(error.message || "Erreur API"));
   }
 
-  // ✅ Récupérer les produits avec pagination
+  // ✅ Obtenir tous les produits avec pagination
   getProducts(page: number = 1): Observable<any> {
-    const url = `${this.baseUrl}/products/`; // 🔥 Utilise uniquement /products/ pour le lazy loading
+    const url = `${this.baseUrl}/products/`;
     const params = new HttpParams().set('page', page.toString());
 
     return this.getHeaders().pipe(
       switchMap(headers => this.http.get(url, { headers, params })),
-      map((response: any) => ({
-        products: response.results || [],
-        next: response.next || null,
-        previous: response.previous || null
-      })),
+      map((response: any) => {
+        // ✅ Log pour vérifier les données
+        console.log("📦 Produits reçus :", response.results);
+        return {
+          products: response.results || [],
+          next: response.next || null,
+          previous: response.previous || null
+        };
+      }),
       catchError(this.handleError)
     );
   }
 
-  // ✅ Récupérer un produit par ID
+  // ✅ Récupérer un produit spécifique
   getProductById(id: string): Observable<any> {
     const url = `${this.baseUrl}/products/product-detail/${id}/`;
     return this.getHeaders().pipe(
@@ -69,7 +72,7 @@ export class ApiService {
     );
   }
 
-  // ✅ Ajouter un produit
+  // ✅ Créer un produit
   addProduct(product: any): Observable<any> {
     const url = `${this.baseUrl}/products/product-create/`;
     return this.getHeaders().pipe(
@@ -78,11 +81,11 @@ export class ApiService {
     );
   }
 
-  // ✅ Modifier un produit
+  // ✅ Modifier un produit existant
   updateProduct(id: string, product: any): Observable<any> {
     const url = `${this.baseUrl}/products/product-update/${id}/`;
     return this.getHeaders().pipe(
-      switchMap(headers => this.http.patch(url, product, { headers })),
+      switchMap(headers => this.http.put(url, product, { headers })),
       catchError(this.handleError)
     );
   }

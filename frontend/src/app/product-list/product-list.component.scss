@@ -4,7 +4,7 @@
 $primary-color: #4CAF50;
 $secondary-color: #FFC107;
 $background-color: #F5F5F5;
-$text-color: #333;
+$text-color: #310000;
 $border-color: #ddd;
 
 .product-list {
@@ -89,22 +89,6 @@ $border-color: #ddd;
       font-weight: bold;
     }
 
-    button.delete {
-      background: #E53935;
-      color: white;
-      padding: 8px 12px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 1rem;
-      font-weight: bold;
-      transition: 0.3s;
-      margin-top: 10px;
-
-      &:hover {
-        background: color.adjust(#E53935, $lightness: -10%);
-      }
-    }
   }
 }
 

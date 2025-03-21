@@ -5,6 +5,8 @@ import { ApiService } from '../../services/api.service';
 import { catchError, of, Observable, startWith, map } from 'rxjs';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatOptionModule } from '@angular/material/core';
 
 @Component({
   selector: 'app-admin-products',
@@ -16,24 +18,28 @@ import { MatInputModule } from '@angular/material/input';
     FormsModule,
     ReactiveFormsModule,
     MatAutocompleteModule,
-    MatInputModule
+    MatInputModule,
+    MatFormFieldModule,
+    MatOptionModule
   ]
 })
 export class AdminProductsComponent implements OnInit {
   products: any[] = [];
   activeTab: string = 'add';
 
+  // Contrôles pour suppression
   selectedProductControl = new FormControl('');
   filteredProductTitles!: Observable<string[]>;
   selectedProductSKU: string = '';
 
-  productTitleControl = new FormControl('');
-  filteredProducts!: Observable<string[]>;
+  // Contrôles pour modification
+  editProductControl = new FormControl('');
+  filteredEditTitles!: Observable<string[]>;
 
-  // ✅ Ajout du champ `image_url`
+  // Objet produit
   product: any = {
     title: '',
-    image_url: '',  // ✅ Nouveau champ pour stocker l'URL de l'image
+    image_url: '',
     category: '',
     subCategory: '',
     brand: '',
@@ -41,6 +47,7 @@ export class AdminProductsComponent implements OnInit {
     description: '',
   };
 
+  // Données statiques
   animals = ['Chien', 'Chat', 'Oiseau', 'Rongeur, Lapin, Furet', 'Basse cour', 'Jardins aquatiques'];
   categories = ['Alimentation sèche', 'Alimentation humide', 'Friandises', 'Accessoires', 'Hygiènes & Soins', 'Jouets'];
   subCategories = ['A définir'];
@@ -54,12 +61,14 @@ export class AdminProductsComponent implements OnInit {
   ngOnInit(): void {
     this.getProducts();
 
-    this.filteredProducts = this.productTitleControl.valueChanges.pipe(
+    // Autocomplétion suppression
+    this.filteredProductTitles = this.selectedProductControl.valueChanges.pipe(
       startWith(''),
-      map(value => this.filterProducts(value || ''))
+      map(value => this.filterProductTitles(value || ''))
     );
 
-    this.filteredProductTitles = this.selectedProductControl.valueChanges.pipe(
+    // Autocomplétion modification
+    this.filteredEditTitles = this.editProductControl.valueChanges.pipe(
       startWith(''),
       map(value => this.filterProductTitles(value || ''))
     );
@@ -67,38 +76,44 @@ export class AdminProductsComponent implements OnInit {
 
   setActiveTab(tab: string) {
     this.activeTab = tab;
+    if (tab === 'add') {
+      this.resetProductForm();
+    }
   }
 
   getProducts() {
     this.apiService.getProducts()
       .pipe(catchError(error => {
         console.error("Erreur API :", error);
-        return of([]);
+        return of({ products: [] });
       }))
       .subscribe({
         next: (response: any) => {
-          this.products = response || [];
+          this.products = response.products || [];
         }
       });
   }
 
-  private filterProducts(value: string): string[] {
-    const filterValue = value.toLowerCase();
-    return this.products
-      .map(prod => prod.title)
-      .filter(title => title.toLowerCase().includes(filterValue));
-  }
-
   private filterProductTitles(value: string): string[] {
-    const filterValue = value.toLowerCase();
+    const filterValue = value.trim().toLowerCase();
+
+    if (!filterValue) {
+      return []; // Affiche rien si champ vide
+    }
+
     return this.products
       .map(prod => prod.title)
       .filter(title => title.toLowerCase().includes(filterValue));
+    // → Utilise startsWith(filterValue) si tu veux commencer par la lettre uniquement
   }
 
   updateSelectedProductSKU() {
     const selectedProduct = this.products.find(prod => prod.title === this.selectedProductControl.value);
-    this.selectedProductSKU = selectedProduct ? selectedProduct.sku : 'N/A';
+    if (selectedProduct && selectedProduct.variations && selectedProduct.variations.length > 0) {
+      this.selectedProductSKU = selectedProduct.variations[0].sku;
+    } else {
+      this.selectedProductSKU = 'N/A';
+    }
   }
 
   deleteProduct() {
@@ -111,14 +126,14 @@ export class AdminProductsComponent implements OnInit {
 
     this.apiService.deleteProduct(selectedProduct.id)
       .pipe(catchError(error => {
-        console.error("Erreur lors de la suppression :", error);
-        alert("Erreur lors de la suppression du produit.");
+        console.error("Erreur suppression :", error);
+        alert("Erreur lors de la suppression.");
         return of(null);
       }))
       .subscribe({
         next: (response) => {
           if (response) {
-            alert("Produit supprimé avec succès !");
+            alert("Produit supprimé !");
             this.getProducts();
             this.selectedProductControl.setValue('');
             this.selectedProductSKU = '';
@@ -127,9 +142,7 @@ export class AdminProductsComponent implements OnInit {
       });
   }
 
-  trackByIndex(index: number, item: any) {
-    return index;
-  }
+  trackByIndex(index: number, item: any) { return index; }
 
   addVariation() {
     this.product.variations.push({ sku: '', price: null, weight: '', stock: 0 });
@@ -139,7 +152,7 @@ export class AdminProductsComponent implements OnInit {
     if (this.product.variations.length > 1) {
       this.product.variations.splice(index, 1);
     } else {
-      alert("Il doit y avoir au moins une variation.");
+      alert("Il faut au moins une variation.");
     }
   }
 
@@ -149,7 +162,7 @@ export class AdminProductsComponent implements OnInit {
       const reader = new FileReader();
       reader.onload = () => {
         this.imagePreview = reader.result as string;
-        this.product.image_url = this.imagePreview;  // ✅ Stocke l'URL de l'image
+        this.product.image_url = this.imagePreview;
       };
       reader.readAsDataURL(file);
     }
@@ -168,25 +181,52 @@ export class AdminProductsComponent implements OnInit {
 
   saveProduct() {
     if (!this.isValidProduct()) {
-      alert("Veuillez remplir tous les champs obligatoires avant d'enregistrer.");
+      alert("Remplis tous les champs obligatoires !");
       return;
     }
 
-    this.apiService.addProduct(this.product)
-      .pipe(catchError(error => {
-        console.error("Erreur lors de l'enregistrement :", error);
-        alert("Erreur lors de l'enregistrement du produit.");
+    const isEdit = this.activeTab === 'edit' && this.product.id;
+    const apiCall = isEdit
+      ? this.apiService.updateProduct(this.product.id, this.product)
+      : this.apiService.addProduct(this.product);
+
+    apiCall.pipe(
+      catchError(error => {
+        console.error("Erreur sauvegarde :", error);
+        alert("Erreur sauvegarde !");
         return of(null);
-      }))
-      .subscribe({
-        next: (response) => {
-          if (response) {
-            alert("Produit enregistré avec succès !");
-            this.getProducts();
-            this.productTitleControl.setValue('');
-            this.imagePreview = null;  // ✅ Réinitialisation de l'aperçu de l'image
-          }
+      })
+    ).subscribe({
+      next: (response) => {
+        if (response) {
+          alert(isEdit ? "Produit modifié !" : "Produit ajouté !");
+          this.getProducts();
+          this.resetProductForm();
+          this.editProductControl.setValue('');
         }
-      });
+      }
+    });
+  }
+
+  loadProductDetails(title: string) {
+    const productToEdit = this.products.find(prod => prod.title === title);
+
+    if (productToEdit) {
+      this.product = JSON.parse(JSON.stringify(productToEdit));
+      this.imagePreview = this.product.image_url || null;
+    }
+  }
+
+  resetProductForm() {
+    this.product = {
+      title: '',
+      image_url: '',
+      category: '',
+      subCategory: '',
+      brand: '',
+      variations: [{ sku: '', price: null, weight: '', stock: 0 }],
+      description: '',
+    };
+    this.imagePreview = null;
   }
 }
