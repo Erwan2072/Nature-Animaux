@@ -7,17 +7,17 @@
 <!-- Contenus dynamiques -->
 <div class="admin-content">
   <div *ngIf="activeTab === 'products'">
-    <!-- ✅ Composant réel produits -->
+    <!-- Composant réel produits -->
     <app-admin-products></app-admin-products>
   </div>
 
   <div *ngIf="activeTab === 'users'">
     <!-- Placeholder utilisateurs -->
-    <p>👥 Gestion des utilisateurs à venir</p>
+    <p>Gestion des utilisateurs à venir</p>
   </div>
 
   <div *ngIf="activeTab === 'orders'">
     <!-- Placeholder commandes -->
-    <p>📦 Gestion des commandes à venir</p>
+    <p>Gestion des commandes à venir</p>
   </div>
 </div>
