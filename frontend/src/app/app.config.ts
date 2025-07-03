@@ -12,12 +12,12 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { ReactiveFormsModule } from '@angular/forms';
 
-// ✅ Importation correcte de Firebase
+//  Importation correcte de Firebase
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { provideAuth, getAuth } from '@angular/fire/auth';
 import { environment } from '../environments/environment';
 
-// ✅ Définition des routes avec Lazy Loading
+//  Définition des routes avec Lazy Loading
 const updatedRoutes: Routes = [
   ...routes,
   {
@@ -31,7 +31,7 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(updatedRoutes,
       withComponentInputBinding(),
-      withInMemoryScrolling({ scrollPositionRestoration: 'top' }) // ✅ Fonctionne bien sous Angular 19
+      withInMemoryScrolling({ scrollPositionRestoration: 'top' }) //  Fonctionne bien sous Angular 19
     ),
     provideHttpClient(),
     importProvidersFrom(

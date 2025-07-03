@@ -1,7 +1,7 @@
 @use "sass:color";
 @import url('https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap');
 
-/* ✅ Définition des couleurs locales */
+/*  Définition des couleurs locales */
 $primary-color: #8BC34A;
 $secondary-color: #ffcdce;
 $background-gradient: linear-gradient(to bottom, #94efff, #cdffd8);
@@ -28,7 +28,7 @@ body {
   flex-direction: column;
 }
 
-/* ✅ LOGO CLIQUABLE AVEC ANIMATION */
+/*  LOGO CLIQUABLE AVEC ANIMATION */
 .logo-container {
   position: fixed;
   top: 20px;
@@ -52,7 +52,7 @@ body {
   height: auto;
 }
 
-/* ✅ TITRE "Nature & Animaux" */
+/*  TITRE "Nature & Animaux" */
 .site-title {
   position: fixed;
   top: 5px;
@@ -73,7 +73,7 @@ body {
   transform: scale(1.05);
 }
 
-/* ✅ SOUS-TITRE FIXÉ SOUS LE TITRE */
+/*  SOUS-TITRE FIXÉ SOUS LE TITRE */
 .site-subtitle {
   position: fixed;
   font-size: 1.1rem;
@@ -89,7 +89,7 @@ body {
   animation: fadeInRight 1.4s ease-out forwards;
 }
 
-/* ✅ HEADER */
+/*  HEADER */
 .header {
   display: flex;
   justify-content: flex-end;
@@ -105,7 +105,7 @@ body {
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* ✅ NAVBAR RESPONSIVE (Menu burger pour mobile) */
+/*  NAVBAR RESPONSIVE (Menu burger pour mobile) */
 .navbar {
   display: flex;
   flex-direction: row;
@@ -127,7 +127,7 @@ body {
   transition: 0.4s;
 }
 
-/* ✅ RESPONSIVE */
+/*  RESPONSIVE */
 @media screen and (max-width: 1024px) {
   .navbar {
     flex-direction: column;
@@ -150,7 +150,7 @@ body {
   }
 }
 
-/* ✅ FOOTER COLLÉ EN BAS DU CONTENU */
+/*  FOOTER COLLÉ EN BAS DU CONTENU */
 .footer {
   background-color: $primary-color;
   color: white;
@@ -162,13 +162,13 @@ body {
   margin-top: auto;
 }
 
-/* ✅ ASSURE QUE LE CONTENU PREND TOUT L'ESPACE DISPONIBLE */
+/*  ASSURE QUE LE CONTENU PREND TOUT L'ESPACE DISPONIBLE */
 .main-container {
   margin-top: 300px;
   flex-grow: 1;
 }
 
-/* ✅ ANIMATIONS */
+/*  ANIMATIONS */
 @keyframes fadeInDown {
   from {
     opacity: 0;
@@ -191,7 +191,7 @@ body {
   }
 }
 
-/* ✅ RESPONSIVE - Adaptation du logo, du titre et du sous-titre */
+/*  RESPONSIVE - Adaptation du logo, du titre et du sous-titre */
 @media screen and (max-width: 1024px) {
   .logo-container img {
     max-width: 40vw; /* Réduction de la taille du logo */

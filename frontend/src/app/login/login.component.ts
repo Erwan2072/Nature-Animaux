@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { RouterModule } from '@angular/router'; // ✅ Ajouté ici
+import { RouterModule } from '@angular/router'; //  Ajouté ici
 
 declare const google: any;
 
@@ -15,7 +15,7 @@ declare const google: any;
   standalone: true,
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, RouterModule] // ✅ Ajout de RouterModule ici
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, RouterModule] //  Ajout de RouterModule ici
 })
 export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
   loginForm: FormGroup;
@@ -58,11 +58,11 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
     const { email, password } = this.loginForm.value;
     this.authService.login(email, password).subscribe({
       next: () => {
-        console.log("✅ Connexion réussie !");
+        console.log(" Connexion réussie !");
         this.authService.fetchAndStoreUserInfo();
       },
       error: (error) => {
-        console.error('❌ Erreur de connexion :', error);
+        console.error('Erreur de connexion :', error);
         this.errorMessage = 'Identifiants incorrects. Veuillez réessayer.';
       }
     });
@@ -70,7 +70,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
 
   loginWithGoogle(): void {
     if (!google?.accounts?.id) {
-      console.error('❌ Google Sign-In non chargé.');
+      console.error('Google Sign-In non chargé.');
       this.errorMessage = 'Connexion Google indisponible.';
       return;
     }
@@ -79,7 +79,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private redirectUser(user: any): void {
-    console.log("🔀 Redirection en fonction du rôle utilisateur :", user);
+    console.log("Redirection en fonction du rôle utilisateur :", user);
     if (user.is_admin) {
       this.router.navigate(['/admin-dashboard']);
     } else {
@@ -89,7 +89,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private initGoogleSignIn(): void {
     if (!google?.accounts?.id) {
-      console.error('❌ Google Sign-In non disponible.');
+      console.error('Google Sign-In non disponible.');
       return;
     }
 
@@ -118,7 +118,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       }, 500);
     } else if (!this.googleButtonInitialized) {
-      console.warn('⚠️ Élément Google Sign-In introuvable. Affichage forcé de la popup.');
+      console.warn('Élément Google Sign-In introuvable. Affichage forcé de la popup.');
       google.accounts.id.prompt();
     }
   }
@@ -126,18 +126,18 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
   private handleGoogleCallback(response: any): void {
     const token = response.credential;
     if (!token) {
-      console.error('❌ Token Google invalide.');
+      console.error('Token Google invalide.');
       this.errorMessage = 'Échec de connexion avec Google.';
       return;
     }
 
     this.authService.loginWithGoogle(token).subscribe({
       next: () => {
-        console.log("✅ Connexion Google réussie !");
+        console.log(" Connexion Google réussie !");
         this.authService.fetchAndStoreUserInfo();
       },
       error: (error) => {
-        console.error('❌ Erreur de connexion Google :', error);
+        console.error('Erreur de connexion Google :', error);
         this.errorMessage = 'Échec de connexion avec Google.';
       }
     });

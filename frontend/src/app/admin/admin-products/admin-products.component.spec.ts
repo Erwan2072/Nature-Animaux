@@ -9,7 +9,7 @@ describe('AdminProductsComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [AdminProductsComponent],
-      providers: [provideHttpClient()]  // ✅ Fournit HttpClient pour ApiService
+      providers: [provideHttpClient()]  //  Fournit HttpClient pour ApiService
     }).compileComponents();
 
     fixture = TestBed.createComponent(AdminProductsComponent);

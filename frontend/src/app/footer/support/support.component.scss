@@ -16,7 +16,7 @@
     text-align: left;
 }
 
-/* ✅ Styles pour les liens vers les réseaux sociaux */
+/*  Styles pour les liens vers les réseaux sociaux */
 .social-links {
     display: flex;
     justify-content: center;
@@ -46,7 +46,7 @@
     }
 }
 
-/* ✅ Formulaire de contact */
+/*  Formulaire de contact */
 form {
     display: flex;
     flex-direction: column;
@@ -67,7 +67,7 @@ textarea {
     border-radius: 5px;
 }
 
-/* ✅ Bouton d'envoi */
+/*  Bouton d'envoi */
 button {
     background-color: blue;
     color: white;
@@ -83,7 +83,7 @@ button {
     }
 }
 
-/* ✅ Styles pour l'image Google Maps */
+/*  Styles pour l'image Google Maps */
 .map-container {
     margin-top: 20px;
     border-radius: 10px;
@@ -103,7 +103,7 @@ button {
     }
 }
 
-/* ✅ Lien vers Google Maps */
+/*  Lien vers Google Maps */
 .map-link {
     margin-top: 10px;
     text-align: center;

@@ -8,8 +8,8 @@ describe('OrdersComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [OrdersComponent],  // ✅ Standalone
-      providers: [provideHttpClient()]  // ✅ Pour HttpClient si utilisé
+      imports: [OrdersComponent],  //  Standalone
+      providers: [provideHttpClient()]  //  Pour HttpClient si utilisé
     }).compileComponents();
 
     fixture = TestBed.createComponent(OrdersComponent);

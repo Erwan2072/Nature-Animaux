@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ApiService } from '../services/api.service';
-import { Router } from '@angular/router'; // 🔧 Ajout import Router pour navigation
+import { Router } from '@angular/router'; // Ajout import Router pour navigation
 
 @Component({
   selector: 'app-product-list',
@@ -20,7 +20,7 @@ export class ProductListComponent implements OnInit {
   burgerMenuOpen: boolean = false;
   activeMenu: string | null = null;
 
-  constructor(private apiService: ApiService, private router: Router) {} // 🔧 Ajout Router
+  constructor(private apiService: ApiService, private router: Router) {} // Ajout Router
 
   ngOnInit(): void {
     this.fetchProducts();
@@ -30,12 +30,12 @@ export class ProductListComponent implements OnInit {
     this.apiService.getProducts().subscribe({
       next: (data) => {
         this.products = (data.products || []).map((product: any) => {
-          // 🔧 Copie image_url vers imageUrl (Angular attend imageUrl dans HTML)
+          // Copie image_url vers imageUrl (Angular attend imageUrl dans HTML)
           const imageUrl = product.image_url?.trim() !== '' ? product.image_url : 'assets/default-product.jpg';
 
           return {
             ...product,
-            imageUrl: imageUrl, // 🔥 Ajout clé imageUrl ici
+            imageUrl: imageUrl, // Ajout clé imageUrl ici
             title: product.title?.trim() || 'Produit sans titre',
             category: product.category?.trim() || 'Catégorie inconnue',
             price: product.price ?? 'Prix non disponible'
@@ -46,11 +46,11 @@ export class ProductListComponent implements OnInit {
 
         this.categories = [...new Set(this.products.map((p: any) => p.category).filter(Boolean))];
 
-        console.log("📦 Produits récupérés :", this.products);
+        console.log("Produits récupérés :", this.products);
       },
       error: (err) => {
         this.errorMessage = "Erreur lors de la récupération des produits.";
-        console.error("❌ Erreur API :", err);
+        console.error("Erreur API :", err);
       }
     });
   }
@@ -89,7 +89,7 @@ export class ProductListComponent implements OnInit {
     return product._id || index.toString();
   }
 
-  /* === ✅ GESTION DU MENU BURGER === */
+  /* ===  GESTION DU MENU BURGER === */
 
   toggleBurgerMenu(): void {
     this.burgerMenuOpen = !this.burgerMenuOpen;
@@ -116,7 +116,7 @@ export class ProductListComponent implements OnInit {
     }
   }
 
-  // ✅ Ajout : redirection vers la page produit
+  //  Ajout : redirection vers la page produit
   goToProduct(productId: string): void {
     this.router.navigate(['/product', productId]);
   }

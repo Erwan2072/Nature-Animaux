@@ -1,12 +1,12 @@
 @use "sass:color";
 
-/* ✅ Définition des couleurs locales */
+/*  Définition des couleurs locales */
 $primary-color: #8BC34A;
 $secondary-color: #ffcdce;
 $background-gradient: linear-gradient(to bottom, rgb(131, 240, 198), #9AD9E2);
 $text-color: #333;
 
-/* ✅ CONTENEUR DES CATÉGORIES */
+/*  CONTENEUR DES CATÉGORIES */
 .category-bar {
   position: fixed;
   top: 60px;
@@ -23,7 +23,7 @@ $text-color: #333;
   border-radius: 20px;
 }
 
-/* ✅ Ajuste la barre pour mobile */
+/*  Ajuste la barre pour mobile */
 @media screen and (max-width: 768px) {
   .category-bar {
     top: 120px;
@@ -32,7 +32,7 @@ $text-color: #333;
   }
 }
 
-/* ✅ STYLE DES BOUTONS DES CATÉGORIES */
+/*  STYLE DES BOUTONS DES CATÉGORIES */
 .category-item {
   position: relative;
   display: inline-block;
@@ -60,7 +60,7 @@ $text-color: #333;
 }
 
 
-/* ✅ Affichage du menu quand actif */
+/*  Affichage du menu quand actif */
 .category-item:hover .dropdown,
 .category-item:focus-within .dropdown {
   opacity: 1;
@@ -68,50 +68,50 @@ $text-color: #333;
   pointer-events: auto;
 }
 
-/* ✅ STYLE DU MENU DÉROULANT */
+/*  STYLE DU MENU DÉROULANT */
 .dropdown {
 	position: absolute;
 	top: 170%;
 	left: 0;
 	background: $secondary-color; /* Rose pastel */
-	border: 2px solid $primary-color; /* ✅ Liseré vert */
+	border: 2px solid $primary-color; /*  Liseré vert */
 	border-radius: 10px;
 	box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
 	display: flex;
 	flex-direction: column;
 	padding: 10px;
 	z-index: 100;
-	min-width: 150px; /* ✅ Ajuste la largeur minimale */
-	width: 150%; /* ✅ Fait en sorte que le menu s'adapte à la largeur du parent */
+	min-width: 150px; /*  Ajuste la largeur minimale */
+	width: 150%; /*  Fait en sorte que le menu s'adapte à la largeur du parent */
   }
 
- /* ✅ Boutons à l'intérieur du menu */
+ /*  Boutons à l'intérieur du menu */
 .dropdown a {
-	display: flex; /* ✅ Permet un bon alignement */
-	align-items: center; /* ✅ Centre verticalement */
-	justify-content: center; /* ✅ Centre horizontalement */
+	display: flex; /*  Permet un bon alignement */
+	align-items: center; /*  Centre verticalement */
+	justify-content: center; /*  Centre horizontalement */
 	text-decoration: none;
 	color: #310000;
 	font-weight: bold;
 	background-color: $secondary-color;
 	padding: 10px 15px;
 	text-align: center;
-	width: 100%; /* ✅ Remplit toute la largeur du menu */
-	border: 0.2px solid $primary-color; /* ✅ Liseré vert */
-	white-space: nowrap; /* ✅ Empêche le texte de passer à la ligne */
-	overflow: hidden; /* ✅ Cache tout débordement */
-	text-overflow: ellipsis; /* ✅ Ajoute "..." si le texte dépasse */
-	box-sizing: border-box; /* ✅ Évite que le padding ne casse l'alignement */
+	width: 100%; /*  Remplit toute la largeur du menu */
+	border: 0.2px solid $primary-color; /*  Liseré vert */
+	white-space: nowrap; /*  Empêche le texte de passer à la ligne */
+	overflow: hidden; /*  Cache tout débordement */
+	text-overflow: ellipsis; /*  Ajoute "..." si le texte dépasse */
+	box-sizing: border-box; /*  Évite que le padding ne casse l'alignement */
   }
 
-  /* ✅ Ajustement pour s'assurer que le texte ne se coupe pas */
+  /*  Ajustement pour s'assurer que le texte ne se coupe pas */
   .dropdown {
-	min-width: 180px; /* ✅ Ajuste la largeur minimale du menu */
-	width: auto; /* ✅ Adapte la largeur au texte */
+	min-width: 180px; /*  Ajuste la largeur minimale du menu */
+	width: auto; /*  Adapte la largeur au texte */
   }
 
   .dropdown a:not(:last-child) {
-	border-bottom: 1px solid color.adjust($primary-color, $lightness: -10%); /* ✅ Fine ligne entre les éléments */
+	border-bottom: 1px solid color.adjust($primary-color, $lightness: -10%); /*  Fine ligne entre les éléments */
   }
 
   .dropdown a:hover {
@@ -119,7 +119,7 @@ $text-color: #333;
 	color: #310000;
   }
 
-  /* ✅ STYLE DE LA BARRE DE RECHERCHE */
+  /*  STYLE DE LA BARRE DE RECHERCHE */
 .category-search {
 	padding: 8px 15px;
 	border-radius: 20px;
@@ -138,14 +138,14 @@ $text-color: #333;
 
 
 /*MENU BURGER*/
-/* ✅ Cache la category-bar sur mobile */
+/*  Cache la category-bar sur mobile */
 @media screen and (max-width: 1024px) {
   .category-bar {
     display: none;
   }
 }
 
-/* ✅ Icône du menu burger */
+/*  Icône du menu burger */
 .burger-icon {
   position: fixed;
   top: 90px;
@@ -170,7 +170,7 @@ $text-color: #333;
   transition: all 0.3s ease-in-out;
 }
 
-/* ✅ Transforme l'icône en croix quand le menu est ouvert */
+/*  Transforme l'icône en croix quand le menu est ouvert */
 .burger-icon.open div:nth-child(1) {
   transform: translateY(8px) rotate(45deg);
 }
@@ -183,7 +183,7 @@ $text-color: #333;
   transform: translateY(-8px) rotate(-45deg);
 }
 
-/* ✅ Menu burger */
+/*  Menu burger */
 .burger-menu {
   position: fixed;
   top: 0;
@@ -199,15 +199,15 @@ $text-color: #333;
   align-items: flex-start;
   padding: 20px;
   z-index: 3000;
-  overflow-y: auto; /* ✅ Permet de scroller si le menu devient trop long */
+  overflow-y: auto; /*  Permet de scroller si le menu devient trop long */
 }
 
-/* ✅ Le menu s'affiche quand ouvert */
+/*  Le menu s'affiche quand ouvert */
 .burger-menu.open {
   right: 0;
 }
 
-/* ✅ Style des catégories principales (Animaux) dans le menu burger */
+/*  Style des catégories principales (Animaux) dans le menu burger */
 .burger-menu ul {
   list-style: none;
   padding: 0;
@@ -221,9 +221,9 @@ $text-color: #333;
   padding: 10px;
 }
 
-/* ✅ Style des catégories principales (Animaux) */
+/*  Style des catégories principales (Animaux) */
 .burger-menu ul li a {
-  color: white !important; /* ✅ Texte en blanc */
+  color: white !important; /*  Texte en blanc */
   font-weight: bold;
   text-decoration: none;
   padding: 12px 15px;
@@ -232,21 +232,21 @@ $text-color: #333;
   border-radius: 5px;
 }
 
-/* ✅ Changement de couleur au survol */
+/*  Changement de couleur au survol */
 .burger-menu ul li a:hover,
 .burger-menu ul li.active > a {
-  background-color: $primary-color; /* ✅ Fond vert */
-  color: #310000 !important; /* ✅ Texte marron pour contraste */
+  background-color: $primary-color; /*  Fond vert */
+  color: #310000 !important; /*  Texte marron pour contraste */
 }
 
-/* ✅ Affiche les sous-menus dans le menu burger */
+/*  Affiche les sous-menus dans le menu burger */
 .burger-menu .category-item {
   width: 100%;
   display: flex;
   flex-direction: column;
 }
 
-/* ✅ Sous-menu (Catégories) */
+/*  Sous-menu (Catégories) */
 .burger-menu .dropdown {
   display: none; /* Caché par défaut */
   background: $secondary-color;
@@ -257,14 +257,14 @@ $text-color: #333;
   width: 100%;
 }
 
-/* ✅ Affichage du sous-menu quand actif */
+/*  Affichage du sous-menu quand actif */
 .burger-menu .category-item.active .dropdown {
   display: flex;
   flex-direction: column;
   width: 100%;
 }
 
-/* ✅ Ajuste le style des liens dans les sous-menus */
+/*  Ajuste le style des liens dans les sous-menus */
 .burger-menu .dropdown a {
   display: block;
   padding: 10px 15px;
@@ -275,31 +275,31 @@ $text-color: #333;
   border-bottom: 1px solid color.adjust($primary-color, $lightness: -10%);
 }
 
-/* ✅ Survol des sous-catégories */
+/*  Survol des sous-catégories */
 .burger-menu .dropdown a:hover {
   background-color: $primary-color;
   color: white !important;
   border-radius: 5px;
 }
 
-/* ✅ Cache le menu burger sur PC et ne l'affiche que sur mobile/tablette */
+/*  Cache le menu burger sur PC et ne l'affiche que sur mobile/tablette */
 .burger-icon,
 .burger-menu {
   display: none;
 }
 
-/* ✅ Affiche le menu burger uniquement en version mobile/tablette */
+/*  Affiche le menu burger uniquement en version mobile/tablette */
 @media screen and (max-width: 1024px) {
   .burger-icon {
-    display: flex; /* ✅ Affiche l'icône du menu burger */
+    display: flex; /*  Affiche l'icône du menu burger */
   }
 
   .burger-menu {
-    display: flex; /* ✅ Rend le menu burger fonctionnel */
+    display: flex; /*  Rend le menu burger fonctionnel */
     flex-direction: column;
   }
 
-  /* ✅ Cache la category-bar pour afficher uniquement le menu burger */
+  /*  Cache la category-bar pour afficher uniquement le menu burger */
   .category-bar {
     display: none;
   }

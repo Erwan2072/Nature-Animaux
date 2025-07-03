@@ -2,7 +2,7 @@
 
     <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
 
-    <!-- ✅ Filtres déplacés sous le logo -->
+    <!--  Filtres déplacés sous le logo -->
     <div class="filters-container">
         <h3>Filtrer par catégorie</h3>
         <div *ngFor="let category of categories">
@@ -12,23 +12,23 @@
             <label>{{ category }}</label>
         </div>
     </div>
-    
-    <!-- ✅ Affichage des produits -->
+
+    <!--  Affichage des produits -->
     <div *ngIf="filteredProducts.length > 0; else noProducts" class="products-container">
         <div *ngFor="let product of filteredProducts; trackBy: trackByProductId"
              class="product-card"
              (click)="goToProduct(product.id)"
              style="cursor: pointer;">
 
-            <!-- ✅ Vérifie et affiche l'image du produit -->
+            <!--  Vérifie et affiche l'image du produit -->
             <img [src]="product.image_url && product.image_url.trim() !== '' ? product.image_url : 'assets/default-product.jpg'"
                  [alt]="product.title || 'Produit sans titre'"
                  class="product-image">
 
-            <!-- ✅ Affichage du titre -->
+            <!--  Affichage du titre -->
             <h3>{{ product.title || 'Produit sans titre' }}</h3>
 
-            <!-- ✅ Affichage du prix basé sur les variations -->
+            <!--  Affichage du prix basé sur les variations -->
             <p class="product-price" *ngIf="getMinPrice(product) !== null">
                 À partir de {{ getMinPrice(product) }} €
             </p>

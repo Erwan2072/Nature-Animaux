@@ -42,9 +42,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     last_name = models.CharField(_("last name"), max_length=30, blank=True, null=True)
     is_active = models.BooleanField(_("active"), default=True)
     is_staff = models.BooleanField(_("staff status"), default=False)
-    date_joined = models.DateTimeField(_("date joined"), default=timezone.now)  # ✅ Ajout de la date d'inscription
+    date_joined = models.DateTimeField(_("date joined"), default=timezone.now)  #  Ajout de la date d'inscription
 
-    # ✅ Ajout des champs d'Adresse
+    #  Ajout des champs d'Adresse
     country = models.CharField(_("country"), max_length=100, blank=True, null=True)
     address = models.TextField(_("address"), blank=True, null=True)
     address_complement = models.CharField(_("address complement"), max_length=255, blank=True, null=True)
@@ -53,7 +53,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     city = models.CharField(_("city"), max_length=100, blank=True, null=True)
     region = models.CharField(_("region"), max_length=100, blank=True, null=True)
 
-    # ✅ Ajout des informations de Paiement (Ne pas stocker les numéros de carte !)
+    #  Ajout des informations de Paiement (Ne pas stocker les numéros de carte !)
     card_last4 = models.CharField(_("last 4 digits"), max_length=4, blank=True, null=True)
     card_name = models.CharField(_("card name"), max_length=255, blank=True, null=True)
     card_expiry = models.CharField(_("card expiry"), max_length=7, blank=True, null=True)  # Format MM/YYYY
@@ -66,7 +66,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     class Meta:
         verbose_name = _("user")
         verbose_name_plural = _("users")
-        ordering = ['-date_joined']  # ✅ Trie par date d'inscription pour plus de performances
+        ordering = ['-date_joined']  # Trie par date d'inscription pour plus de performances
 
     def __str__(self):
         return self.email

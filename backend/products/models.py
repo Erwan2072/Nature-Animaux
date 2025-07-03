@@ -9,7 +9,7 @@ class Product:
     def __init__(self, title=None, category=None, sub_category=None, brand=None, color=None, sku=None, price=None, weight=None, stock=None, description=None, variations=None, product_id=None):
         """Initialisation du produit avec validation pour le prix, le stock et le poids."""
 
-        # ✅ Vérifications uniquement pour price, stock, et weight
+        #  Vérifications uniquement pour price, stock, et weight
         if price is not None and (not isinstance(price, (int, float)) or price < 0):
             raise ValueError("Le prix doit être un nombre positif.")
         if stock is not None and (not isinstance(stock, int) or stock < 0):

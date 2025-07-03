@@ -42,7 +42,7 @@ class LoginView(APIView):
         if serializer.is_valid():
             user = serializer.validated_data["user"]
 
-            # ✅ Génération du token JWT
+            #  Génération du token JWT
             refresh = RefreshToken.for_user(user)
             return Response({
                 "message": "Connexion réussie",
@@ -68,7 +68,7 @@ class LogoutView(APIView):
             if not refresh_token:
                 return Response({"error": "Token manquant"}, status=status.HTTP_400_BAD_REQUEST)
 
-            # ✅ Blacklist du token JWT
+            #  Blacklist du token JWT
             token = RefreshToken(refresh_token)
             token.blacklist()
 
@@ -89,10 +89,10 @@ class ProfileView(APIView):
             "is_admin": user.is_superuser
         }, status=status.HTTP_200_OK)
 
-# ✅ Ajout de l'endpoint pour **modifier le profil utilisateur**
+#  Ajout de l'endpoint pour **modifier le profil utilisateur**
 class UpdateProfileView(UpdateAPIView):
     """
-    ✅ Permet aux utilisateurs authentifiés de modifier leur profil.
+     Permet aux utilisateurs authentifiés de modifier leur profil.
     """
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
@@ -106,7 +106,7 @@ class UpdateProfileView(UpdateAPIView):
 
     def patch(self, request, *args, **kwargs):
         """
-        ✅ Mise à jour partielle du profil (PATCH).
+        Mise à jour partielle du profil (PATCH).
         Permet de modifier un ou plusieurs champs sans toucher aux autres.
         """
         user = self.get_object()

@@ -1,6 +1,6 @@
 @use "sass:color";
 
-/* ✅ NAVIGATION (Barre sous le logo et le titre) */
+/*  NAVIGATION (Barre sous le logo et le titre) */
 .nav-bar {
   display: flex;
   align-items: center;
@@ -17,7 +17,7 @@
   flex-wrap: wrap;
 }
 
-/* ✅ ICÔNES CONNEXION ET PANIER */
+/*  ICÔNES CONNEXION ET PANIER */
 .nav-right {
   display: flex;
   align-items: center;
@@ -41,14 +41,14 @@
   transform: scale(1.1);
 }
 
-/* ✅ Style du bouton Connexion avec liseré rose */
+/*  Style du bouton Connexion avec liseré rose */
 .btn {
   background: white;
   color: #8BC34A;
   font-weight: bold;
   padding: 8px 14px;
   border-radius: 20px;
-  border: 2px solid #ffcdce; /* ✅ Liseré rose */
+  border: 2px solid #ffcdce; /*  Liseré rose */
   cursor: pointer;
   transition: all 0.3s;
   font-size: 0.9rem;
@@ -58,7 +58,7 @@
   background: #fff5;
 }
 
-/* ✅ STYLE DU PROFIL (Bouton + Menu) */
+/*  STYLE DU PROFIL (Bouton + Menu) */
 .dropdown {
   position: relative;
 }
@@ -82,13 +82,13 @@
   background: color.adjust(#8BC34A, $lightness: -10%);
 }
 
-/* ✅ STYLE DU MENU DÉROULANT */
+/*  STYLE DU MENU DÉROULANT */
 .dropdown-menu {
   position: absolute;
   top: 110%;
   right: 0;
-  background: #ffcdce; /* ✅ Fond rose */
-  border: 2px solid #8BC34A; /* ✅ Liseré vert */
+  background: #ffcdce; /*  Fond rose */
+  border: 2px solid #8BC34A; /*  Liseré vert */
   border-radius: 10px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
   padding: 10px 0;
@@ -101,18 +101,18 @@
   transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
-/* ✅ Affichage du menu quand il est ouvert */
+/*  Affichage du menu quand il est ouvert */
 .dropdown-menu.show {
   opacity: 1;
   transform: translateY(0);
 }
 
-/* ✅ STYLE DES BOUTONS DANS LE MENU */
+/*  STYLE DES BOUTONS DANS LE MENU */
 .dropdown-menu li {
   list-style: none;
 }
 
-/* ✅ Couleur du texte + Ajout du bouton "Vos commandes" */
+/*  Couleur du texte + Ajout du bouton "Vos commandes" */
 .dropdown-menu button {
   background: transparent;
   border: none;
@@ -120,7 +120,7 @@
   text-align: left;
   padding: 10px 15px;
   font-size: 1rem;
-  color: #310000; /* ✅ Texte en #310000 */
+  color: #310000; /*  Texte en #310000 */
   cursor: pointer;
   transition: background 0.3s;
 }
@@ -131,16 +131,16 @@
   border-radius: 5px;
 }
 
-/* ✅ Fixe la hauteur de la barre de navigation */
+/*  Fixe la hauteur de la barre de navigation */
 .nav-bar {
-  min-height: 80px; /* ✅ Assure une hauteur minimale */
+  min-height: 80px; /*  Assure une hauteur minimale */
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
 }
 
-/* ✅ Responsive */
+/*  Responsive */
 @media screen and (max-width: 1024px) {
   .nav-bar {
     flex-direction: column;
@@ -167,11 +167,11 @@
   }
 }
 
-/* ✅ Empêche la barre de se réduire en version mobile */
+/*  Empêche la barre de se réduire en version mobile */
 @media screen and (max-width: 768px) {
   .nav-bar {
-    height: 80px !important; /* ✅ Empêche toute réduction */
-    flex-wrap: nowrap; /* ✅ Empêche le changement de ligne */
+    height: 80px !important; /*  Empêche toute réduction */
+    flex-wrap: nowrap; /*  Empêche le changement de ligne */
   }
 
   .nav-right {

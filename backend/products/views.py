@@ -58,7 +58,7 @@ def product_detail(request, pk):
         logger.error(f"❌ Erreur lors de la récupération du produit {pk} : {e}")
         return Response({"error": "Erreur interne du serveur."}, status=500)
 
-# ✅ Liste des produits avec pagination et correction de format
+# Liste des produits avec pagination et correction de format
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def product_list(request):
@@ -68,27 +68,27 @@ def product_list(request):
 
     try:
         paginator = PageNumberPagination()
-        paginator.page_size = 10  # ✅ Définit la taille de la pagination
+        paginator.page_size = 10  # Définit la taille de la pagination
         products = list(products_collection.find({}))
 
         if not products:
             return Response({"message": "Aucun produit trouvé."}, status=200)
 
-        # 🔥 Correction des valeurs manquantes
+        # Correction des valeurs manquantes
         for product in products:
             product["_id"] = str(product["_id"])
             product["title"] = product.get("title", "Produit sans titre")
             product["category"] = product.get("category", "Catégorie inconnue")
             product["imageUrl"] = product.get("imageUrl", "assets/default-image.jpg")
 
-            # ✅ Vérifier la présence de variations et définir un prix minimum
+            # Vérifier la présence de variations et définir un prix minimum
             product["variations"] = product.get("variations", [])
             if product["variations"]:
                 product["price"] = min(v.get("price", float('inf')) for v in product["variations"] if "price" in v)
             else:
                 product["price"] = "Prix non disponible"
 
-        # ✅ Correction de la pagination
+        # Correction de la pagination
         paginated_products = paginator.paginate_queryset(products, request)
         serializer = ProductSerializer(paginated_products, many=True)
         return paginator.get_paginated_response(serializer.data)  # ✅ Utilisation correcte de `get_paginated_response()`
@@ -97,7 +97,7 @@ def product_list(request):
         logger.error(f"❌ Erreur lors de la récupération des produits : {e}")
         return Response({"error": "Erreur interne du serveur."}, status=500)
 
-# ✅ Création d'un produit (réservé aux admins)
+# Création d'un produit (réservé aux admins)
 @api_view(['POST'])
 @permission_classes([IsAdminUser])
 def product_create(request):
@@ -112,7 +112,7 @@ def product_create(request):
         if serializer.is_valid():
             product_data = serializer.validated_data
 
-            # ✅ Valeurs par défaut si absentes
+            # Valeurs par défaut si absentes
             product_data["title"] = product_data.get("title", "Produit sans titre")
             product_data["category"] = product_data.get("category", "Catégorie inconnue")
             product_data["imageUrl"] = product_data.get("imageUrl", "assets/default-image.jpg")
@@ -120,17 +120,17 @@ def product_create(request):
             result = products_collection.insert_one(product_data)
             product_data["_id"] = str(result.inserted_id)
 
-            logger.info(f"✅ Produit ajouté : {product_data['title']} ({product_data['_id']})")
+            logger.info(f"Produit ajouté : {product_data['title']} ({product_data['_id']})")
             return Response(product_data, status=201)
 
-        logger.error(f"❌ Erreurs de validation : {serializer.errors}")
+        logger.error(f"Erreurs de validation : {serializer.errors}")
         return Response(serializer.errors, status=400)
 
     except Exception as e:
-        logger.error(f"❌ Erreur lors de la création du produit : {e}")
+        logger.error(f"Erreur lors de la création du produit : {e}")
         return Response({"error": "Erreur interne du serveur."}, status=500)
 
-# ✅ Mise à jour d'un produit (réservé aux admins)
+# Mise à jour d'un produit (réservé aux admins)
 @api_view(['PUT'])
 @permission_classes([IsAdminUser])
 def product_update(request, pk):
@@ -146,13 +146,13 @@ def product_update(request, pk):
         if not existing_product:
             return Response({"error": "Produit non trouvé."}, status=404)
 
-        logger.info(f"📩 Données reçues pour mise à jour : {request.data}")
+        logger.info(f"Données reçues pour mise à jour : {request.data}")
 
         serializer = ProductSerializer(data=request.data, partial=True)
         if serializer.is_valid():
             updated_data = {k: v for k, v in serializer.validated_data.items() if v is not None}
 
-            # ✅ Conserver les anciennes valeurs si elles ne sont pas fournies
+            # Conserver les anciennes valeurs si elles ne sont pas fournies
             updated_data["title"] = updated_data.get("title", existing_product.get("title", "Produit sans titre"))
             updated_data["category"] = updated_data.get("category", existing_product.get("category", "Catégorie inconnue"))
             updated_data["imageUrl"] = updated_data.get("imageUrl", existing_product.get("imageUrl", "assets/default-image.jpg"))
@@ -162,17 +162,17 @@ def product_update(request, pk):
             updated_product = products_collection.find_one({"_id": ObjectId(pk)})
             updated_product["_id"] = str(updated_product["_id"])
 
-            logger.info(f"✅ Produit mis à jour : {updated_product['title']} ({updated_product['_id']})")
+            logger.info(f"Produit mis à jour : {updated_product['title']} ({updated_product['_id']})")
             return Response(updated_product)
 
-        logger.error(f"❌ Erreurs de validation : {serializer.errors}")
+        logger.error(f"Erreurs de validation : {serializer.errors}")
         return Response(serializer.errors, status=400)
 
     except Exception as e:
-        logger.error(f"❌ Erreur lors de la mise à jour du produit {pk} : {e}")
+        logger.error(f"Erreur lors de la mise à jour du produit {pk} : {e}")
         return Response({"error": "Erreur interne du serveur."}, status=500)
 
-# ✅ Suppression d'un produit (réservé aux admins)
+# Suppression d'un produit (réservé aux admins)
 @api_view(['DELETE'])
 @permission_classes([IsAdminUser])
 def product_delete(request, pk):
@@ -188,9 +188,9 @@ def product_delete(request, pk):
         if result.deleted_count == 0:
             return Response({"error": "Produit non trouvé."}, status=404)
 
-        logger.info(f"🗑️ Produit supprimé avec succès (ID: {pk})")
+        logger.info(f"Produit supprimé avec succès (ID: {pk})")
         return Response({"message": "Produit supprimé avec succès."}, status=200)
 
     except Exception as e:
-        logger.error(f"❌ Erreur lors de la suppression du produit {pk} : {e}")
+        logger.error(f"Erreur lors de la suppression du produit {pk} : {e}")
         return Response({"error": "Erreur interne du serveur."}, status=500)

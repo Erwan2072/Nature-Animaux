@@ -1,6 +1,6 @@
 <div class="nav-bar">
 	<div class="nav-right">
-	  <!-- ✅ Icônes Connexion et Panier -->
+	  <!--  Icônes Connexion et Panier -->
 	  <button (click)="router.navigate(['/cart'])" class="btn-cart">🛒</button>
 	  <button *ngIf="!isAuthenticated" (click)="router.navigate(['/login'])" class="btn">Connexion</button>
 

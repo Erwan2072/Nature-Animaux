@@ -10,22 +10,22 @@ export class AdminService {
 
   constructor(private http: HttpClient) {}
 
-  // ✅ Récupérer tous les produits
+  //  Récupérer tous les produits
   getProducts(): Observable<any[]> {
     return this.http.get<any[]>(`${this.baseUrl}/`);
   }
 
-  // ✅ Ajouter un produit
+  //  Ajouter un produit
   addProduct(productData: any): Observable<any> {
     return this.http.post(`${this.baseUrl}/`, productData);
   }
 
-  // ✅ Modifier un produit
+  //  Modifier un produit
   updateProduct(productId: number, updatedData: any): Observable<any> {
     return this.http.put(`${this.baseUrl}/${productId}/`, updatedData);
   }
 
-  // ✅ Supprimer un produit
+  //  Supprimer un produit
   deleteProduct(productId: number): Observable<any> {
     return this.http.delete(`${this.baseUrl}/${productId}/`);
   }

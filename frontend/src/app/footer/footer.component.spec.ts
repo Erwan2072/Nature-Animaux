@@ -9,8 +9,8 @@ describe('FooterComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
-        FooterComponent,  // ✅ Standalone
-        RouterTestingModule  // ✅ Fournit ActivatedRoute
+        FooterComponent,  //  Standalone
+        RouterTestingModule  //  Fournit ActivatedRoute
       ]
     }).compileComponents();
 

@@ -1,20 +1,20 @@
-<!-- ✅ Icône du menu burger (visible seulement sur mobile et tablette) -->
+<!--  Icône du menu burger (visible seulement sur mobile et tablette) -->
 <div class="burger-icon" (click)="toggleBurgerMenu()" [class.open]="burgerMenuOpen">
 	<div></div>
 	<div></div>
 	<div></div>
 </div>
 
-<!-- ✅ Menu burger qui affiche la category-bar en version mobile -->
+<!--  Menu burger qui affiche la category-bar en version mobile -->
 <nav class="burger-menu" [class.open]="burgerMenuOpen">
 	<ul>
 		<li *ngFor="let animal of animals" [class.active]="activeMenu === animal.name">
-			<!-- ✅ Affichage des catégories principales -->
+			<!--  Affichage des catégories principales -->
 			<a (click)="toggleMenu(animal.name)">
 				{{ animal.label }}
 			</a>
 
-			<!-- ✅ Affichage des sous-catégories -->
+			<!--  Affichage des sous-catégories -->
 			<div class="dropdown" *ngIf="activeMenu === animal.name">
 				<a *ngFor="let category of animal.categories"
 				   [routerLink]="category.link ? ['/products', animal.name, category.link] : []"
@@ -26,7 +26,7 @@
 	</ul>
 </nav>
 
-<!-- ✅ Barre des Catégories (Affichée uniquement en desktop) -->
+<!--  Barre des Catégories (Affichée uniquement en desktop) -->
 <nav class="category-bar" [class.show]="!burgerMenuOpen">
 	<!-- Boucle sur les catégories principales -->
 	<div class="category-item" *ngFor="let animal of animals">
@@ -41,6 +41,6 @@
 		</div>
 	</div>
 
-	<!-- ✅ Barre de recherche -->
+	<!--  Barre de recherche -->
 	<input type="text" class="category-search" placeholder="🔍 Rechercher...">
 </nav>

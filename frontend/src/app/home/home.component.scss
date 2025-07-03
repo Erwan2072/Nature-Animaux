@@ -1,10 +1,10 @@
-/* ✅ Définition des couleurs locales */
+/*  Définition des couleurs locales */
 $primary-color: #8BC34A;
 $secondary-color: #ffcdce;
 $background-gradient: linear-gradient(to bottom, rgb(131, 240, 198), #9AD9E2);
 $text-color: #333;
 
-/* ✅ PAGE ACCUEIL */
+/*  PAGE ACCUEIL */
 .home-container {
   margin-top: 50px !important;
   padding: 40px;
@@ -18,7 +18,7 @@ $text-color: #333;
   margin-right: auto !important;
 }
 
-/* ✅ Style de l'image d'accueil */
+/*  Style de l'image d'accueil */
 .home-image {
   text-align: center;
   margin-top: 300px;
@@ -31,7 +31,7 @@ $text-color: #333;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-/* ✅ Texte "Nature & Animaux" sous l'image */
+/*  Texte "Nature & Animaux" sous l'image */
 .banner {
   margin-top: 120px;
   text-align: center;
@@ -43,12 +43,12 @@ $text-color: #333;
   margin-bottom: 40px;
 }
 
-/* ✅ Style du bandeau */
-/* ✅ Ajustement du bandeau animé */
+/*  Style du bandeau */
+/*  Ajustement du bandeau animé */
 .banner-container {
-  width: 90%; /* ✅ Augmente la largeur pour afficher plus de texte */
-  height: auto; /* ✅ S'adapte au contenu */
-  min-height: 70px; /* ✅ Augmente la hauteur si nécessaire */
+  width: 90%; /*  Augmente la largeur pour afficher plus de texte */
+  height: auto; /*  S'adapte au contenu */
+  min-height: 70px; /*  Augmente la hauteur si nécessaire */
   background-color: $primary-color;
   color: white;
   font-size: 1.8rem;
@@ -62,29 +62,29 @@ $text-color: #333;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 10px 20px; /* ✅ Plus de padding pour éviter la coupure */
-  white-space: normal; /* ✅ Permet au texte de passer à la ligne si besoin */
+  padding: 10px 20px; /*  Plus de padding pour éviter la coupure */
+  white-space: normal; /*  Permet au texte de passer à la ligne si besoin */
 
   @media screen and (max-width: 768px) {
-    width: 95%; /* ✅ Plus large sur mobile */
+    width: 95%; /*  Plus large sur mobile */
     font-size: 1.5rem;
     padding: 10px 15px;
   }
 }
 
-/* ✅ Ajuste les textes animés */
+/*  Ajuste les textes animés */
 .banner-text {
   position: absolute;
   width: 100%;
   text-align: center;
   opacity: 0;
   transition: opacity 1s ease-in-out;
-  white-space: normal; /* ✅ Permet le retour à la ligne */
-  line-height: 1.4; /* ✅ Meilleure lisibilité */
-  padding: 0 10px; /* ✅ Ajoute du padding latéral */
+  white-space: normal; /*  Permet le retour à la ligne */
+  line-height: 1.4; /*  Meilleure lisibilité */
+  padding: 0 10px; /*  Ajoute du padding latéral */
 }
 
-/* ✅ Gestion de l'affichage du texte */
+/*  Gestion de l'affichage du texte */
 .banner-text:nth-child(1) {
   animation: fadeText 8s infinite;
 }
@@ -94,7 +94,7 @@ $text-color: #333;
   animation-delay: 4s;
 }
 
-/* ✅ Animation du texte */
+/*  Animation du texte */
 @keyframes fadeText {
   0%, 100% { opacity: 0; }
   10%, 40% { opacity: 1; }
@@ -103,18 +103,18 @@ $text-color: #333;
 @media screen and (max-width: 768px) {
   .banner-container {
     width: 95%;
-    font-size: 1.3rem; /* ✅ Réduit la taille du texte */
-    padding: 8px 12px; /* ✅ Ajuste le padding pour garder une bonne lisibilité */
-    min-height: 50px; /* ✅ Diminue la hauteur */
+    font-size: 1.3rem; /*  Réduit la taille du texte */
+    padding: 8px 12px; /*  Ajuste le padding pour garder une bonne lisibilité */
+    min-height: 50px; /*  Diminue la hauteur */
   }
 
   .banner-text {
-    font-size: 1.2rem; /* ✅ Réduit aussi la taille du texte dans l'animation */
+    font-size: 1.2rem; /*  Réduit aussi la taille du texte dans l'animation */
     padding: 0 8px;
   }
 }
 
-/* ✅ Carrousel en rotation circulaire */
+/*  Carrousel en rotation circulaire */
 .carousel-container {
   width: 150px;
   height: 50px;
@@ -131,7 +131,7 @@ $text-color: #333;
   animation: rotateCarousel 30s infinite linear;
 }
 
-/* ✅ Style des images */
+/*  Style des images */
 .carousel-item {
   width: 100%;
   height: 100%;
@@ -149,7 +149,7 @@ $text-color: #333;
   box-shadow: 0px 0px 0px rgba(0, 0, 0, 0.2);
 }
 
-/* ✅ Animation de rotation circulaire */
+/*  Animation de rotation circulaire */
 @keyframes rotateCarousel {
   0% { transform: rotateY(0deg); }
   33% { transform: rotateY(120deg); }
@@ -157,7 +157,7 @@ $text-color: #333;
   100% { transform: rotateY(360deg); }
 }
 
-/* ✅ RESPONSIVE GLOBAL */
+/*  RESPONSIVE GLOBAL */
 @media screen and (max-width: 768px) {
   .home-container {
     width: 90vw !important;

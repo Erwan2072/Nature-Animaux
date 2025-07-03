@@ -12,9 +12,9 @@ import { RouterModule } from '@angular/router';
 })
 export class NavbarComponent {
   activeMenu: string | null = null;
-  burgerMenuOpen: boolean = false; // ✅ Gestion du menu burger
+  burgerMenuOpen: boolean = false; //  Gestion du menu burger
 
-  // ✅ Définition des catégories dynamiques
+  //  Définition des catégories dynamiques
   animals = [
     {
       name: 'chien',
@@ -78,32 +78,32 @@ export class NavbarComponent {
     }
   ];
 
-  // ✅ Ouvre ou ferme le menu déroulant des catégories
+  //  Ouvre ou ferme le menu déroulant des catégories
   toggleMenu(category: string) {
     if (this.burgerMenuOpen) {
-      // ✅ Mode mobile : Affiche le sous-menu dans le menu burger
+      //  Mode mobile : Affiche le sous-menu dans le menu burger
       this.activeMenu = this.activeMenu === category ? null : category;
     } else {
-      // ✅ Mode desktop : Affiche le sous-menu au survol/clic
+      //  Mode desktop : Affiche le sous-menu au survol/clic
       this.activeMenu = this.activeMenu === category ? null : category;
     }
   }
 
-  // ✅ Ferme les menus déroulants ET le menu burger quand on clique sur une sous-catégorie
+  //  Ferme les menus déroulants ET le menu burger quand on clique sur une sous-catégorie
   closeMenu() {
     this.activeMenu = null;
-    this.burgerMenuOpen = false; // ✅ Ferme aussi le menu burger
+    this.burgerMenuOpen = false; //  Ferme aussi le menu burger
   }
 
-  // ✅ Gère l'affichage du menu burger
+  //  Gère l'affichage du menu burger
   toggleBurgerMenu() {
     this.burgerMenuOpen = !this.burgerMenuOpen;
     if (!this.burgerMenuOpen) {
-      this.activeMenu = null; // ✅ Ferme les sous-menus si on ferme le burger
+      this.activeMenu = null; //  Ferme les sous-menus si on ferme le burger
     }
   }
 
-  // ✅ Ferme les menus quand on clique en dehors (uniquement si le clic est à l'extérieur du menu)
+  //  Ferme les menus quand on clique en dehors (uniquement si le clic est à l'extérieur du menu)
   @HostListener('document:click', ['$event'])
   onClickOutside(event: Event) {
     const target = event.target as HTMLElement;

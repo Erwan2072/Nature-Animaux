@@ -9,11 +9,11 @@ import { Router } from '@angular/router';
 })
 export class LegalComponent {
 
-  constructor(private router: Router) {} // ✅ Injection du Router
+  constructor(private router: Router) {} //  Injection du Router
 
   redirectToSupport() {
     this.router.navigate(['/support']);
-    window.scrollTo(0, 0); // ✅ Redirection vers la page Support
+    window.scrollTo(0, 0); //  Redirection vers la page Support
   }
 
 }

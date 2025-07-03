@@ -1,4 +1,4 @@
-/* ✅ Styles généraux pour les pages About, CGV, Mentions légales et Support */
+/*  Styles généraux pour les pages About, CGV, Mentions légales et Support */
 .page-container {
     max-width: 900px;
     margin: 50px auto;
@@ -9,7 +9,7 @@
     text-align: center;
 }
 
-/* ✅ Titre principal */
+/*  Titre principal */
 .page-title {
     font-size: 2rem;
     font-weight: bold;
@@ -17,24 +17,24 @@
     margin-bottom: 20px;
 }
 
-/* ✅ Contenu principal */
+/*  Contenu principal */
 .page-content {
     background: white;
     padding: 30px;
     border-radius: 10px;
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
-    text-align: justify; // ✅ Justifie le texte
+    text-align: justify; //  Justifie le texte
 }
 
-/* ✅ Paragraphe */
+/*  Paragraphe */
 .page-content p {
     font-size: 1.2rem;
     line-height: 1.6;
     color: #333;
-    margin-bottom: 15px; // ✅ Ajout d'un espace entre les paragraphes
+    margin-bottom: 15px; //  Ajout d'un espace entre les paragraphes
 }
 
-/* ✅ Mise en valeur du texte */
+/*  Mise en valeur du texte */
 .page-content strong {
     font-weight: bold;
 }
@@ -44,14 +44,14 @@
     color: #555;
 }
 
-/* ✅ Centrage du bouton "Nous contacter" */
+/*  Centrage du bouton "Nous contacter" */
 .contact-button-container {
     display: flex;
-    justify-content: center; // ✅ Centre le bouton horizontalement
+    justify-content: center; //  Centre le bouton horizontalement
     margin-top: 20px;
 }
 
-/* ✅ Bouton Contact */
+/*  Bouton Contact */
 .contact-button {
     background-color: #ff6b6c;
     color: white;
@@ -62,7 +62,7 @@
     cursor: pointer;
     transition: background 0.3s ease-in-out;
     font-weight: bold;
-    width: fit-content; // ✅ Évite que le bouton prenne toute la largeur
+    width: fit-content; //  Évite que le bouton prenne toute la largeur
     text-align: center;
 }
 

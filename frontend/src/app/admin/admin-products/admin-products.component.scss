@@ -8,7 +8,7 @@
     text-align: center;
 }
 
-/* ✅ Onglets */
+/*  Onglets */
 .tabs {
     display: flex;
     justify-content: center;
@@ -36,7 +36,7 @@
     }
 }
 
-/* ✅ Style global du tableau */
+/*  Style global du tableau */
 .product-table,
 .product-delete-table {
     width: 100%;
@@ -83,7 +83,7 @@
     justify-content: center; /* Centre parfaitement */
 }
 
-/* ✅ **Correction Tableau de suppression** */
+/* **Correction Tableau de suppression** */
 .product-delete-table {
     width: 100%;
     max-width: 800px; /* Réduction pour un alignement correct */
@@ -110,7 +110,7 @@
     }
 }
 
-/* ✅ **Correction du bouton Supprimer** */
+/*  **Correction du bouton Supprimer** */
 .delete-button-container {
     text-align: center;
     margin-top: 15px; /* Ajustement pour un bon espacement */
@@ -140,7 +140,7 @@
     }
 }
 
-/* ✅ Bouton Valider */
+/* Bouton Valider */
 .validate-button {
     background-color: #8BC34A;
     color: #310000;
@@ -161,7 +161,7 @@
     }
 }
 
-/* ✅ Bouton "Ajouter une variation" */
+/*  Bouton "Ajouter une variation" */
 .add-variation-button {
     background-color: #ffcdce;
     color: #310000;
@@ -181,7 +181,7 @@
     }
 }
 
-/* ✅ Style du bouton "Choisir une image" */
+/*  Style du bouton "Choisir une image" */
 .image-upload-label {
     background-color: #ffcdce;
     color: #310000;
@@ -198,7 +198,7 @@
     }
 }
 
-/* ✅ Centrage général */
+/* Centrage général */
 .center {
     text-align: center;
 }

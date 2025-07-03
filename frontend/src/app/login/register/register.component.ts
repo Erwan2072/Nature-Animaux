@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth.service'; // ✅ Adapter le chemin si besoin
+import { AuthService } from '../../services/auth.service'; //  Adapter le chemin si besoin
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -42,7 +42,7 @@ export class RegisterComponent implements OnInit {
 
     this.authService.register(email, password).subscribe({
       next: () => {
-        console.log('✅ Inscription réussie !');
+        console.log(' Inscription réussie !');
         this.router.navigate(['/login']);
       },
       error: (error) => {

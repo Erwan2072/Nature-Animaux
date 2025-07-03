@@ -31,11 +31,11 @@ export class ProductDetailComponent implements OnInit {
             this.selectedVariationId = this.product.variations[0].id;
           }
 
-          console.log("🧩 Produit chargé :", this.product);
+          console.log("Produit chargé :", this.product);
         },
         error: (err) => {
           this.errorMessage = "Erreur lors du chargement du produit.";
-          console.error("❌ Erreur API :", err);
+          console.error("Erreur API :", err);
         }
       });
     }
@@ -56,13 +56,13 @@ export class ProductDetailComponent implements OnInit {
   addToCart(): void {
     const selectedVariation = this.product?.variations?.find((v: any) => v.id === this.selectedVariationId);
     if (selectedVariation) {
-      console.log(`🛒 Ajouté au panier :`, {
+      console.log(` Ajouté au panier :`, {
         productId: this.product.id,
         title: this.product.title,
         variation: selectedVariation,
         quantity: this.quantity
       });
-      // 🔧 Intégration panier future ici
+      // Intégration panier future ici
     } else {
       console.warn("❗ Aucune variation sélectionnée.");
     }
@@ -76,12 +76,12 @@ export class ProductDetailComponent implements OnInit {
   formatDescription(desc: string): string {
     if (!desc) return 'Pas de description détaillée.';
 
-    // 🔧 Mise en gras des titres
+    //  Mise en gras des titres
     desc = desc.replace(/Composition\s*:/gi, '<strong>Composition :</strong>');
     desc = desc.replace(/Composants Analytiques\s*:/gi, '<strong>Composants Analytiques :</strong>');
     desc = desc.replace(/Additifs\s*:/gi, '<strong>Additifs :</strong>');
 
-    // 🔧 Retours à la ligne après les sections
+    // Retours à la ligne après les sections
     desc = desc.replace(/([\.|\*])\s*/g, '$1<br><br>');
 
     return desc;

@@ -10,11 +10,11 @@ describe('LoginComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
-        LoginComponent,  // ✅ Standalone = dans imports
-        RouterTestingModule  // ✅ Simule la navigation
+        LoginComponent,  //  Standalone = dans imports
+        RouterTestingModule  //  Simule la navigation
       ],
       providers: [
-        provideHttpClient()  // ✅ Fournit HttpClient (mode standalone friendly)
+        provideHttpClient()  //  Fournit HttpClient (mode standalone friendly)
       ]
     }).compileComponents();
 

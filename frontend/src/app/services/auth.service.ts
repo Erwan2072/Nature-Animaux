@@ -13,7 +13,7 @@ export class AuthService {
   public user$ = this.userSubject.asObservable();
 
   constructor(private http: HttpClient) {
-    // ✅ Récupération du token en sessionStorage au rechargement
+    //  Récupération du token en sessionStorage au rechargement
     const savedToken = sessionStorage.getItem('access_token');
     if (savedToken) {
       this.authTokenSubject.next(savedToken);
@@ -21,7 +21,7 @@ export class AuthService {
     }
   }
 
-  // ✅ Définit et stocke le token
+  //  Définit et stocke le token
   private setAuthToken(token: string | null): void {
     this.authTokenSubject.next(token);
     if (token) {
@@ -31,17 +31,17 @@ export class AuthService {
     }
   }
 
-  // ✅ Récupère le token immédiatement (utile pour les headers synchrones)
+  //  Récupère le token immédiatement (utile pour les headers synchrones)
   getTokenSync(): string | null {
     return this.authTokenSubject.value;
   }
 
-  // ✅ Récupère le token en tant qu'Observable (utile pour les appels asynchrones)
+  //  Récupère le token en tant qu'Observable (utile pour les appels asynchrones)
   getToken(): Observable<string | null> {
     return this.authTokenSubject.asObservable();
   }
 
-  // ✅ Connexion de l'utilisateur avec email/mot de passe
+  //  Connexion de l'utilisateur avec email/mot de passe
   login(email: string, password: string): Observable<any> {
     return this.http.post<any>(`${this.baseUrl}/login/`, { email, password }).pipe(
       map(response => {
@@ -58,11 +58,11 @@ export class AuthService {
     );
   }
 
-  // ✅ Inscription d'un nouvel utilisateur
+  //  Inscription d'un nouvel utilisateur
   register(email: string, password: string): Observable<any> {
     return this.http.post<any>(`${this.baseUrl}/register/`, { email, password }).pipe(
       map(response => {
-        console.log('✅ Utilisateur créé avec succès:', response);
+        console.log(' Utilisateur créé avec succès:', response);
         return response;
       }),
       catchError(error => {
@@ -72,7 +72,7 @@ export class AuthService {
     );
   }
 
-  // ✅ Connexion via Google
+  //  Connexion via Google
   loginWithGoogle(token: string): Observable<any> {
     return this.http.post<any>(`${this.baseUrl}/auth/google/`, { token }).pipe(
       map(response => {
@@ -89,7 +89,7 @@ export class AuthService {
     );
   }
 
-  // ✅ Récupère et stocke les infos utilisateur après connexion
+  //  Récupère et stocke les infos utilisateur après connexion
   fetchAndStoreUserInfo(): void {
     const token = this.getTokenSync();
     if (!token) {
@@ -102,7 +102,7 @@ export class AuthService {
     this.http.get<any>(`${this.baseUrl}/profile/`, { headers }).subscribe(
       user => {
         if (user) {
-          console.log("✅ Utilisateur récupéré :", user); // 🔥 Ajout pour debug
+          console.log(" Utilisateur récupéré :", user); // 🔥 Ajout pour debug
           this.userSubject.next(user);
         }
       },
@@ -116,22 +116,22 @@ export class AuthService {
     );
   }
 
-  // ✅ Vérifie si l'utilisateur est connecté
+  //  Vérifie si l'utilisateur est connecté
   isAuthenticated(): Observable<boolean> {
     return this.authTokenSubject.asObservable().pipe(map(token => !!token));
   }
 
-  // ✅ Vérifie si l'utilisateur est Admin
+  //  Vérifie si l'utilisateur est Admin
   isAdmin(): Observable<boolean> {
     return this.user$.pipe(map(user => user?.is_admin || false));
   }
 
-  // ✅ Récupère le rôle utilisateur
+  //  Récupère le rôle utilisateur
   getUserRole(): Observable<string> {
     return this.user$.pipe(map(user => (user ? (user.is_admin ? 'admin' : 'user') : 'guest')));
   }
 
-  // ✅ Déconnexion complète
+  //  Déconnexion complète
   logout(): void {
     this.setAuthToken(null);
     this.userSubject.next(null);

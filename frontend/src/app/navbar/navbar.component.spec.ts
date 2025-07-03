@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NavbarComponent } from './navbar.component';
-import { provideHttpClient } from '@angular/common/http';  // 👈 Pour AuthService
-import { RouterTestingModule } from '@angular/router/testing';  // 👈 Pour RouterLink/Navigation
+import { provideHttpClient } from '@angular/common/http';  // Pour AuthService
+import { RouterTestingModule } from '@angular/router/testing';  // Pour RouterLink/Navigation
 
 describe('NavbarComponent', () => {
   let component: NavbarComponent;
@@ -11,10 +11,10 @@ describe('NavbarComponent', () => {
     await TestBed.configureTestingModule({
       imports: [
         NavbarComponent,
-        RouterTestingModule  // ✅ Fournit RouterLink, ActivatedRoute...
+        RouterTestingModule  //  Fournit RouterLink, ActivatedRoute...
       ],
       providers: [
-        provideHttpClient()  // ✅ Fournit HttpClient à AuthService ou autre
+        provideHttpClient()  //  Fournit HttpClient à AuthService ou autre
       ]
     }).compileComponents();
 

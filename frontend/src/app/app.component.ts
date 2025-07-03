@@ -20,23 +20,23 @@ export class AppComponent implements OnInit {
   isAdminPage: boolean = false;
   isAuthenticated: boolean = false;
 
-  // ✅ Ajout de la gestion d'animation
+  //  Ajout de la gestion d'animation
   isAnimated: boolean = false;
 
   constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
-    // ✅ Déclenche l'animation après un court délai
+    //  Déclenche l'animation après un court délai
     setTimeout(() => {
       this.isAnimated = true;
     }, 200);
 
-    // ✅ Vérifie si l'utilisateur est connecté
+    //  Vérifie si l'utilisateur est connecté
     this.authService.user$.subscribe(user => {
       this.isAuthenticated = !!user;
     });
 
-    // ✅ Détection des pages admin
+    //  Détection des pages admin
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe((event: any) => {
@@ -44,7 +44,7 @@ export class AppComponent implements OnInit {
       });
   }
 
-  // ✅ Affichage/caché du menu burger
+  //  Affichage/caché du menu burger
   toggleMenu(): void {
     if (this.isAdminPage) return;
     this.isMenuOpen = !this.isMenuOpen;

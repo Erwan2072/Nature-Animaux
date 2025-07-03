@@ -8,7 +8,7 @@ describe('ApiService', () => {
   let service: ApiService;
   let httpMock: HttpTestingController;
 
-  // ✅ Mock AuthService avec un faux token
+  //  Mock AuthService avec un faux token
   const mockAuthService = {
     getToken: () => of('FAKE_TOKEN')
   };
@@ -27,7 +27,7 @@ describe('ApiService', () => {
   });
 
   afterEach(() => {
-    httpMock.verify(); // ✅ Vérifie qu'aucune requête pendante
+    httpMock.verify(); //  Vérifie qu'aucune requête pendante
   });
 
   it('should be created', () => {

@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AccountComponent } from './account.component';
-import { provideHttpClient } from '@angular/common/http';  // 👈 Ajouté
+import { provideHttpClient } from '@angular/common/http';
 
 describe('AccountComponent', () => {
   let component: AccountComponent;
@@ -8,8 +8,8 @@ describe('AccountComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AccountComponent],  // ✅ Standalone
-      providers: [provideHttpClient()]  // ✅ Pour HttpClient utilisé dans le compo ou service
+      imports: [AccountComponent],  //  Standalone
+      providers: [provideHttpClient()]  //  Pour HttpClient utilisé dans le compo ou service
     }).compileComponents();
 
     fixture = TestBed.createComponent(AccountComponent);

@@ -1,12 +1,12 @@
 <div class="account-container">
-	<!-- ✅ Onglets style tableau Excel -->
+	<!--  Onglets style tableau Excel -->
 	<div class="tabs">
 	  <button (click)="setActiveTab('profile')" [class.active]="activeTab === 'profile'">Profil</button>
 	  <button (click)="setActiveTab('address')" [class.active]="activeTab === 'address'">Adresse</button>
 	  <button (click)="setActiveTab('payment')" [class.active]="activeTab === 'payment'">Paiement</button>
 	</div>
 
-	<!-- ✅ Onglet Profil -->
+	<!--  Onglet Profil -->
 	<div *ngIf="activeTab === 'profile'" class="tab-content">
 	  <form [formGroup]="accountForm" (ngSubmit)="saveProfile()">
 		<label>Email</label>
@@ -21,10 +21,10 @@
 		<label>Téléphone</label>
 		<input formControlName="phone" type="tel" placeholder="Votre téléphone">
 
-		<button class="validate-button" type="submit">✅ Enregistrer</button>
+		<button class="validate-button" type="submit"> Enregistrer</button>
 	  </form>
 
-	  <!-- ✅ Changement de mot de passe -->
+	  <!--  Changement de mot de passe -->
 	  <h3>Changer de mot de passe</h3>
 	  <form [formGroup]="passwordForm" (ngSubmit)="changePassword()">
 		<label>Ancien mot de passe</label>
@@ -36,14 +36,14 @@
 		<label>Confirmer le mot de passe</label>
 		<input formControlName="confirmNewPassword" type="password" placeholder="Confirmez le mot de passe">
 
-		<!-- ✅ Message d'erreur si les mots de passe ne correspondent pas -->
+		<!--  Message d'erreur si les mots de passe ne correspondent pas -->
 		<p *ngIf="passwordMismatch" class="error-message">❌ Les mots de passe ne correspondent pas.</p>
 
 		<button class="validate-button" type="submit">🔒 Modifier le mot de passe</button>
 	  </form>
 	</div>
 
-	<!-- ✅ Onglet Adresse -->
+	<!--  Onglet Adresse -->
 	<div *ngIf="activeTab === 'address'" class="tab-content">
 	  <form [formGroup]="addressForm" (ngSubmit)="saveAddress()">
 		<label>Pays</label>
@@ -54,11 +54,11 @@
 		<label>Adresse</label>
 		<input formControlName="address" type="text" placeholder="Votre adresse">
 
-		<!-- ✅ Ajout du champ Complément d'adresse -->
+		<!--  Ajout du champ Complément d'adresse -->
 		<label>Complément d'adresse</label>
 		<input formControlName="addressComplement" type="text" placeholder="Bâtiment, étage, etc.">
 
-		<!-- ✅ Ajout du champ Interphone -->
+		<!--  Ajout du champ Interphone -->
 		<label>Interphone</label>
 		<input formControlName="intercom" type="text" placeholder="Code d'accès ou nom interphone">
 
@@ -68,11 +68,11 @@
 		<label>Ville</label>
 		<input formControlName="city" type="text" placeholder="Votre ville">
 
-		<button class="validate-button" type="submit">✅ Enregistrer l'adresse</button>
+		<button class="validate-button" type="submit"> Enregistrer l'adresse</button>
 	  </form>
 	</div>
 
-	<!-- ✅ Onglet Paiement -->
+	<!--  Onglet Paiement -->
 <div *ngIf="activeTab === 'payment'" class="tab-content">
 	<form [formGroup]="paymentForm">
 	  <label>Numéro de Carte</label>
@@ -87,10 +87,10 @@
 	  <label>CVV</label>
 	  <input formControlName="cardCVV" type="text" placeholder="123">
 
-	  <button class="validate-button" (click)="savePayment()">✅ Enregistrer le paiement</button>
+	  <button class="validate-button" (click)="savePayment()"> Enregistrer le paiement</button>
 	</form>
 
-	<!-- ✅ Cartes enregistrées -->
+	<!--  Cartes enregistrées -->
 	<div *ngIf="savedCards.length > 0" class="saved-cards-container">
 	  <h3>Cartes enregistrées</h3>
 	  <div *ngFor="let card of savedCards; let i = index" class="saved-card">

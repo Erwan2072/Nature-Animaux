@@ -4,43 +4,43 @@ import { AdminGuard } from './services/admin.guard';
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
 
-  // ✅ Page d'accueil
+  //  Page d'accueil
   {
     path: 'home',
     loadComponent: () => import('./home/home.component').then(m => m.HomeComponent)
   },
 
-  // ✅ À propos
+  //  À propos
   {
     path: 'about',
     loadComponent: () => import('./footer/about/about.component').then(m => m.AboutComponent)
   },
 
-  // ✅ Page des produits (Liste complète)
+  //  Page des produits (Liste complète)
   {
     path: 'products',
     loadComponent: () => import('./product-list/product-list.component').then(m => m.ProductListComponent)
   },
 
-  // ✅ Route dynamique pour les produits d'une catégorie spécifique
+  //  Route dynamique pour les produits d'une catégorie spécifique
   {
     path: 'products/:animal/:category',
     loadComponent: () => import('./product-list/product-list.component').then(m => m.ProductListComponent)
   },
 
-  // ✅ Page de connexion
+  //  Page de connexion
   {
     path: 'login',
     loadComponent: () => import('./login/login.component').then(m => m.LoginComponent)
   },
 
-  // ✅ Page d'inscription (Ajouté avec lazy loading)
+  //  Page d'inscription (Ajouté avec lazy loading)
   {
     path: 'register',
     loadComponent: () => import('./login/register/register.component').then(m => m.RegisterComponent)
   },
 
-  // ✅ Pages Admin (Protégées par `AdminGuard`)
+  //  Pages Admin (Protégées par `AdminGuard`)
   {
     path: 'admin',
     loadComponent: () => import('./admin/admin.component').then(m => m.AdminComponent),
@@ -62,7 +62,7 @@ export const routes: Routes = [
     canActivate: [AdminGuard]
   },
 
-  // ✅ Ajout des pages liées au footer avec lazy loading
+  //  Ajout des pages liées au footer avec lazy loading
   {
     path: 'terms',
     loadComponent: () => import('./footer/terms/terms.component').then(m => m.TermsComponent)
@@ -84,12 +84,12 @@ export const routes: Routes = [
     loadComponent: () => import('./header/orders/orders.component').then(m => m.OrdersComponent)
   },
 
-  // ✅ Route dynamique pour les détails d'un produit
+  //  Route dynamique pour les détails d'un produit
   {
     path: 'product/:id',
     loadComponent: () => import('./product-detail/product-detail.component').then(m => m.ProductDetailComponent)
   },
 
-  // ✅ Redirection en cas de route inconnue
+  //  Redirection en cas de route inconnue
   { path: '**', redirectTo: 'home' }
 ];

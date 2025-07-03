@@ -1,5 +1,5 @@
 <div class="admin-products-container">
-    <!-- ✅ Onglets -->
+    <!--  Onglets -->
     <div class="tabs">
         <button [class.active]="activeTab === 'add'" (click)="setActiveTab('add')">Ajout</button>
         <button [class.active]="activeTab === 'edit'" (click)="setActiveTab('edit')">Modification</button>
@@ -8,11 +8,11 @@
 
     <h2>Produits</h2>
 
-    <!-- ✅ AJOUT / MODIF -->
+    <!--  AJOUT / MODIF -->
     <div *ngIf="activeTab !== 'delete'">
         <table class="product-table">
             <tbody>
-                <!-- ✅ Champ Titre avec suggestions pour MODIFICATION -->
+                <!-- Champ Titre avec suggestions pour MODIFICATION -->
                 <tr *ngIf="activeTab === 'edit'">
                     <td><strong>Sélectionner un produit</strong></td>
                     <td colspan="3">
@@ -28,7 +28,7 @@
                     </td>
                 </tr>
 
-                <!-- ✅ Titre manuel pour AJOUT -->
+                <!--  Titre manuel pour AJOUT -->
                 <tr *ngIf="activeTab === 'add'">
                     <td><strong>Titre du produit</strong></td>
                     <td colspan="3">
@@ -39,7 +39,7 @@
                     </td>
                 </tr>
 
-                <!-- ✅ Sélections -->
+                <!-- Sélections -->
                 <tr>
                     <td><strong>Animaux</strong></td>
                     <td colspan="3">
@@ -73,7 +73,7 @@
                     </td>
                 </tr>
 
-                <!-- ✅ Variations -->
+                <!-- Variations -->
                 <tr>
                     <td colspan="5"><h3>Variations</h3></td>
                 </tr>
@@ -101,7 +101,7 @@
                     </td>
                 </tr>
 
-                <!-- ✅ Image -->
+                <!-- Image -->
                 <tr>
                     <td colspan="5"><h3>Photo du produit</h3></td>
                 </tr>
@@ -114,7 +114,7 @@
                     </td>
                 </tr>
 
-                <!-- ✅ Description -->
+                <!-- Description -->
                 <tr>
                     <td colspan="5"><h3>Description du produit</h3></td>
                 </tr>
@@ -124,7 +124,7 @@
                     </td>
                 </tr>
 
-                <!-- ✅ Valider -->
+                <!-- Valider -->
                 <tr>
                     <td colspan="5" class="center">
                         <button class="validate-button" (click)="saveProduct()">✅ Valider</button>
@@ -134,7 +134,7 @@
         </table>
     </div>
 
-    <!-- ✅ SUPPRESSION INCHANGÉE -->
+    <!- SUPPRESSION INCHANGÉE -->
     <div *ngIf="activeTab === 'delete'" class="delete-section">
         <table class="product-table">
             <tbody>

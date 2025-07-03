@@ -8,12 +8,12 @@
 	text-align: center;
 }
 
-/* ✅ Onglets style Excel */
+/*  Onglets style Excel */
 .tabs {
 	display: flex;
 	justify-content: space-between;
 	margin-bottom: 25px;
-	border-bottom: 3px solid #8BC34A; /* ✅ Séparation nette */
+	border-bottom: 3px solid #8BC34A; /*  Séparation nette */
 	padding-bottom: 5px;
 
 	button {
@@ -40,7 +40,7 @@
 	}
 }
 
-/* ✅ Contenu des onglets */
+/*  Contenu des onglets */
 .tab-content {
 	background: white;
 	padding: 20px;
@@ -50,7 +50,7 @@
 	text-align: left;
 }
 
-/* ✅ Labels des formulaires */
+/*  Labels des formulaires */
 label {
 	display: block;
 	margin-top: 10px;
@@ -58,7 +58,7 @@ label {
 	color: #310000;
 }
 
-/* ✅ Inputs & Select */
+/*  Inputs & Select */
 input, select {
 	width: 100%;
 	padding: 12px;
@@ -74,7 +74,7 @@ input, select {
 	}
 }
 
-/* ✅ Bouton de validation */
+/*  Bouton de validation */
 .validate-button {
 	background-color: #8BC34A;
 	color: #310000;
@@ -133,7 +133,7 @@ input, select {
 	cursor: pointer;
   }
 
-/* ✅ Gestion responsive */
+/*  Gestion responsive */
 @media screen and (max-width: 768px) {
 	.account-container {
 		padding: 30px;

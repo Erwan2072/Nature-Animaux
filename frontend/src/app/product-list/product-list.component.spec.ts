@@ -3,14 +3,14 @@ import { ProductListComponent } from './product-list.component';
 import { provideHttpClient } from '@angular/common/http';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
-import { ApiService } from '../services/api.service';  // ✅ Chemin adapté
-import { AuthService } from '../services/auth.service';  // ✅ Chemin adapté
+import { ApiService } from '../services/api.service';  //  Chemin adapté
+import { AuthService } from '../services/auth.service';  //  Chemin adapté
 
 describe('ProductListComponent', () => {
   let component: ProductListComponent;
   let fixture: ComponentFixture<ProductListComponent>;
 
-  // ✅ Mocks pour éviter les erreurs API lors des tests
+  //  Mocks pour éviter les erreurs API lors des tests
   const mockApiService = {
     getProducts: jasmine.createSpy('getProducts').and.returnValue(of({ products: [], next: null, previous: null }))
   };
@@ -24,7 +24,7 @@ describe('ProductListComponent', () => {
     await TestBed.configureTestingModule({
       imports: [
         ProductListComponent,
-        RouterTestingModule  // ✅ Si tu as du RouterLink ou router-outlet dans le component
+        RouterTestingModule  //  Si tu as du RouterLink ou router-outlet dans le component
       ],
       providers: [
         provideHttpClient(),

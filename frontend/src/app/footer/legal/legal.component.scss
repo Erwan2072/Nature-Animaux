@@ -14,11 +14,11 @@
     border-radius: 10px;
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
 
-    /* ✅ Justification du texte */
+    /*  Justification du texte */
     text-align: justify;
 }
 
-/* ✅ Assurer que tous les textes sont bien justifiés */
+/*  Assurer que tous les textes sont bien justifiés */
 .page-content p,
 .page-content div,
 .page-content ul,
@@ -74,7 +74,7 @@ a {
     }
 }
 
-/* ✅ Ajout d'une justification globale sur le composant */
+/*  Ajout d'une justification globale sur le composant */
 :host {
     display: block;
 }

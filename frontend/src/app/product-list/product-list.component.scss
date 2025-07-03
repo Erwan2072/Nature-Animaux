@@ -14,9 +14,9 @@ $border-color: #ddd;
   background-color: transparent;
   border-radius: 8px;
   box-shadow: 0px 0px 0px rgba(0, 0, 0, 0.1);
-  flex-grow: 1; /* ✅ Prend toute la hauteur disponible */
+  flex-grow: 1; /*  Prend toute la hauteur disponible */
   display: flex;
-  flex-direction: column; /* ✅ Permet au contenu de s'étirer correctement */
+  flex-direction: column; /*  Permet au contenu de s'étirer correctement */
 
   h2 {
     text-align: center;
@@ -61,7 +61,7 @@ $border-color: #ddd;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 20px;
     padding: 10px;
-    flex-grow: 1; /* ✅ Évite que le footer soit poussé vers le bas inutilement */
+    flex-grow: 1; /*  Évite que le footer soit poussé vers le bas inutilement */
   }
 
   .product-card {
@@ -92,7 +92,7 @@ $border-color: #ddd;
   }
 }
 
-/* ✅ Fixe les filtres à gauche sous le logo */
+/*  Fixe les filtres à gauche sous le logo */
 .filters-container {
   position: fixed;
   left: 20px;
@@ -129,8 +129,8 @@ $border-color: #ddd;
   box-shadow: 0px 0px 0px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
-  flex-grow: 1; /* ✅ Prend toute la place disponible */
-  min-height: auto; /* ✅ Ne force pas une hauteur trop grande */
+  flex-grow: 1; /*  Prend toute la place disponible */
+  min-height: auto; /*  Ne force pas une hauteur trop grande */
 }
 
 .products-container {
@@ -138,11 +138,11 @@ $border-color: #ddd;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 20px;
   padding: 10px;
-  flex-grow: 1; /* ✅ Assure que les produits remplissent l’espace */
-  min-height: auto; /* ✅ Empêche un scroll inutile */
+  flex-grow: 1; /*  Assure que les produits remplissent l’espace */
+  min-height: auto; /*  Empêche un scroll inutile */
 }
 
-/* ✅ Fixe le footer en bas sans créer d’espace vide */
+/*  Fixe le footer en bas sans créer d’espace vide */
 .footer {
   background-color: $primary-color;
   color: white;
@@ -153,10 +153,10 @@ $border-color: #ddd;
   position: relative;
   bottom: 0;
   left: 0;
-  margin-top: auto; /* ✅ Permet au footer de rester collé */
+  margin-top: auto; /*  Permet au footer de rester collé */
 }
 
-/* ✅ Responsive Design */
+/*  Responsive Design */
 @media screen and (max-width: 1024px) {
   .product-list {
     padding: 10px; /* Réduction du padding pour optimiser l'affichage */

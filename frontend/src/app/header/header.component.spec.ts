@@ -2,13 +2,13 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HeaderComponent } from './header.component';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
-import { AuthService } from '../services/auth.service';  // ✅ Ajusté
+import { AuthService } from '../services/auth.service';  //  Ajusté
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
   let fixture: ComponentFixture<HeaderComponent>;
 
-  // ✅ Mock complet avec user$
+  //  Mock complet avec user$
   const mockAuthService = {
     user$: of(null),  // ⬅️ Corrige ici
     getToken: jasmine.createSpy('getToken').and.returnValue(of('FAKE_TOKEN')),
@@ -22,7 +22,7 @@ describe('HeaderComponent', () => {
         RouterTestingModule
       ],
       providers: [
-        { provide: AuthService, useValue: mockAuthService }  // ✅ Fournit mock complet
+        { provide: AuthService, useValue: mockAuthService }  //  Fournit mock complet
       ]
     }).compileComponents();
 

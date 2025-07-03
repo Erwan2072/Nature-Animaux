@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { HttpClient } from '@angular/common/http'; // ✅ Importation d'HttpClient
+import { HttpClient } from '@angular/common/http'; //  Importation d'HttpClient
 
 @Component({
   selector: 'app-account',
@@ -18,26 +18,26 @@ export class AccountComponent implements OnInit {
   paymentForm!: FormGroup;
   passwordForm!: FormGroup;
   passwordMismatch: boolean = false;
-  apiUrl: string = 'https://api.tonsite.com/users'; // ✅ URL API à modifier selon ton backend
+  apiUrl: string = 'https://api.tonsite.com/users'; //  URL API à modifier selon ton backend
 
-  // ✅ Liste des pays pour le champ "Pays"
+  //  Liste des pays pour le champ "Pays"
   countries: string[] = [
     "Afghanistan", "Afrique du Sud", "Albanie", "Algérie", "Allemagne", "Andorre", "Angola",
     "France", "Canada", "États-Unis", "Royaume-Uni", "Japon", "Italie", "Espagne", "Brésil",
     "Russie", "Chine", "Inde", "Mexique", "Argentine", "Australie", "Nouvelle-Zélande"
   ];
 
-  // ✅ Gestion des cartes enregistrées
+  //  Gestion des cartes enregistrées
   savedCards: { last4: string; cardName: string; cardExpiry: string }[] = [];
 
   constructor(private fb: FormBuilder, private http: HttpClient) {}
 
   ngOnInit(): void {
     this.initForms();
-    this.loadUserData(); // ✅ Charge les données utilisateur au démarrage
+    this.loadUserData(); //  Charge les données utilisateur au démarrage
   }
 
-  // ✅ Initialisation des formulaires
+  //  Initialisation des formulaires
   private initForms() {
     this.accountForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -71,19 +71,19 @@ export class AccountComponent implements OnInit {
     });
   }
 
-  // ✅ Vérification de la correspondance des mots de passe
+  //  Vérification de la correspondance des mots de passe
   private checkPasswordMatch() {
     const newPassword = this.passwordForm.get('newPassword')?.value;
     const confirmNewPassword = this.passwordForm.get('confirmNewPassword')?.value;
     this.passwordMismatch = newPassword !== confirmNewPassword;
   }
 
-  // ✅ Change l'onglet actif
+  //  Change l'onglet actif
   setActiveTab(tab: string) {
     this.activeTab = tab;
   }
 
-  // ✅ Chargement des données utilisateur depuis l'API
+  //  Chargement des données utilisateur depuis l'API
   loadUserData() {
     this.http.get<any>(`${this.apiUrl}/me`).subscribe(
       (data) => {
@@ -98,11 +98,11 @@ export class AccountComponent implements OnInit {
     );
   }
 
-  // ✅ Sauvegarde des modifications (envoi des données au backend)
+  //  Sauvegarde des modifications (envoi des données au backend)
   saveProfile() {
     if (this.accountForm.valid) {
       this.http.put(`${this.apiUrl}/update-profile`, this.accountForm.value).subscribe(
-        () => console.log('✅ Profil enregistré'),
+        () => console.log(' Profil enregistré'),
         (error) => console.error('❌ Erreur lors de l\'enregistrement du profil', error)
       );
     }
@@ -111,7 +111,7 @@ export class AccountComponent implements OnInit {
   saveAddress() {
     if (this.addressForm.valid) {
       this.http.put(`${this.apiUrl}/update-address`, this.addressForm.value).subscribe(
-        () => console.log('✅ Adresse enregistrée'),
+        () => console.log(' Adresse enregistrée'),
         (error) => console.error('❌ Erreur lors de l\'enregistrement de l\'adresse', error)
       );
     }
@@ -125,50 +125,50 @@ export class AccountComponent implements OnInit {
         cardExpiry: this.paymentForm.value.cardExpiry
       };
       this.savedCards.push(newCard);
-      console.log('✅ Paiement enregistré', this.savedCards);
+      console.log(' Paiement enregistré', this.savedCards);
 
       this.http.put(`${this.apiUrl}/update-payment`, this.paymentForm.value).subscribe(
-        () => console.log('✅ Paiement enregistré'),
-        (error) => console.error('❌ Erreur lors de l\'enregistrement du paiement', error)
+        () => console.log(' Paiement enregistré'),
+        (error) => console.error(' Erreur lors de l\'enregistrement du paiement', error)
       );
     }
   }
 
-  // ✅ Modifier une carte
+  //  Modifier une carte
   editCard(index: number) {
     const card = this.savedCards[index];
     this.paymentForm.patchValue({
-      cardNumber: '', // ❌ On ne peut pas récupérer un numéro de carte complet pour des raisons de sécurité
+      cardNumber: '', // On ne peut pas récupérer un numéro de carte complet pour des raisons de sécurité
       cardName: card.cardName,
       cardExpiry: card.cardExpiry,
-      cardCVV: '' // ✅ CVV doit être re-saisi
+      cardCVV: '' //  CVV doit être re-saisi
     });
     console.log('📝 Modification de la carte :', card);
   }
 
 
-  // ✅ Supprimer une carte enregistrée
+  //  Supprimer une carte enregistrée
   deleteCard(index: number) {
-    this.savedCards.splice(index, 1); // ✅ Supprime la carte localement
+    this.savedCards.splice(index, 1); //  Supprime la carte localement
 
-    // ✅ Envoie la suppression au backend
+    //  Envoie la suppression au backend
     this.http.delete(`${this.apiUrl}/delete-card/${index}`).subscribe(
-      () => console.log('✅ Carte supprimée'),
-      (error) => console.error('❌ Erreur lors de la suppression de la carte', error)
+      () => console.log('Carte supprimée'),
+      (error) => console.error('Erreur lors de la suppression de la carte', error)
     );
   }
 
-  // ✅ Mise à jour du mot de passe
+  //  Mise à jour du mot de passe
   changePassword() {
     this.checkPasswordMatch();
 
     if (this.passwordForm.valid && !this.passwordMismatch) {
       this.http.put(`${this.apiUrl}/change-password`, this.passwordForm.value).subscribe(
-        () => console.log('✅ Mot de passe mis à jour'),
-        (error) => console.error('❌ Erreur lors de la mise à jour du mot de passe', error)
+        () => console.log('Mot de passe mis à jour'),
+        (error) => console.error('Erreur lors de la mise à jour du mot de passe', error)
       );
     } else {
-      console.warn('❌ Erreur : les mots de passe ne correspondent pas.');
+      console.warn('Erreur : les mots de passe ne correspondent pas.');
     }
   }
 }
