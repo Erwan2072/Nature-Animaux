@@ -13,7 +13,7 @@ class ProductSerializer(serializers.Serializer):
     """Sérialiseur principal des produits"""
     id = serializers.CharField(source='_id', read_only=True)
     title = serializers.CharField(max_length=255, required=False, allow_blank=True, allow_null=True, default="Produit sans titre")
-    image_url = serializers.CharField(max_length=500, required=False, allow_blank=True, allow_null=True, default="")  # ✅ Ajout du champ image
+    image_url = serializers.CharField(max_length=500, required=False, allow_blank=True, allow_null=True, default="")
     category = serializers.CharField(max_length=255, required=False, allow_blank=True, allow_null=True)
     sub_category = serializers.CharField(max_length=255, required=False, allow_blank=True, allow_null=True)
     brand = serializers.CharField(max_length=255, required=False, allow_blank=True, allow_null=True)
@@ -31,7 +31,7 @@ class ProductSerializer(serializers.Serializer):
         if not product_data.get("title"):
             product_data["title"] = "Produit sans titre"
         if not product_data.get("image_url"):
-            product_data["image_url"] = "/assets/no-image.png"  # ✅ Image par défaut si aucune n'est fournie
+            product_data["image_url"] = "/assets/no-image.png"  # Image par défaut si aucune n'est fournie
 
         result = products_collection.insert_one(product_data)
         product_data['_id'] = str(result.inserted_id)

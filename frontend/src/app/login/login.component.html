@@ -34,10 +34,10 @@
 
 	  <button type="submit" [disabled]="loginForm.invalid">Se connecter</button>
 
-	  <!-- 🔥 Google Sign-In : Bouton unique généré dynamiquement -->
+	  <!-- Google Sign-In : Bouton unique généré dynamiquement -->
 	  <div id="google-signin-button" class="google-login-container"></div>
 
-	  <!-- 🔥 Affichage d'un message d'erreur global -->
+	  <!-- Affichage d'un message d'erreur global -->
 	  <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
 	</form>
 

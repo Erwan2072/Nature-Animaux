@@ -2,7 +2,7 @@ import os
 from pathlib import Path
 from datetime import timedelta
 
-# ✅ Base Directory (Garder uniquement cette définition)
+#  Base Directory (Garder uniquement cette définition)
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "django-insecure-3#&plqt0d!hvl+q98k8@^i+yy*762!t4ixe_===)(pkn#&4wua")
@@ -44,20 +44,20 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',  # 🔥 Doit être bien configuré
+    'django.middleware.csrf.CsrfViewMiddleware',  # Doit être bien configuré
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'allauth.account.middleware.AccountMiddleware',
 ]
 
-# ✅ REST Framework Configuration
+#  REST Framework Configuration
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework_simplejwt.authentication.JWTAuthentication',  # ✅ Utilisation de JWT
+        'rest_framework_simplejwt.authentication.JWTAuthentication',  # Utilisation de JWT
     ],
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',  # ✅ Protège toutes les routes par défaut
+        'rest_framework.permissions.IsAuthenticated',  # Protège toutes les routes par défaut
     ],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,
@@ -69,17 +69,17 @@ REST_FRAMEWORK = {
     ],
 }
 
-# ✅ Configuration JWT
+#  Configuration JWT
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
     'SIGNING_KEY': SECRET_KEY,
-    'AUTH_HEADER_TYPES': ('Bearer',),  # ✅ Définit le préfixe du token comme "Bearer"
+    'AUTH_HEADER_TYPES': ('Bearer',),  # Définit le préfixe du token comme "Bearer"
 }
 
-# ✅ Sécurisation des cookies et CSRF
+# Sécurisation des cookies et CSRF
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:4200",
     "https://ton-domaine.com",
@@ -89,7 +89,7 @@ CSRF_COOKIE_HTTPONLY = True
 REST_USE_JWT = True
 JWT_AUTH_SECURE = True
 
-# ✅ Configuration de CORS
+# Configuration de CORS
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_ALL_ORIGINS = False
 CORS_ALLOWED_ORIGINS = [
@@ -105,7 +105,7 @@ CORS_ALLOW_HEADERS = [
     "x-requested-with"
 ]
 
-# ✅ Configuration de Allauth
+# Configuration de Allauth
 SOCIALACCOUNT_PROVIDERS = {
     "google": {
         "SCOPE": ["email", "profile"],
@@ -120,10 +120,10 @@ ACCOUNT_USERNAME_REQUIRED = False  # Désactiver `username`
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None  # Empêche allauth de chercher `username`
 ACCOUNT_EMAIL_VERIFICATION = "optional"
 
-# ✅ Configuration Django
+# Configuration Django
 ROOT_URLCONF = 'nature_animaux.urls'
 
-# ✅ Configuration TEMPLATES
+# Configuration TEMPLATES
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -142,7 +142,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'nature_animaux.wsgi.application'
 
-# ✅ Configuration Base de données PostgreSQL
+# Configuration Base de données PostgreSQL
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -166,7 +166,7 @@ TIME_ZONE = 'Europe/Paris'
 USE_I18N = True
 USE_TZ = True
 
-# ✅ Correction de STATIC_ROOT
+# Correction de STATIC_ROOT
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / "staticfiles"
 

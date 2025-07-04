@@ -10,16 +10,16 @@ import logging
 # Configuration du logger
 logger = logging.getLogger(__name__)
 
-# ✅ Vérification si MongoDB est disponible
+#  Vérification si MongoDB est disponible
 def check_mongo_connection():
     try:
         products_collection.find_one()
         return True
     except Exception as e:
-        logger.error(f"🚨 MongoDB non disponible : {e}")
+        logger.error(f" MongoDB non disponible : {e}")
         return False
 
-# ✅ API Overview
+# API Overview
 @api_view(['GET'])
 def api_overview(request):
     """Affiche un aperçu des routes disponibles."""
@@ -32,7 +32,7 @@ def api_overview(request):
     }
     return Response(api_urls)
 
-# ✅ Détails d'un produit (accessible à tous)
+# Détails d'un produit (accessible à tous)
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def product_detail(request, pk):
@@ -41,7 +41,7 @@ def product_detail(request, pk):
         return Response({"error": "Base de données MongoDB non accessible."}, status=500)
 
     try:
-        logger.info(f"🔍 Recherche du produit avec l'ID : '{pk}'")
+        logger.info(f" Recherche du produit avec l'ID : '{pk}'")
 
         if not ObjectId.is_valid(pk):
             return Response({"error": "ID invalide."}, status=400)
@@ -55,7 +55,7 @@ def product_detail(request, pk):
         return Response(serializer.data)
 
     except Exception as e:
-        logger.error(f"❌ Erreur lors de la récupération du produit {pk} : {e}")
+        logger.error(f" Erreur lors de la récupération du produit {pk} : {e}")
         return Response({"error": "Erreur interne du serveur."}, status=500)
 
 # Liste des produits avec pagination et correction de format
@@ -91,10 +91,10 @@ def product_list(request):
         # Correction de la pagination
         paginated_products = paginator.paginate_queryset(products, request)
         serializer = ProductSerializer(paginated_products, many=True)
-        return paginator.get_paginated_response(serializer.data)  # ✅ Utilisation correcte de `get_paginated_response()`
+        return paginator.get_paginated_response(serializer.data)  # Utilisation correcte de `get_paginated_response()`
 
     except Exception as e:
-        logger.error(f"❌ Erreur lors de la récupération des produits : {e}")
+        logger.error(f"Erreur lors de la récupération des produits : {e}")
         return Response({"error": "Erreur interne du serveur."}, status=500)
 
 # Création d'un produit (réservé aux admins)
@@ -106,7 +106,7 @@ def product_create(request):
         return Response({"error": "Base de données MongoDB non accessible."}, status=500)
 
     try:
-        logger.info(f"📩 Données reçues : {request.data}")
+        logger.info(f"Données reçues : {request.data}")
 
         serializer = ProductSerializer(data=request.data)
         if serializer.is_valid():

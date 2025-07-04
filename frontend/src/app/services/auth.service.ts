@@ -6,7 +6,7 @@ import { Observable, BehaviorSubject, map, catchError, throwError } from 'rxjs';
   providedIn: 'root'
 })
 export class AuthService {
-  private baseUrl = 'http://127.0.0.1:8000/api'; // 🔥 Vérifie bien que ton backend expose `/api`
+  private baseUrl = 'http://127.0.0.1:8000/api'; // Vérifie bien que ton backend expose `/api`
   private authTokenSubject = new BehaviorSubject<string | null>(null);
   private userSubject = new BehaviorSubject<any>(null);
 
@@ -102,7 +102,7 @@ export class AuthService {
     this.http.get<any>(`${this.baseUrl}/profile/`, { headers }).subscribe(
       user => {
         if (user) {
-          console.log(" Utilisateur récupéré :", user); // 🔥 Ajout pour debug
+          console.log(" Utilisateur récupéré :", user); //Ajout pour debug
           this.userSubject.next(user);
         }
       },

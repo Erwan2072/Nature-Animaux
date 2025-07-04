@@ -139,6 +139,21 @@
 	z-index: 10 !important;
   }
 
+  /* Responsive pour tablette */
+@media screen and (max-width: 1024px) {
+  .login-container {
+    max-width: 70%; // adapte selon ton design
+    padding: 25px;
+  }
+
+  h2 {
+    font-size: 1.9em;
+  }
+
+  button {
+    font-size: 1.1em;
+  }
+}
 
 /*  Responsive pour mobile */
 @media screen and (max-width: 768px) {

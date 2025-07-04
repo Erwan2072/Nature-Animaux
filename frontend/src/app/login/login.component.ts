@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { RouterModule } from '@angular/router'; //  Ajouté ici
+import { RouterModule } from '@angular/router';
 
 declare const google: any;
 
@@ -15,7 +15,7 @@ declare const google: any;
   standalone: true,
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, RouterModule] //  Ajout de RouterModule ici
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, RouterModule]
 })
 export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
   loginForm: FormGroup;
