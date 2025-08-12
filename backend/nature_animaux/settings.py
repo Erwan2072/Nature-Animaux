@@ -82,6 +82,7 @@ SIMPLE_JWT = {
 # Sécurisation des cookies et CSRF
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:4200",
+    "http://127.0.0.1:4200",
     "https://ton-domaine.com",
 ]
 SESSION_COOKIE_HTTPONLY = True
@@ -94,6 +95,7 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_ALL_ORIGINS = False
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:4200",
+    "http://127.0.0.1:4200",
     "https://ton-domaine.com",
 ]
 CORS_ALLOW_HEADERS = [
@@ -146,7 +148,7 @@ WSGI_APPLICATION = 'nature_animaux.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv("POSTGRES_DB", "nature_animaux_db"),
+        'NAME': os.getenv("POSTGRES_DB", "nature_animaux"),
         'USER': os.getenv("POSTGRES_USER", "nature_admin"),
         'PASSWORD': os.getenv("POSTGRES_PASSWORD", "NewN&Aweb25"),
         'HOST': os.getenv("POSTGRES_HOST", "localhost"),
