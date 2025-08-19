@@ -1,53 +1,45 @@
 from nature_animaux.mongo_config import products_collection
-from bson import ObjectId, errors
+from bson import ObjectId
 import logging
 
 # Configurer le logger
 logger = logging.getLogger(__name__)
 
 class Product:
-    def __init__(self, title=None, category=None, sub_category=None, brand=None, color=None, sku=None, price=None, weight=None, stock=None, description=None, variations=None, product_id=None):
-        """Initialisation du produit avec validation pour le prix, le stock et le poids."""
-
-        #  Vérifications uniquement pour price, stock, et weight
-        if price is not None and (not isinstance(price, (int, float)) or price < 0):
-            raise ValueError("Le prix doit être un nombre positif.")
-        if stock is not None and (not isinstance(stock, int) or stock < 0):
-            raise ValueError("Le stock doit être un entier positif.")
-        if weight is not None and (not isinstance(weight, (int, float)) or weight < 0):
-            raise ValueError("Le poids doit être un nombre positif.")
-
+    def __init__(self, title=None, category=None, sub_category=None,
+                 brand=None, color=None, description=None,
+                 variations=None, image_url=None, product_id=None):
+        """
+        Modèle produit avec variations (sku, price, stock, weight par variation).
+        """
         self._id = product_id
         self.title = title
         self.category = category
         self.sub_category = sub_category
         self.brand = brand
         self.color = color
-        self.sku = sku
-        self.price = price
-        self.weight = weight
-        self.stock = stock
         self.description = description
+        self.image_url = image_url if image_url else "/assets/no-image.png"
         self.variations = variations if variations else []
 
     def save(self):
         try:
             product_data = {
-                "title": self.title if self.title else None,
-                "category": self.category if self.category else None,
-                "sub_category": self.sub_category if self.sub_category else None,
-                "brand": self.brand if self.brand else None,
-                "color": self.color if self.color else None,
-                "sku": self.sku if self.sku else None,
-                "price": self.price if self.price is not None else None,
-                "weight": self.weight if self.weight is not None else None,
-                "stock": self.stock if self.stock is not None else None,
-                "description": self.description if self.description else None,
+                "title": self.title or "Produit sans titre",
+                "category": self.category,
+                "sub_category": self.sub_category,
+                "brand": self.brand,
+                "color": self.color,
+                "description": self.description,
+                "image_url": self.image_url,
                 "variations": self.variations if self.variations else []
             }
 
             if self._id:
-                result = products_collection.update_one({"_id": ObjectId(self._id)}, {"$set": product_data})
+                result = products_collection.update_one(
+                    {"_id": ObjectId(self._id)},
+                    {"$set": product_data}
+                )
                 if result.matched_count == 0:
                     raise ValueError(f"Produit avec l'ID {self._id} introuvable.")
                 logger.info(f"Produit mis à jour : {self.title}")
@@ -63,13 +55,11 @@ class Product:
     def find(product_id):
         try:
             if not ObjectId.is_valid(product_id):
-                logger.error(f"ID invalide pour la recherche : {product_id}")
                 raise ValueError(f"'{product_id}' is not a valid ObjectId.")
 
             product = products_collection.find_one({"_id": ObjectId(product_id)})
             if product:
                 return Product(**product, product_id=str(product["_id"]))
-            logger.warning(f"Produit avec l'ID {product_id} introuvable.")
             return None
         except Exception as e:
             logger.error(f"Erreur lors de la recherche du produit {product_id} : {str(e)}")
@@ -88,7 +78,6 @@ class Product:
     def delete(product_id):
         try:
             if not ObjectId.is_valid(product_id):
-                logger.error(f"ID invalide pour la suppression : {product_id}")
                 raise ValueError(f"'{product_id}' is not a valid ObjectId.")
 
             result = products_collection.delete_one({"_id": ObjectId(product_id)})

@@ -13,5 +13,5 @@ except Exception as e:
     print("❌ Erreur de connexion MongoDB :", e)
 
 # --- SEED (une seule fois pour faire apparaître la base dans Compass) ---
-products_collection.insert_one({"_seed": True, "title": "Produit test", "price": 1})
-print("✅ Document test inséré")
+#products_collection.insert_one({"_seed": True, "title": "Produit test", "price": 1})
+#print("✅ Document test inséré")

@@ -31,7 +31,7 @@ export class ProductListComponent implements OnInit {
       next: (data) => {
         this.products = (data.products || []).map((product: any) => {
           // Copie image_url vers imageUrl (Angular attend imageUrl dans HTML)
-          const imageUrl = product.image_url?.trim() !== '' ? product.image_url : 'assets/default-product.jpg';
+          const imageUrl = product.imageUrl?.trim() !== '' ? product.imageUrl : 'assets/default-product.jpg';
 
           return {
             ...product,

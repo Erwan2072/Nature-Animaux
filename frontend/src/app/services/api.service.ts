@@ -8,18 +8,22 @@ import { AuthService } from './auth.service';
   providedIn: 'root'
 })
 export class ApiService {
-  private baseUrl = 'http://127.0.0.1:8000'; //  URL de base Django
+  private baseUrl = 'http://127.0.0.1:8000'; // URL de base Django
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 
-  //  Générer les headers avec le token JWT
-  private getHeaders(): Observable<HttpHeaders> {
+  // 🔑 Générer les headers avec le token JWT
+  private getHeaders(isFormData: boolean = false): Observable<HttpHeaders> {
     return this.authService.getToken().pipe(
       map(token => {
         let headers = new HttpHeaders({
-          'Content-Type': 'application/json',
           'Accept': 'application/json'
         });
+
+        // ⚠️ Ne pas fixer Content-Type si FormData
+        if (!isFormData) {
+          headers = headers.set('Content-Type', 'application/json');
+        }
 
         if (token) {
           headers = headers.set('Authorization', `Bearer ${token}`);
@@ -33,7 +37,7 @@ export class ApiService {
     );
   }
 
-  //  Gestion centralisée des erreurs
+  // Gestion centralisée des erreurs
   private handleError(error: any): Observable<never> {
     console.error("❌ Erreur API :", error);
     if (error.status === 401) {
@@ -43,7 +47,7 @@ export class ApiService {
     return throwError(() => new Error(error.message || "Erreur API"));
   }
 
-  //  Obtenir tous les produits avec pagination
+  // Obtenir tous les produits avec pagination
   getProducts(page: number = 1): Observable<any> {
     const url = `${this.baseUrl}/products/`;
     const params = new HttpParams().set('page', page.toString());
@@ -51,8 +55,7 @@ export class ApiService {
     return this.getHeaders().pipe(
       switchMap(headers => this.http.get(url, { headers, params })),
       map((response: any) => {
-        //  Log pour vérifier les données
-        console.log("📦 Produits reçus :", response.results);
+        console.log("Produits reçus :", response.results);
         return {
           products: response.results || [],
           next: response.next || null,
@@ -63,7 +66,7 @@ export class ApiService {
     );
   }
 
-  //  Récupérer un produit spécifique
+  // Récupérer un produit spécifique
   getProductById(id: string): Observable<any> {
     const url = `${this.baseUrl}/products/product-detail/${id}/`;
     return this.getHeaders().pipe(
@@ -72,25 +75,36 @@ export class ApiService {
     );
   }
 
-  //  Créer un produit
+  // ➕ Créer un produit
   addProduct(product: any): Observable<any> {
     const url = `${this.baseUrl}/products/product-create/`;
-    return this.getHeaders().pipe(
-      switchMap(headers => this.http.post(url, product, { headers })),
+    const isFormData = product instanceof FormData;
+
+    return this.getHeaders(isFormData).pipe(
+      switchMap(headers => {
+        if (isFormData) headers = headers.delete('Content-Type');
+        return this.http.post(url, product, { headers });
+      }),
       catchError(this.handleError)
     );
   }
 
-  //  Modifier un produit existant
+  // Modifier un produit existant
   updateProduct(id: string, product: any): Observable<any> {
     const url = `${this.baseUrl}/products/product-update/${id}/`;
-    return this.getHeaders().pipe(
-      switchMap(headers => this.http.put(url, product, { headers })),
+    const isFormData = product instanceof FormData;
+
+    return this.getHeaders(isFormData).pipe(
+      switchMap(headers => {
+        if (isFormData) headers = headers.delete('Content-Type');
+        console.log("📤 Données envoyées updateProduct :", product);
+        return this.http.put(url, product, { headers });
+      }),
       catchError(this.handleError)
     );
   }
 
-  //  Supprimer un produit
+  // Supprimer un produit
   deleteProduct(id: string): Observable<any> {
     const url = `${this.baseUrl}/products/product-delete/${id}/`;
     return this.getHeaders().pipe(

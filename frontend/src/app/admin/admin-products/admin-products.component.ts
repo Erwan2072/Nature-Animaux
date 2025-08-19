@@ -39,7 +39,7 @@ export class AdminProductsComponent implements OnInit {
   // Objet produit
   product: any = {
     title: '',
-    image_url: '',
+    imageUrl: '',  // ✅ cohérence avec backend
     category: '',
     subCategory: '',
     brand: '',
@@ -55,6 +55,7 @@ export class AdminProductsComponent implements OnInit {
   weights = ['1kg', '2.5kg', '5kg', '10kg', '3kg', '7kg', '15kg', '20kg', '25kg', '30kg'];
 
   imagePreview: string | null = null;
+  imageFile: File | null = null; // ✅ garde le fichier pour Cloudinary
 
   constructor(private apiService: ApiService) {}
 
@@ -89,27 +90,26 @@ export class AdminProductsComponent implements OnInit {
       }))
       .subscribe({
         next: (response: any) => {
-          this.products = response.products || [];
+          // ✅ uniformiser l’ID Mongo
+          this.products = (response.products || []).map((p: any) => ({
+            ...p,
+            id: p._id || p.id
+          }));
         }
       });
   }
 
   private filterProductTitles(value: string): string[] {
     const filterValue = value.trim().toLowerCase();
-
-    if (!filterValue) {
-      return []; // Affiche rien si champ vide
-    }
-
+    if (!filterValue) return [];
     return this.products
       .map(prod => prod.title)
       .filter(title => title.toLowerCase().includes(filterValue));
-    // → Utilise startsWith(filterValue) si tu veux commencer par la lettre uniquement
   }
 
   updateSelectedProductSKU() {
     const selectedProduct = this.products.find(prod => prod.title === this.selectedProductControl.value);
-    if (selectedProduct && selectedProduct.variations && selectedProduct.variations.length > 0) {
+    if (selectedProduct?.variations?.length > 0) {
       this.selectedProductSKU = selectedProduct.variations[0].sku;
     } else {
       this.selectedProductSKU = 'N/A';
@@ -118,7 +118,6 @@ export class AdminProductsComponent implements OnInit {
 
   deleteProduct() {
     const selectedProduct = this.products.find(prod => prod.title === this.selectedProductControl.value);
-
     if (!selectedProduct) {
       alert("Veuillez sélectionner un produit valide à supprimer.");
       return;
@@ -159,10 +158,10 @@ export class AdminProductsComponent implements OnInit {
   onFileSelected(event: any) {
     const file = event.target.files[0];
     if (file) {
+      this.imageFile = file;
       const reader = new FileReader();
       reader.onload = () => {
         this.imagePreview = reader.result as string;
-        this.product.image_url = this.imagePreview;
       };
       reader.readAsDataURL(file);
     }
@@ -185,21 +184,45 @@ export class AdminProductsComponent implements OnInit {
       return;
     }
 
+    const formData = new FormData();
+
+    // ✅ Forcer variations en tableau d’objets corrects
+const variations = (this.product.variations || []).map((v: any) => ({
+  sku: v.sku || '',
+  price: v.price !== null ? Number(v.price) : null,
+  weight: v.weight || '',
+  stock: v.stock !== null ? Number(v.stock) : 0,
+}));
+
+formData.append('variations', JSON.stringify(variations));
+
+
+    // Autres champs
+    Object.keys(this.product).forEach(key => {
+      if (key !== 'variations' && this.product[key] !== null && this.product[key] !== undefined) {
+        formData.append(key, this.product[key]);
+      }
+    });
+
+    if (this.imageFile) {
+      formData.append('image', this.imageFile);
+    }
+
     const isEdit = this.activeTab === 'edit' && this.product.id;
     const apiCall = isEdit
-      ? this.apiService.updateProduct(this.product.id, this.product)
-      : this.apiService.addProduct(this.product);
+      ? this.apiService.updateProduct(this.product.id, formData)
+      : this.apiService.addProduct(formData);
 
     apiCall.pipe(
       catchError(error => {
-        console.error("Erreur sauvegarde :", error);
+        console.error("❌ Erreur sauvegarde :", error);
         alert("Erreur sauvegarde !");
         return of(null);
       })
     ).subscribe({
       next: (response) => {
         if (response) {
-          alert(isEdit ? "Produit modifié !" : "Produit ajouté !");
+          alert(isEdit ? "✅ Produit modifié !" : "✅ Produit ajouté !");
           this.getProducts();
           this.resetProductForm();
           this.editProductControl.setValue('');
@@ -209,18 +232,28 @@ export class AdminProductsComponent implements OnInit {
   }
 
   loadProductDetails(title: string) {
-    const productToEdit = this.products.find(prod => prod.title === title);
+  const productToEdit = this.products.find(prod => prod.title === title);
+  if (productToEdit) {
+    this.product = JSON.parse(JSON.stringify(productToEdit));
 
-    if (productToEdit) {
-      this.product = JSON.parse(JSON.stringify(productToEdit));
-      this.imagePreview = this.product.image_url || null;
-    }
+    // ✅ Toujours normaliser les variations
+    this.product.variations = (this.product.variations || []).map((v: any) => ({
+      sku: v.sku || '',
+      price: v.price !== null ? Number(v.price) : null,
+      weight: v.weight || '',
+      stock: v.stock !== null ? Number(v.stock) : 0,
+    }));
+
+    this.imagePreview = this.product.imageUrl || null;
+    this.imageFile = null;
   }
+}
+
 
   resetProductForm() {
     this.product = {
       title: '',
-      image_url: '',
+      imageUrl: '',
       category: '',
       subCategory: '',
       brand: '',
@@ -228,5 +261,6 @@ export class AdminProductsComponent implements OnInit {
       description: '',
     };
     this.imagePreview = null;
+    this.imageFile = null;
   }
 }

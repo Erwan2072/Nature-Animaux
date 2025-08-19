@@ -21,9 +21,10 @@
              style="cursor: pointer;">
 
             <!--  Vérifie et affiche l'image du produit -->
-            <img [src]="product.image_url && product.image_url.trim() !== '' ? product.image_url : 'assets/default-product.jpg'"
-                 [alt]="product.title || 'Produit sans titre'"
-                 class="product-image">
+            <img [src]="product.imageUrl && product.imageUrl.trim() !== '' ? product.imageUrl : 'assets/default-product.jpg'"
+                    [alt]="product.title || 'Produit sans titre'"
+                    class="product-image">
+
 
             <!--  Affichage du titre -->
             <h3>{{ product.title || 'Produit sans titre' }}</h3>
