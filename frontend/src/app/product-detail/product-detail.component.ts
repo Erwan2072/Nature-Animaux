@@ -41,42 +41,41 @@ export class ProductDetailComponent implements OnInit {
     }
   }
 
-  getMinPrice(): number | null {
-    if (!this.product?.variations || this.product.variations.length === 0) {
-      return null;
+  /** ✅ Renvoie le prix de la variation sélectionnée */
+  getSelectedPrice(): number | null {
+    const selectedVariation = this.getSelectedVariation();
+    if (selectedVariation && selectedVariation.price !== null && selectedVariation.price !== undefined) {
+      return selectedVariation.price;
     }
-
-    const prices = this.product.variations
-      .map((v: any) => v.price)
-      .filter((p: number) => p !== null && p !== undefined);
-
-    return prices.length > 0 ? Math.min(...prices) : null;
+    return null;
   }
 
+  /** Récupère la variation sélectionnée */
+  getSelectedVariation(): any {
+    return this.product?.variations?.find((v: any) => v.id === this.selectedVariationId);
+  }
+
+  /** Ajoute au panier */
   addToCart(): void {
-    const selectedVariation = this.product?.variations?.find((v: any) => v.id === this.selectedVariationId);
+    const selectedVariation = this.getSelectedVariation();
     if (selectedVariation) {
-      console.log(` Ajouté au panier :`, {
+      console.log(`✅ Ajouté au panier :`, {
         productId: this.product.id,
         title: this.product.title,
         variation: selectedVariation,
         quantity: this.quantity
       });
-      // Intégration panier future ici
+      // TODO : Intégration panier
     } else {
       console.warn("❗ Aucune variation sélectionnée.");
     }
   }
 
-  getSelectedVariation(): any {
-    return this.product?.variations?.find((v: any) => v.id === this.selectedVariationId);
-  }
-
-
+  /** Mise en forme de la description */
   formatDescription(desc: string): string {
     if (!desc) return 'Pas de description détaillée.';
 
-    //  Mise en gras des titres
+    // Mise en gras des titres
     desc = desc.replace(/Composition\s*:/gi, '<strong>Composition :</strong>');
     desc = desc.replace(/Composants Analytiques\s*:/gi, '<strong>Composants Analytiques :</strong>');
     desc = desc.replace(/Additifs\s*:/gi, '<strong>Additifs :</strong>');
@@ -86,5 +85,4 @@ export class ProductDetailComponent implements OnInit {
 
     return desc;
   }
-
 }

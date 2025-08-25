@@ -178,58 +178,62 @@ export class AdminProductsComponent implements OnInit {
     );
   }
 
-  saveProduct() {
-    if (!this.isValidProduct()) {
-      alert("Remplis tous les champs obligatoires !");
-      return;
-    }
-
-    const formData = new FormData();
-
-    // ✅ Forcer variations en tableau d’objets corrects
-const variations = (this.product.variations || []).map((v: any) => ({
-  sku: v.sku || '',
-  price: v.price !== null ? Number(v.price) : null,
-  weight: v.weight || '',
-  stock: v.stock !== null ? Number(v.stock) : 0,
-}));
-
-formData.append('variations', JSON.stringify(variations));
-
-
-    // Autres champs
-    Object.keys(this.product).forEach(key => {
-      if (key !== 'variations' && this.product[key] !== null && this.product[key] !== undefined) {
-        formData.append(key, this.product[key]);
-      }
-    });
-
-    if (this.imageFile) {
-      formData.append('image', this.imageFile);
-    }
-
-    const isEdit = this.activeTab === 'edit' && this.product.id;
-    const apiCall = isEdit
-      ? this.apiService.updateProduct(this.product.id, formData)
-      : this.apiService.addProduct(formData);
-
-    apiCall.pipe(
-      catchError(error => {
-        console.error("❌ Erreur sauvegarde :", error);
-        alert("Erreur sauvegarde !");
-        return of(null);
-      })
-    ).subscribe({
-      next: (response) => {
-        if (response) {
-          alert(isEdit ? "✅ Produit modifié !" : "✅ Produit ajouté !");
-          this.getProducts();
-          this.resetProductForm();
-          this.editProductControl.setValue('');
-        }
-      }
-    });
+saveProduct() {
+  if (!this.isValidProduct()) {
+    alert("Remplis tous les champs obligatoires !");
+    return;
   }
+
+  const formData = new FormData();
+
+  // ✅ Ajouter les variations correctement
+  this.product.variations.forEach((v: any, index: number) => {
+    formData.append(`variations[${index}][sku]`, v.sku || '');
+    formData.append(`variations[${index}][price]`, v.price !== null ? String(v.price) : '');
+    formData.append(`variations[${index}][weight]`, v.weight || '');
+    formData.append(`variations[${index}][stock]`, v.stock !== null ? String(v.stock) : '0');
+  });
+
+  // Autres champs
+  Object.keys(this.product).forEach(key => {
+    if (key !== 'variations' && this.product[key] !== null && this.product[key] !== undefined) {
+      formData.append(key, this.product[key]);
+    }
+  });
+
+  if (this.imageFile) {
+    formData.append('image', this.imageFile);
+  }
+
+
+  console.log("🟡 Données envoyées via FormData :");
+  for (let [key, value] of formData.entries()) {
+    console.log(`${key}: ${value}`);
+  }
+
+  
+  const isEdit = this.activeTab === 'edit' && this.product.id;
+  const apiCall = isEdit
+    ? this.apiService.updateProduct(this.product.id, formData)
+    : this.apiService.addProduct(formData);
+
+  apiCall.pipe(
+    catchError(error => {
+      console.error("❌ Erreur sauvegarde :", error);
+      alert("Erreur sauvegarde !");
+      return of(null);
+    })
+  ).subscribe({
+    next: (response) => {
+      if (response) {
+        alert(isEdit ? "✅ Produit modifié !" : "✅ Produit ajouté !");
+        this.getProducts();
+        this.resetProductForm();
+        this.editProductControl.setValue('');
+      }
+    }
+  });
+}
 
   loadProductDetails(title: string) {
   const productToEdit = this.products.find(prod => prod.title === title);

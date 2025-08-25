@@ -7,116 +7,149 @@ from .serializers import ProductSerializer
 from nature_animaux.mongo_config import products_collection
 import logging
 import cloudinary.uploader
+import re
 import json
 
 # Configuration du logger
 logger = logging.getLogger(__name__)
 
-#  Vérification si MongoDB est disponible
+
+# Vérification MongoDB
 def check_mongo_connection():
     try:
         products_collection.find_one()
         return True
     except Exception as e:
-        logger.error(f" MongoDB non disponible : {e}")
+        logger.error(f"❌ MongoDB non disponible : {e}")
         return False
 
-# API Overview
+
+# Aperçu des routes
 @api_view(['GET'])
 def api_overview(request):
-    """Affiche un aperçu des routes disponibles."""
-    api_urls = {
+    return Response({
         'List': '/products/',
         'Detail': '/product-detail/<str:pk>/',
         'Create': '/product-create/',
         'Update': '/product-update/<str:pk>/',
         'Delete': '/product-delete/<str:pk>/',
-    }
-    return Response(api_urls)
+    })
 
-# Détails d'un produit (accessible à tous)
+
+import re
+import json
+
+def normalize_variations(data):
+    """
+    Reconstruit les variations envoyées via FormData (ex: variations[0][sku]) en une vraie liste de dicts.
+    """
+    pattern = re.compile(r'^variations\[(\d+)\]\[(\w+)\]$')
+    variations = {}
+
+    # 🔍 Reconstituer les variations à partir des champs FormData
+    for key in list(data.keys()):
+        match = pattern.match(key)
+        if match:
+            index, field = match.groups()
+            if index not in variations:
+                variations[index] = {}
+            variations[index][field] = data.pop(key)
+
+    # 🧪 Si variations ont été détectées dans FormData
+    if variations:
+        normalized = []
+        for index in sorted(variations.keys(), key=int):
+            v = variations[index]
+            normalized.append({
+                'sku': v.get('sku', ''),
+                'price': float(v.get('price')) if v.get('price') not in [None, ''] else None,
+                'weight': v.get('weight', '') or "Non défini",
+                'stock': int(v.get('stock')) if v.get('stock') not in [None, ''] else 0,
+            })
+        data['variations'] = normalized
+        return data
+
+    # 🔄 Fallback pour JSON brut (au cas où)
+    if "variations" in data:
+        raw = data["variations"]
+        if isinstance(raw, str):
+            try:
+                parsed = json.loads(raw)
+                if isinstance(parsed, list):
+                    data["variations"] = parsed
+                else:
+                    raise ValueError("Variations doit être une liste JSON.")
+            except json.JSONDecodeError:
+                raise ValueError("Format JSON invalide pour variations.")
+        elif isinstance(raw, list):
+            data["variations"] = raw
+
+    return data
+
+
+
+# --- DETAIL ---
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def product_detail(request, pk):
-    """Récupère les détails d'un produit."""
     if not check_mongo_connection():
-        return Response({"error": "Base de données MongoDB non accessible."}, status=500)
+        return Response({"error": "DB non accessible."}, status=500)
 
-    try:
-        logger.info(f" Recherche du produit avec l'ID : '{pk}'")
+    if not ObjectId.is_valid(pk):
+        return Response({"error": "ID invalide."}, status=400)
 
-        if not ObjectId.is_valid(pk):
-            return Response({"error": "ID invalide."}, status=400)
+    product = products_collection.find_one({"_id": ObjectId(pk)})
+    if not product:
+        return Response({"error": "Produit non trouvé."}, status=404)
 
-        product = products_collection.find_one({"_id": ObjectId(pk)})
-        if not product:
-            return Response({"error": "Produit non trouvé."}, status=404)
+    product["_id"] = str(product["_id"])
+    serializer = ProductSerializer(product)
+    return Response(serializer.data)
 
-        product["_id"] = str(product["_id"])
-        serializer = ProductSerializer(product)
-        return Response(serializer.data)
 
-    except Exception as e:
-        logger.error(f" Erreur lors de la récupération du produit {pk} : {e}")
-        return Response({"error": "Erreur interne du serveur."}, status=500)
-
-# Liste des produits avec pagination et correction de format
+# --- LIST ---
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def product_list(request):
-    """Liste tous les produits avec pagination."""
     if not check_mongo_connection():
-        return Response({"error": "Base de données MongoDB non accessible."}, status=500)
+        return Response({"error": "DB non accessible."}, status=500)
 
     try:
         paginator = PageNumberPagination()
-        paginator.page_size = 10  # Définit la taille de la pagination
+        paginator.page_size = 10
         products = list(products_collection.find({}))
 
-        if not products:
-            return Response({"message": "Aucun produit trouvé."}, status=200)
-
-        # Correction des valeurs manquantes
         for product in products:
             product["_id"] = str(product["_id"])
             product["title"] = product.get("title", "Produit sans titre")
             product["category"] = product.get("category", "Catégorie inconnue")
-
-            # ✅ Correction image : garde Cloudinary si dispo, sinon image par défaut
             product["imageUrl"] = product.get("imageUrl") or "assets/default-image.jpg"
 
-            # Vérifier la présence de variations et définir un prix minimum
-            product["variations"] = product.get("variations", [])
-            if product["variations"]:
-                product["price"] = min(
-                    v.get("price", float('inf')) for v in product["variations"] if "price" in v
-                )
-            else:
-                product["price"] = "Prix non disponible"
+            # Nettoyage des variations
+            cleaned_variations = []
+            for idx, v in enumerate(product.get("variations", [])):
+                price_value = v.get("price")
+                cleaned_variations.append({
+                    "sku": v.get("sku") or f"REF-{product['_id']}-{idx+1}",
+                    "weight": v.get("weight") or "Non défini",
+                    "price": price_value if isinstance(price_value, (int, float)) else None,
+                    "stock": v.get("stock", 0)
+                })
+            product["variations"] = cleaned_variations
 
-        # Correction de la pagination
-        paginated_products = paginator.paginate_queryset(products, request)
-        serializer = ProductSerializer(paginated_products, many=True)
-        return paginator.get_paginated_response(serializer.data)  # Utilisation correcte de `get_paginated_response()`
+            # Prix principal : le plus bas trouvé dans les variations
+            valid_prices = [v["price"] for v in cleaned_variations if isinstance(v["price"], (int, float))]
+            product["price"] = min(valid_prices) if valid_prices else None  # pas de string ici
+
+        # Pagination
+        paginated = paginator.paginate_queryset(products, request)
+        serializer = ProductSerializer(paginated, many=True)
+        return paginator.get_paginated_response(serializer.data)
 
     except Exception as e:
-        logger.error(f"Erreur lors de la récupération des produits : {e}")
-        return Response({"error": "Erreur interne du serveur."}, status=500)
+        logger.exception("❌ Erreur product_list")
+        return Response({"error": str(e)}, status=500)   # renvoie le message exact
 
-# --- Normalisation des variations ---
-def normalize_variations(data):
-    """Transforme 'variations' en liste de dicts valide pour le serializer."""
-    if "variations" in data:
-        if isinstance(data["variations"], str):
-            try:
-                data["variations"] = json.loads(data["variations"])
-            except json.JSONDecodeError:
-                raise ValueError("Format JSON invalide pour variations.")
-        elif isinstance(data["variations"], list):
-            # Vérifie que c’est une liste de dicts
-            if not all(isinstance(v, dict) for v in data["variations"]):
-                raise ValueError("Chaque variation doit être un objet JSON (dict).")
-    return data
 
 
 # --- CREATE ---
@@ -124,19 +157,28 @@ def normalize_variations(data):
 @permission_classes([IsAdminUser])
 def product_create(request):
     if not check_mongo_connection():
-        return Response({"error": "Base de données MongoDB non accessible."}, status=500)
+        return Response({"error": "DB non accessible."}, status=500)
 
     try:
         data = request.data.copy()
-        logger.info(f"[CREATE] Données reçues : {data.keys()} | files: {list(request.FILES.keys())}")
+        logger.info(f"[CREATE] Data reçue: {list(data.keys())}, Files: {list(request.FILES.keys())}")
 
-        # Normalisation des variations
-        try:
-            data = normalize_variations(data)
-        except ValueError as e:
-            return Response({"error": str(e)}, status=400)
+        # ✅ Reconstruire correctement les variations depuis FormData
+        variations = []
+        i = 0
+        while f"variations[{i}][sku]" in data:
+            variation = {
+                "sku": data.get(f"variations[{i}][sku]"),
+                "price": float(data.get(f"variations[{i}][price]", 0)) if data.get(f"variations[{i}][price]") else None,
+                "weight": data.get(f"variations[{i}][weight]"),
+                "stock": int(data.get(f"variations[{i}][stock]", 0)) if data.get(f"variations[{i}][stock]") else 0,
+            }
+            variations.append(variation)
+            i += 1
 
-        # Upload Cloudinary si image envoyée
+        data["variations"] = variations
+
+        # Upload image si envoyée
         if 'image' in request.FILES:
             try:
                 up = cloudinary.uploader.upload(
@@ -147,7 +189,7 @@ def product_create(request):
                 )
                 data['imageUrl'] = up.get('secure_url', '')
             except Exception as e:
-                logger.exception("Erreur Cloudinary (create)")
+                logger.exception("❌ Cloudinary create")
                 return Response({"error": f"Erreur Cloudinary: {e}"}, status=500)
 
         serializer = ProductSerializer(data=data)
@@ -155,11 +197,11 @@ def product_create(request):
             product = serializer.save()
             return Response(ProductSerializer(product).data, status=201)
 
-        logger.error(f"Validation errors (create) : {serializer.errors}")
+        logger.error(f"❌ Validation errors (create): {serializer.errors}")
         return Response(serializer.errors, status=400)
 
     except Exception as e:
-        logger.exception("Erreur lors de la création du produit")
+        logger.exception("❌ Erreur product_create")
         return Response({"error": "Erreur interne du serveur."}, status=500)
 
 
@@ -168,36 +210,33 @@ def product_create(request):
 @permission_classes([IsAdminUser])
 def product_update(request, pk):
     if not check_mongo_connection():
-        return Response({"error": "Base de données MongoDB non accessible."}, status=500)
+        return Response({"error": "DB non accessible."}, status=500)
+
+    if not ObjectId.is_valid(pk):
+        return Response({"error": "ID invalide."}, status=400)
+
+    existing = products_collection.find_one({"_id": ObjectId(pk)})
+    if not existing:
+        return Response({"error": "Produit non trouvé."}, status=404)
 
     try:
-        if not ObjectId.is_valid(pk):
-            return Response({"error": "ID invalide."}, status=400)
-
-        existing_product = products_collection.find_one({"_id": ObjectId(pk)})
-        if not existing_product:
-            return Response({"error": "Produit non trouvé."}, status=404)
-
         data = request.data.copy()
-        logger.info(f"[UPDATE] Données reçues : {data.keys()} | files: {list(request.FILES.keys())}")
+        logger.info(f"[UPDATE] Data reçue: {list(data.keys())}, Files: {list(request.FILES.keys())}")
 
-        # Normalisation des variations
+        # Variations
         try:
             data = normalize_variations(data)
         except ValueError as e:
             return Response({"error": str(e)}, status=400)
 
-        # Upload Cloudinary si nouvelle image envoyée
+        # Upload image si nouvelle envoyée
         if 'image' in request.FILES:
             try:
-                old_image_url = existing_product.get("imageUrl")
+                old_image_url = existing.get("imageUrl")
                 if old_image_url and "cloudinary" in old_image_url:
-                    try:
-                        old_public_id = old_image_url.split("/")[-1].split(".")[0]
-                        cloudinary.uploader.destroy(f"products/{old_public_id}")
-                        logger.info(f"Ancienne image supprimée (Cloudinary id: {old_public_id})")
-                    except Exception as e:
-                        logger.warning(f"Impossible de supprimer l'ancienne image : {e}")
+                    old_id = old_image_url.split("/")[-1].split(".")[0]
+                    cloudinary.uploader.destroy(f"products/{old_id}")
+                    logger.info(f"✅ Ancienne image supprimée (id: {old_id})")
 
                 up = cloudinary.uploader.upload(
                     request.FILES['image'],
@@ -207,57 +246,54 @@ def product_update(request, pk):
                 )
                 data['imageUrl'] = up.get('secure_url', '')
             except Exception as e:
-                logger.exception("Erreur Cloudinary (update)")
+                logger.exception("❌ Cloudinary update")
                 return Response({"error": f"Erreur Cloudinary: {e}"}, status=500)
 
-        serializer = ProductSerializer(instance=existing_product, data=data, partial=True)
+        serializer = ProductSerializer(instance=existing, data=data, partial=True)
         if serializer.is_valid():
-            updated_product = serializer.save()
-            return Response(ProductSerializer(updated_product).data, status=200)
+            updated = serializer.save()
+            return Response(ProductSerializer(updated).data, status=200)
 
-        logger.error(f"Validation errors (update) : {serializer.errors}")
+        logger.error(f"❌ Validation errors (update): {serializer.errors}")
         return Response(serializer.errors, status=400)
 
     except Exception as e:
-        logger.exception(f"Erreur lors de la mise à jour du produit {pk}")
+        logger.exception("❌ Erreur product_update")
         return Response({"error": "Erreur interne du serveur."}, status=500)
 
-# Suppression d'un produit (réservé aux admins)
+
+# --- DELETE ---
 @api_view(['DELETE'])
 @permission_classes([IsAdminUser])
 def product_delete(request, pk):
-    """Supprime un produit ainsi que son image Cloudinary si présente."""
     if not check_mongo_connection():
-        return Response({"error": "Base de données MongoDB non accessible."}, status=500)
+        return Response({"error": "DB non accessible."}, status=500)
+
+    if not ObjectId.is_valid(pk):
+        return Response({"error": "ID invalide."}, status=400)
+
+    product = products_collection.find_one({"_id": ObjectId(pk)})
+    if not product:
+        return Response({"error": "Produit non trouvé."}, status=404)
 
     try:
-        if not ObjectId.is_valid(pk):
-            return Response({"error": "ID invalide."}, status=400)
-
-        # Récupérer le produit avant suppression pour avoir l'image
-        product = products_collection.find_one({"_id": ObjectId(pk)})
-        if not product:
-            return Response({"error": "Produit non trouvé."}, status=404)
-
-        # Supprimer l'image Cloudinary si elle existe
+        # Supprimer image Cloudinary si présente
         image_url = product.get("imageUrl")
         if image_url and "cloudinary" in image_url:
             try:
-                # Récupérer public_id à partir de l'URL Cloudinary
                 public_id = image_url.split("/")[-1].split(".")[0]
                 cloudinary.uploader.destroy(f"products/{public_id}")
-                logger.info(f"Image Cloudinary supprimée (public_id: {public_id})")
+                logger.info(f"✅ Image supprimée (id: {public_id})")
             except Exception as e:
-                logger.warning(f"Impossible de supprimer l'image Cloudinary : {e}")
+                logger.warning(f"⚠️ Erreur suppression image: {e}")
 
-        # Supprimer le produit dans MongoDB
+        # Supprimer produit
         result = products_collection.delete_one({"_id": ObjectId(pk)})
         if result.deleted_count == 0:
-            return Response({"error": "Échec suppression du produit."}, status=500)
+            return Response({"error": "Échec suppression produit."}, status=500)
 
-        logger.info(f"Produit supprimé avec succès (ID: {pk})")
-        return Response({"message": "Produit supprimé avec succès."}, status=200)
+        return Response({"message": "✅ Produit supprimé."}, status=200)
 
     except Exception as e:
-        logger.error(f"Erreur lors de la suppression du produit {pk} : {e}")
+        logger.exception("❌ Erreur product_delete")
         return Response({"error": "Erreur interne du serveur."}, status=500)
