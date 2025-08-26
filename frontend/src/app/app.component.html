@@ -1,25 +1,35 @@
 <div class="wrapper">
 
-  <!--  CONTAINER POUR LE LOGO ET LE TITRE -->
-  <div class="container-header">
-    <a href="/" class="logo-container">
-      <img src="assets/images/logo.png" alt="Logo Nature & Animaux" class="logo-img">
-    </a>
-    <a href="/" class="site-title">Nature & Animaux</a>
-    <!--  SOUS-TITRE -->
-    <p class="site-subtitle">Votre animalerie itinérante</p>
-  </div>
+  <!--  En-tête principal du site -->
+  <header class="site-header" role="banner">
+    <div class="container-header">
+      <a href="/" class="logo-container" aria-label="Accueil Nature & Animaux">
+        <img src="assets/images/logo.png" alt="Logo Nature & Animaux" class="logo-img">
+      </a>
 
-  <!--  HEADER PRINCIPAL -->
-  <app-header></app-header>
+      <div class="title-container">
+        <h1 class="site-title">Nature & Animaux</h1>
+        <p class="site-subtitle">Votre animalerie itinérante</p>
+      </div>
+    </div>
 
-<!--  BARRE DES CATÉGORIES -->
-  <app-navbar></app-navbar>
+    <!--  Navigation principale -->
+    <app-header></app-header>
 
+    <!--  Navigation catégories -->
+    <nav aria-label="Catégories d’animaux">
+      <app-navbar></app-navbar>
+    </nav>
+  </header>
 
-  <!--  STRUCTURE PRINCIPALE -->
-  <main class="main-container">
+  <!--  Contenu principal -->
+  <main class="main-container" id="main-content" role="main" tabindex="-1">
     <router-outlet></router-outlet>
   </main>
 
-  <app-footer></app-footer>
+  <!--  Pied de page -->
+  <footer role="contentinfo">
+    <app-footer></app-footer>
+  </footer>
+
+</div>

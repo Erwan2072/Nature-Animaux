@@ -62,6 +62,19 @@ export const routes: Routes = [
     canActivate: [AdminGuard]
   },
 
+    //  Page Panier
+  {
+    path: 'cart',
+    loadComponent: () => import('./cart/cart.component').then(m => m.CartComponent)
+  },
+
+  //  Page Delivery (livraison) — on la branchera après
+  /**{
+    path: 'delivery',
+    loadComponent: () => import('./delivery/delivery.component').then(m => m.DeliveryComponent)
+  },**/
+
+
   //  Ajout des pages liées au footer avec lazy loading
   {
     path: 'terms',

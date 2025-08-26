@@ -1,39 +1,57 @@
-<div class="product-detail" *ngIf="product; else loadingOrError">
+<div class="product-detail" *ngIf="product; else loadingOrError" aria-labelledby="productTitle">
 
   <div class="product-top">
     <!-- Image produit -->
-    <img [src]="product.imageUrl?.trim() !== '' ? product.imageUrl : 'assets/default-product.jpg'"
-         [alt]="product.title || 'Produit sans titre'"
-         class="product-detail-image">
+    <img
+      [src]="product.imageUrl?.trim() !== '' ? product.imageUrl : 'assets/default-product.jpg'"
+      [alt]="product.title || 'Produit sans titre'"
+      class="product-detail-image"
+      loading="lazy"
+    />
 
     <!-- Infos produit -->
     <div class="product-info">
-      <h2>{{ product.title || 'Produit sans titre' }}</h2>
+      <h1 id="productTitle">{{ product.title || 'Produit sans titre' }}</h1>
 
       <!-- ✅ Prix de la variation sélectionnée -->
       <p *ngIf="getSelectedPrice() !== null" class="price">
-        Prix : {{ getSelectedPrice() }} €
+        Prix : <strong>{{ getSelectedPrice() | currency:'EUR':'symbol':'1.2-2' }}</strong>
       </p>
-      <p *ngIf="getSelectedPrice() === null" class="price">
-        Prix non disponible
-      </p>
+      <p *ngIf="getSelectedPrice() === null" class="price">Prix non disponible</p>
 
       <!-- Sélecteur poids -->
-      <label>Poids</label>
-      <select [(ngModel)]="selectedVariationId">
+      <label for="variation">Poids</label>
+      <select id="variation" [(ngModel)]="selectedVariationId">
         <option *ngFor="let variation of product.variations" [value]="variation.id">
-          {{ variation.weight }} - {{ variation.price }} €
+          {{ variation.weight }} - {{ variation.price | currency:'EUR':'symbol':'1.2-2' }}
         </option>
       </select>
 
       <!-- Quantité -->
-      <label>Quantité</label>
-      <input type="number" min="1" [(ngModel)]="quantity" />
+      <label for="quantity">Quantité</label>
+      <input
+        id="quantity"
+        type="number"
+        min="1"
+        [(ngModel)]="quantity"
+        inputmode="numeric"
+        aria-label="Choisir la quantité"
+      />
 
       <!-- Bouton -->
-      <button class="add-to-cart-btn" (click)="addToCart()">
-        Ajouter au panier 🛒
+      <button
+        class="add-to-cart-btn"
+        type="button"
+        (click)="addToCart()"
+        [disabled]="isAdding"
+        aria-label="Ajouter le produit au panier"
+      >
+        {{ isAdding ? 'Ajout en cours…' : 'Ajouter au panier 🛒' }}
       </button>
+
+      <!-- Toast feedback -->
+      <p class="toast success" *ngIf="toast?.type === 'success'">{{ toast?.msg }}</p>
+      <p class="toast error" *ngIf="toast?.type === 'error'">{{ toast?.msg }}</p>
     </div>
   </div>
 
@@ -43,11 +61,27 @@
   </p>
 
   <!-- Description longue formatée -->
-  <div class="long-description">
+  <div class="long-description" aria-label="Description du produit">
     <p [innerHTML]="formatDescription(product.description)"></p>
   </div>
 </div>
 
 <ng-template #loadingOrError>
-  <p>{{ errorMessage || 'Chargement du produit...' }}</p>
+  <p>{{ errorMessage || 'Chargement du produit…' }}</p>
 </ng-template>
+
+<!-- SEO : données structurées JSON-LD Produit -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org/",
+  "@type": "Product",
+  "name": "{{ product?.title || 'Produit' }}",
+  "sku": "{{ getSelectedVariation()?.sku || '' }}",
+  "offers": {
+    "@type": "Offer",
+    "price": "{{ getSelectedPrice() || '' }}",
+    "priceCurrency": "EUR",
+    "availability": "https://schema.org/InStock"
+  }
+}
+</script>

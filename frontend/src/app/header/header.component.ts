@@ -1,6 +1,7 @@
-import { Component, HostListener, ElementRef } from '@angular/core';
+import { Component, HostListener, ElementRef, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
+import { CartService } from '../services/cart.service'; // ✅ import du service panier
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -16,6 +17,9 @@ export class HeaderComponent {
   isAdmin = false;
   isDropdownOpen = false;
 
+  // ✅ compteur du panier (signal exposé par le CartService)
+  cartService = inject(CartService);
+
   constructor(private authService: AuthService, public router: Router, private eRef: ElementRef) {
     this.authService.user$.subscribe(user => {
       console.log("🔍 Utilisateur connecté :", user);
@@ -30,6 +34,9 @@ export class HeaderComponent {
         this.isAdmin = false;
       }
     });
+
+    // 🔄 Initialise le compteur du panier dès que le header est chargé
+    this.cartService.getCart().subscribe();
   }
 
   //  Récupérer les deux premières lettres de l'email
@@ -55,7 +62,6 @@ export class HeaderComponent {
       console.error("🚨 Accès refusé : l'utilisateur n'est pas admin");
     }
   }
-
 
   //  Ouvrir/fermer le menu déroulant
   toggleDropdown(): void {

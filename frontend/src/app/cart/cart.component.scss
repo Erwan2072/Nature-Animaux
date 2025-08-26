@@ -1,0 +1,138 @@
+/* ========= Thème Nature & Animaux (variables) ========= */
+:root {
+  --na-primary: #2e7d32; /* vert principal (AA sur fond clair) */
+  --na-primary-contrast: #ffffff;
+  --na-accent: #00695c; /* vert sapin / secondaire */
+  --na-ink: #102a43; /* texte principal */
+  --na-muted: #5c6c7b; /* texte secondaire */
+  --na-surface: #ffffff; /* cartes */
+  --na-surface-alt: #f5f7f8; /* fond doux */
+  --na-border: #d8e1e8; /* bordures */
+  --na-danger: #9d1c1c; /* suppression */
+  --na-focus: #0b5fff; /* focus visible AA */
+  --na-shadow: 0 2px 14px rgba(16, 42, 67, 0.08);
+}
+
+/* ========= Accessibilité / bases ========= */
+* { box-sizing: border-box; }
+.page-title { color: var(--na-ink); font-weight: 800; margin: 0 0 1rem; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; clip-path: inset(50%); }
+
+:focus-visible {
+  outline: 3px solid var(--na-focus);
+  outline-offset: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+/* ========= Layout ========= */
+.cart {
+  max-width: 1040px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.cart-list { display: grid; gap: 12px; }
+
+.cart-row {
+  display: grid;
+  grid-template-columns: 96px 1fr auto;
+  gap: 16px;
+  align-items: center;
+  background: var(--na-surface);
+  padding: 14px;
+  border-radius: 14px;
+  box-shadow: var(--na-shadow);
+  border: 1px solid var(--na-border);
+}
+
+.thumb,
+.thumb img,
+.thumb .thumb--placeholder {
+  width: 96px; height: 96px; border-radius: 10px;
+  object-fit: contain; background: var(--na-surface-alt);
+  border: 1px dashed var(--na-border);
+}
+
+.meta .title {
+  margin: 0 0 6px;
+  color: var(--na-ink);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.meta .unit {
+  display: flex; align-items: baseline; gap: 8px; margin-bottom: 10px;
+  .label { color: var(--na-muted); font-size: .95rem; }
+  .value { color: var(--na-ink); }
+}
+
+.qty {
+  display: flex; align-items: center; gap: 10px;
+  .q { min-width: 2ch; text-align: center; font-weight: 700; color: var(--na-ink); }
+}
+
+.line-total {
+  display: grid; justify-items: end; gap: 4px;
+  span { color: var(--na-muted); font-size: .95rem; }
+  strong { color: var(--na-ink); font-size: 1.06rem; }
+}
+
+/* ========= Summary ========= */
+.summary {
+  margin-top: 18px; background: var(--na-surface);
+  padding: 16px; border-radius: 14px; box-shadow: var(--na-shadow);
+  border: 1px solid var(--na-border);
+
+  .row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; color: var(--na-ink); }
+  .hint { color: var(--na-muted); margin: 4px 0 12px; font-size: .95rem; }
+  .actions { display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap; }
+}
+
+/* ========= Buttons ========= */
+.btn {
+  display: inline-block; padding: 10px 14px; border-radius: 10px; text-decoration: none;
+  font-weight: 700; border: 1px solid transparent;
+  transition: transform .05s ease, background .2s ease, border-color .2s ease, color .2s ease;
+
+  &.primary {
+    background: var(--na-primary); color: var(--na-primary-contrast);
+    &:hover { transform: translateY(-1px); }
+    &:active { transform: translateY(0); }
+  }
+
+  &.ghost {
+    background: var(--na-surface-alt); color: var(--na-ink); border-color: var(--na-border);
+    &:hover { background: #eef2f4; }
+  }
+
+  &.link {
+    background: transparent; border-color: transparent; color: var(--na-ink); padding: 0;
+    &.danger { color: var(--na-danger); }
+  }
+
+  &.icon {
+    background: var(--na-surface-alt); color: var(--na-ink); border-color: var(--na-border);
+    padding: 6px 12px; line-height: 1; font-size: 1.1rem;
+    &:disabled { opacity: .6; cursor: not-allowed; }
+  }
+}
+
+/* ========= Empty & Loading ========= */
+.empty, .loading { text-align: center; padding: 40px 0; color: var(--na-muted); }
+
+/* ========= Responsive ========= */
+@media (max-width: 768px) {
+  .cart-row {
+    grid-template-columns: 80px 1fr;
+    .thumb, .thumb img, .thumb .thumb--placeholder { width: 80px; height: 80px; }
+  }
+}
+
+@media (max-width: 480px) {
+  .cart { padding: 0 .75rem; }
+  .cart-row { grid-template-columns: 72px 1fr; }
+  .thumb, .thumb img, .thumb .thumb--placeholder { width: 72px; height: 72px; }
+  .btn { font-size: .95rem; }
+}

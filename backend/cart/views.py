@@ -1,0 +1,57 @@
+from rest_framework import permissions, status
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from django.shortcuts import get_object_or_404
+from .models import Cart, CartItem
+from .serializers import CartSerializer, CartItemCreateSerializer
+
+def _get_or_create_cart(request):
+    user = request.user if request.user.is_authenticated else None
+    sid = request.session.session_key or ""
+    if not request.session.session_key:
+        request.session.save()
+        sid = request.session.session_key
+    cart, _ = Cart.objects.get_or_create(user=user, session_id=sid)
+    return cart
+
+class CartDetailView(APIView):
+    permission_classes = [permissions.AllowAny]
+    def get(self, request):
+        cart = _get_or_create_cart(request)
+        return Response(CartSerializer(cart).data)
+
+class CartItemAddView(APIView):
+    permission_classes = [permissions.AllowAny]
+    def post(self, request):
+        cart = _get_or_create_cart(request)
+        s = CartItemCreateSerializer(data=request.data)
+        s.is_valid(raise_exception=True)
+        data = s.validated_data
+        item, created = CartItem.objects.get_or_create(
+            cart=cart, product_id=data["product_id"], variant_id=data["variant_id"],
+            defaults={
+                "product_title": data.get("product_title",""),
+                "unit_price": data["unit_price"],
+                "quantity": data["quantity"],
+                "image_url": data.get("image_url",""),
+            }
+        )
+        if not created:
+            item.quantity += data["quantity"]
+            item.save()
+        return Response({"id": item.id, "total_price": item.total_price}, status=status.HTTP_201_CREATED)
+
+class CartItemUpdateDeleteView(APIView):
+    permission_classes = [permissions.AllowAny]
+    def patch(self, request, pk: int):
+        cart = _get_or_create_cart(request)
+        item = get_object_or_404(CartItem, pk=pk, cart=cart)
+        q = int(request.data.get("quantity", item.quantity))
+        item.quantity = max(1, q)
+        item.save()
+        return Response({"id": item.id, "total_price": item.total_price})
+    def delete(self, request, pk: int):
+        cart = _get_or_create_cart(request)
+        item = get_object_or_404(CartItem, pk=pk, cart=cart)
+        item.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

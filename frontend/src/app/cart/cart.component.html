@@ -1,0 +1,112 @@
+<section class="cart" aria-labelledby="cartTitle" *ngIf="loaded(); else loading">
+  <h1 id="cartTitle" class="page-title">Mon panier</h1>
+
+  <ng-container *ngIf="items().length; else empty">
+    <div class="cart-list" role="list">
+      <article
+        class="cart-row"
+        role="listitem"
+        *ngFor="let it of items(); trackBy: trackById"
+      >
+        <div class="thumb" aria-hidden="true">
+          <img
+            *ngIf="it.image_url; else placeholder"
+            [src]="it.image_url"
+            [alt]="it.product_title"
+            loading="lazy"
+          />
+          <ng-template #placeholder>
+            <div class="thumb--placeholder" aria-hidden="true"></div>
+          </ng-template>
+        </div>
+
+        <div class="meta">
+          <h2 class="title">{{ it.product_title }}</h2>
+
+          <div class="unit">
+            <span class="label">Prix unitaire</span>
+            <strong class="value">
+              {{ it.unit_price | currency : 'EUR' : 'symbol' : '1.2-2' }}
+            </strong>
+          </div>
+
+          <div class="qty" role="group" [attr.aria-label]="'Quantité ' + it.product_title">
+            <button
+              class="btn icon"
+              type="button"
+              (click)="decr(it)"
+              [disabled]="optimisticQty(it) <= 1"
+              aria-label="Diminuer la quantité"
+            >
+              −
+            </button>
+            <output class="q" aria-live="polite">{{ optimisticQty(it) }}</output>
+            <button
+              class="btn icon"
+              type="button"
+              (click)="incr(it)"
+              aria-label="Augmenter la quantité"
+            >
+              +
+            </button>
+
+            <button
+              class="btn link danger"
+              type="button"
+              (click)="remove(it)"
+              aria-label="Supprimer l’article du panier"
+            >
+              Supprimer
+            </button>
+          </div>
+        </div>
+
+        <div class="line-total" aria-label="Total de la ligne">
+          <span>Total</span>
+          <strong>
+            {{ lineTotal(it) | currency : 'EUR' : 'symbol' : '1.2-2' }}
+          </strong>
+        </div>
+      </article>
+    </div>
+
+    <aside class="summary" aria-labelledby="summaryTitle">
+      <h2 id="summaryTitle" class="sr-only">Résumé du panier</h2>
+      <div class="row">
+        <span>Sous‑total</span>
+        <strong aria-live="polite">
+          {{ subtotal() | currency : 'EUR' : 'symbol' : '1.2-2' }}
+        </strong>
+      </div>
+      <p class="hint">Les frais de livraison seront calculés à l’étape suivante.</p>
+
+      <nav class="actions" aria-label="Actions du panier">
+        <a routerLink="/" class="btn ghost">Continuer mes achats</a>
+        <a routerLink="/delivery" class="btn primary">Passer la commande</a>
+      </nav>
+    </aside>
+  </ng-container>
+</section>
+
+<ng-template #empty>
+  <div class="empty">
+    <p>Votre panier est vide.</p>
+    <a routerLink="/" class="btn primary">Découvrir les produits</a>
+  </div>
+</ng-template>
+
+<ng-template #loading>
+  <div class="loading">Chargement du panier…</div>
+</ng-template>
+
+<!-- SEO: données structurées basiques (Breadcrumb) -->
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"BreadcrumbList",
+  "itemListElement":[
+    {"@type":"ListItem","position":1,"name":"Accueil","item":"https://www.natureetanimaux.fr/"},
+    {"@type":"ListItem","position":2,"name":"Panier","item":"https://www.natureetanimaux.fr/cart"}
+  ]
+}
+</script>

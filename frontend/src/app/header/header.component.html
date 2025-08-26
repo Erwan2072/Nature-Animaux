@@ -1,19 +1,29 @@
 <div class="nav-bar">
-	<div class="nav-right">
-	  <!--  Icônes Connexion et Panier -->
-	  <button (click)="router.navigate(['/cart'])" class="btn-cart">🛒</button>
-	  <button *ngIf="!isAuthenticated" (click)="router.navigate(['/login'])" class="btn">Connexion</button>
+  <div class="nav-right">
 
-	  <div *ngIf="isAuthenticated" class="dropdown">
-		<button class="btn profile-btn" (click)="toggleDropdown()">
-		  <span class="initials">{{ userInitials }}</span> ⏷
-		</button>
-		<ul class="dropdown-menu" [class.show]="isDropdownOpen">
-		  <li><button (click)="router.navigate(['/account'])"> Votre compte </button></li>
-		  <li><button (click)="router.navigate(['/orders'])"> Vos commandes</button></li>
-		  <li *ngIf="isAdmin"><button (click)="goToAdmin()"> Espace Admin</button></li>
-		  <li><button (click)="logout()"> Déconnexion</button></li>
-		</ul>
-	  </div>
-	</div>
+    <!--  Icône Panier avec badge -->
+    <button (click)="router.navigate(['/cart'])" class="btn-cart">
+      🛒
+      <span class="cart-badge" *ngIf="cartService.cartCount() > 0">
+        {{ cartService.cartCount() }}
+      </span>
+    </button>
+
+    <!--  Connexion -->
+    <button *ngIf="!isAuthenticated" (click)="router.navigate(['/login'])" class="btn">Connexion</button>
+
+    <!--  Profil utilisateur connecté -->
+    <div *ngIf="isAuthenticated" class="dropdown">
+      <button class="btn profile-btn" (click)="toggleDropdown()">
+        <span class="initials">{{ userInitials }}</span> ⏷
+      </button>
+      <ul class="dropdown-menu" [class.show]="isDropdownOpen">
+        <li><button (click)="router.navigate(['/account'])">Votre compte</button></li>
+        <li><button (click)="router.navigate(['/orders'])">Vos commandes</button></li>
+        <li *ngIf="isAdmin"><button (click)="goToAdmin()">Espace Admin</button></li>
+        <li><button (click)="logout()">Déconnexion</button></li>
+      </ul>
+    </div>
+
   </div>
+</div>

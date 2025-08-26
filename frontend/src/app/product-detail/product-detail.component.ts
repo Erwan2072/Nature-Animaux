@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ApiService } from '../services/api.service';
+import { CartService } from '../services/cart.service'; // 👈 import du panier
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms'; // Pour ngModel
 
@@ -16,8 +17,12 @@ export class ProductDetailComponent implements OnInit {
   errorMessage: string = '';
   selectedVariationId: string = ''; // ID de la variation sélectionnée (poids)
   quantity: number = 1; // Quantité sélectionnée
+  isAdding = false;
+  toast: { type: 'success' | 'error', msg: string } | null = null;
 
-  constructor(private route: ActivatedRoute, private apiService: ApiService) {}
+  private route = inject(ActivatedRoute);
+  private apiService = inject(ApiService);
+  private cartService = inject(CartService); // 👈 injection du panier
 
   ngOnInit(): void {
     const productId = this.route.snapshot.paramMap.get('id');
@@ -44,10 +49,7 @@ export class ProductDetailComponent implements OnInit {
   /** ✅ Renvoie le prix de la variation sélectionnée */
   getSelectedPrice(): number | null {
     const selectedVariation = this.getSelectedVariation();
-    if (selectedVariation && selectedVariation.price !== null && selectedVariation.price !== undefined) {
-      return selectedVariation.price;
-    }
-    return null;
+    return selectedVariation?.price ?? null;
   }
 
   /** Récupère la variation sélectionnée */
@@ -58,17 +60,34 @@ export class ProductDetailComponent implements OnInit {
   /** Ajoute au panier */
   addToCart(): void {
     const selectedVariation = this.getSelectedVariation();
-    if (selectedVariation) {
-      console.log(`✅ Ajouté au panier :`, {
-        productId: this.product.id,
-        title: this.product.title,
-        variation: selectedVariation,
-        quantity: this.quantity
-      });
-      // TODO : Intégration panier
-    } else {
+    if (!selectedVariation) {
       console.warn("❗ Aucune variation sélectionnée.");
+      return;
     }
+
+    const payload = {
+      product_id: this.product.id,  //garder en string (Mongo ObjectId)
+      variant_id: selectedVariation.id, // idem, laisse string si c’est un sku
+      quantity: this.quantity,
+      unit_price: selectedVariation.price,
+      product_title: `${this.product.title} - ${selectedVariation.label ?? ''}`,
+      image_url: this.product.imageUrl || ''
+    };
+
+
+    this.isAdding = true;
+    this.cartService.addItem(payload).subscribe({
+      next: () => {
+        this.isAdding = false;
+        this.toast = { type: 'success', msg: 'Produit ajouté au panier ✅' };
+        setTimeout(() => this.toast = null, 2000);
+      },
+      error: (err) => {
+        this.isAdding = false;
+        console.error('Erreur ajout panier', err);
+        this.toast = { type: 'error', msg: 'Erreur lors de l’ajout au panier ❌' };
+      }
+    });
   }
 
   /** Mise en forme de la description */

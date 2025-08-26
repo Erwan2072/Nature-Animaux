@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     # Applications internes
     'products',
     'users',
+    'cart',
     'cloudinary',
     'cloudinary_storage',
 ]
