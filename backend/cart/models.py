@@ -1,3 +1,4 @@
+import uuid
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
@@ -29,3 +30,23 @@ class CartItem(models.Model):
     @property
     def total_price(self):
         return self.unit_price * self.quantity
+
+# Nouveau modèle pour choix de livraison
+class DeliveryChoice(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    cart = models.OneToOneField(Cart, on_delete=models.CASCADE, related_name="delivery_choice")
+    mode = models.CharField(
+        max_length=100,
+        choices=[
+            ("retrait", "Retrait au dépôt"),
+            ("livraison", "Livraison standard"),
+            ("mondial_relay", "Mondial Relay"),
+            ("ups", "UPS"),
+            ("colissimo", "Colissimo"),
+        ],
+        default="retrait"
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.cart} - {self.mode}"
