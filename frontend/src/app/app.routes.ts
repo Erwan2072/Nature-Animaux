@@ -69,10 +69,10 @@ export const routes: Routes = [
   },
 
   //  Page Delivery (livraison) — on la branchera après
-  /**{
+  {
     path: 'delivery',
     loadComponent: () => import('./delivery/delivery.component').then(m => m.DeliveryComponent)
-  },**/
+  },
 
 
   //  Ajout des pages liées au footer avec lazy loading

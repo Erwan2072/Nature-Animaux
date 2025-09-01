@@ -209,3 +209,8 @@ SECURE_SSL_REDIRECT = not DEBUG
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 CSRF_COOKIE_HTTPONLY = True
+
+# Boxtal API configuration
+BOXTAL_CLIENT_ID = env("BOXTAL_CLIENT_ID", default="")
+BOXTAL_CLIENT_SECRET = env("BOXTAL_CLIENT_SECRET", default="")
+BOXTAL_BASE_URL = env("BOXTAL_BASE_URL", default="https://api.boxtal.build")

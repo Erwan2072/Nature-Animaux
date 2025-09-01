@@ -1,0 +1,80 @@
+<div class="delivery-container">
+  <h2 id="delivery-title">Choisir un mode de livraison</h2>
+
+  <!-- Description pour l’accessibilité -->
+  <p id="delivery-description">
+    Sélectionnez un transporteur pour votre commande. Les frais varient en fonction du poids.
+  </p>
+
+  <!-- Liste des transporteurs -->
+  <form aria-labelledby="delivery-title delivery-description">
+    <fieldset>
+      <legend class="sr-only">Options de livraison</legend>
+
+      <div 
+        class="delivery-option" 
+        *ngFor="let option of deliveryOptions"
+      >
+        <label [for]="'delivery-' + option.mode">
+          <input
+            type="radio"
+            name="delivery"
+            [id]="'delivery-' + option.mode"
+            [(ngModel)]="selectedDelivery"
+            [value]="option.mode"
+            [attr.aria-checked]="selectedDelivery === option.mode"
+            [attr.aria-label]="option.label + ', ' + (option.fees | currency:'EUR')"
+          />
+          <span class="label">{{ option.label }}</span>
+          <span class="price">{{ option.fees | currency:'EUR' }}</span>
+        </label>
+      </div>
+    </fieldset>
+  </form>
+
+  <!-- Résumé de la commande -->
+  <section 
+    class="delivery-summary" 
+    aria-labelledby="summary-title"
+  >
+    <h3 id="summary-title">Résumé de la commande</h3>
+
+    <p>
+      Sous-total articles : 
+      <strong aria-live="polite">{{ subtotal() | currency:'EUR' }}</strong>
+    </p>
+
+    <p *ngIf="selectedDelivery">
+      Frais de livraison : 
+      <strong aria-live="polite">{{ getSelectedFees() | currency:'EUR' }}</strong>
+    </p>
+
+    <p class="total" *ngIf="selectedDelivery">
+      Total à payer : 
+      <strong aria-live="polite">{{ (subtotal() + getSelectedFees()) | currency:'EUR' }}</strong>
+    </p>
+  </section>
+
+  <!-- Actions -->
+  <nav class="delivery-actions" aria-label="Navigation livraison">
+    <button 
+      type="button"
+      routerLink="/cart" 
+      class="btn btn-secondary"
+      aria-label="Retour au panier"
+    >
+      ⬅ Retour au panier
+    </button>
+
+    <button
+      type="button"
+      class="btn btn-primary"
+      [disabled]="!selectedDelivery"
+      (click)="confirmDelivery()"
+      [attr.aria-disabled]="!selectedDelivery"
+      aria-label="Continuer vers le paiement"
+    >
+      Continuer vers le paiement ➡
+    </button>
+  </nav>
+</div>

@@ -1,10 +1,14 @@
 from rest_framework import generics, status
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.views import APIView
 from .models import DeliveryChoice
 from .serializers import DeliveryChoiceSerializer
 from orders.models import Order
+from cart.models import Cart, CartItem
+from products.models import Product
 from decimal import Decimal
+from bson import ObjectId
 
 
 class DeliveryChoiceView(generics.CreateAPIView):
@@ -61,3 +65,98 @@ class DeleteDeliveryChoiceView(generics.DestroyAPIView):
     serializer_class = DeliveryChoiceSerializer
     permission_classes = [IsAuthenticated]
     queryset = DeliveryChoice.objects.all()
+
+
+# ----------------------------
+# 🚚 Mock dynamique du calcul livraison
+# ----------------------------
+class MockDeliveryOptionsView(APIView):
+    """
+    Retourne :
+    - le sous-total du panier,
+    - le poids total,
+    - le détail des articles (id, titre, quantité, prix unitaire, total, poids),
+    - et les frais de livraison mockés (Colissimo, Mondial Relay, Chronopost).
+    """
+
+    permission_classes = [AllowAny]
+
+    def get(self, request, *args, **kwargs):
+        # 🔹 Récupérer le panier (session ou user)
+        user = request.user if request.user.is_authenticated else None
+        sid = request.session.session_key or ""
+        if not request.session.session_key:
+            request.session.save()
+            sid = request.session.session_key
+
+        cart, _ = Cart.objects.get_or_create(user=user, session_id=sid)
+
+        # 🔹 Calcul du poids total + détails articles
+        total_weight = 0
+        items_detail = []
+
+        for item in cart.items.all():
+            # Valeur par défaut
+            weight = float(item.weight) if item.weight else 0
+
+            # Vérifier côté Mongo si dispo
+            product = Product.find(item.product_id)
+            if product:
+                variation = next(
+                    (v for v in product.variations if v.get("sku") == item.variant_id),
+                    None
+                )
+                if variation and "weight" in variation:
+                    weight = float(variation["weight"])
+
+            total_weight += weight * item.quantity
+
+            items_detail.append({
+                "id": item.id,
+                "product_id": item.product_id,
+                "variant_id": item.variant_id,
+                "title": item.product_title,
+                "unit_price": float(item.unit_price),
+                "quantity": item.quantity,
+                "total_price": float(item.total_price),
+                "weight": weight,
+            })
+
+        if total_weight == 0:
+            total_weight = 1  # fallback si aucun poids trouvé
+
+        # 🔹 Sous-total
+        subtotal = float(cart.subtotal)
+
+        # 🔹 Tarifs mockés
+        def colissimo_price(w):
+            if w <= 5: return 6.50
+            if w <= 10: return 8.50
+            if w <= 20: return 12.00
+            return 18.00
+
+        def mondial_relay_price(w):
+            if w <= 5: return 4.90
+            if w <= 10: return 6.90
+            if w <= 20: return 9.50
+            return 14.00
+
+        def chronopost_price(w):
+            if w <= 5: return 9.90
+            if w <= 10: return 12.90
+            if w <= 20: return 18.90
+            return 25.00
+
+        options = [
+            {"mode": "colissimo", "label": "Colissimo", "fees": colissimo_price(total_weight)},
+            {"mode": "mondial_relay", "label": "Mondial Relay", "fees": mondial_relay_price(total_weight)},
+            {"mode": "chronopost", "label": "Chronopost", "fees": chronopost_price(total_weight)},
+        ]
+
+        # 🔹 Réponse finale
+        return Response({
+            "subtotal": subtotal,
+            "total_weight": total_weight,
+            "items": items_detail,
+            "options": options
+        })

@@ -42,6 +42,7 @@ class CartItemAddView(APIView):
                 "unit_price": data["unit_price"],
                 "quantity": data["quantity"],
                 "image_url": data.get("image_url", ""),
+                "weight": data.get("weight", 0),
             }
         )
         if not created:
@@ -49,7 +50,7 @@ class CartItemAddView(APIView):
             item.save()
 
         return Response(
-            {"id": item.id, "total_price": item.total_price},
+            {"id": item.id, "total_price": item.total_price, "weight": item.weight},
             status=status.HTTP_201_CREATED
         )
 
@@ -101,3 +102,4 @@ class CartDeliveryView(APIView):
         cart.save()
 
         return Response(CartSerializer(cart).data, status=status.HTTP_200_OK)
+    
