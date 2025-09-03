@@ -1,9 +1,9 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ApiService } from '../services/api.service';
-import { CartService } from '../services/cart.service'; // 👈 import du panier
+import { CartService } from '../services/cart.service'; 
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms'; // Pour ngModel
+import { FormsModule } from '@angular/forms'; 
 
 @Component({
   selector: 'app-product-detail',
@@ -22,7 +22,7 @@ export class ProductDetailComponent implements OnInit {
 
   private route = inject(ActivatedRoute);
   private apiService = inject(ApiService);
-  private cartService = inject(CartService); // 👈 injection du panier
+  private cartService = inject(CartService); // injection du panier
 
   ngOnInit(): void {
     const productId = this.route.snapshot.paramMap.get('id');
@@ -46,7 +46,7 @@ export class ProductDetailComponent implements OnInit {
     }
   }
 
-  /** ✅ Renvoie le prix de la variation sélectionnée */
+  /** Renvoie le prix de la variation sélectionnée */
   getSelectedPrice(): number | null {
     const selectedVariation = this.getSelectedVariation();
     return selectedVariation?.price ?? null;

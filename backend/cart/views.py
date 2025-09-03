@@ -33,6 +33,21 @@ class CartItemAddView(APIView):
         s.is_valid(raise_exception=True)
         data = s.validated_data
 
+        # ⚡ Récupérer le poids
+        weight = data.get("weight", 0)
+
+        if not weight or weight == 0:
+            from products.models import Product
+            product = Product.find(data["product_id"])
+            if product:
+                variation = next(
+                    (v for v in product.variations if v.get("sku") == data["variant_id"]),
+                    None
+                )
+                if variation and "weight" in variation:
+                    weight = float(variation["weight"])
+
+        # ⚡ Création ou update de l’item
         item, created = CartItem.objects.get_or_create(
             cart=cart,
             product_id=data["product_id"],
@@ -42,11 +57,12 @@ class CartItemAddView(APIView):
                 "unit_price": data["unit_price"],
                 "quantity": data["quantity"],
                 "image_url": data.get("image_url", ""),
-                "weight": data.get("weight", 0),
+                "weight": weight,  # poids réel
             }
         )
         if not created:
             item.quantity += data["quantity"]
+            item.weight = weight  # mettre à jour si nécessaire
             item.save()
 
         return Response(

@@ -96,18 +96,22 @@ class MockDeliveryOptionsView(APIView):
         items_detail = []
 
         for item in cart.items.all():
-            # Valeur par défaut
+            # Valeur par défaut → poids du CartItem
             weight = float(item.weight) if item.weight else 0
 
-            # Vérifier côté Mongo si dispo
-            product = Product.find(item.product_id)
-            if product:
-                variation = next(
-                    (v for v in product.variations if v.get("sku") == item.variant_id),
-                    None
-                )
-                if variation and "weight" in variation:
-                    weight = float(variation["weight"])
+            print(f"🛒 Item: {item.product_title} | Qty={item.quantity} | Poids enregistré={item.weight}")
+
+            # Si pas de poids dans le CartItem, tenter côté Mongo
+            if weight == 0:
+                product = Product.find(item.product_id)
+                if product:
+                    variation = next(
+                        (v for v in product.variations if v.get("sku") == item.variant_id),
+                        None
+                    )
+                    if variation and "weight" in variation:
+                        weight = float(variation["weight"])
+                        print(f"👉 Fallback Mongo trouvé : {weight}")
 
             total_weight += weight * item.quantity
 
@@ -121,6 +125,8 @@ class MockDeliveryOptionsView(APIView):
                 "total_price": float(item.total_price),
                 "weight": weight,
             })
+
+        print(f"📦 TOTAL WEIGHT calculé = {total_weight}")
 
         if total_weight == 0:
             total_weight = 1  # fallback si aucun poids trouvé
@@ -152,6 +158,10 @@ class MockDeliveryOptionsView(APIView):
             {"mode": "mondial_relay", "label": "Mondial Relay", "fees": mondial_relay_price(total_weight)},
             {"mode": "chronopost", "label": "Chronopost", "fees": chronopost_price(total_weight)},
         ]
+
+        print("📦 Poids total calculé :", total_weight)
+        print("🛒 Subtotal :", subtotal)
+
 
         # 🔹 Réponse finale
         return Response({

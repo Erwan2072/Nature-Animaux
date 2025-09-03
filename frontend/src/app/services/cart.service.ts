@@ -26,6 +26,7 @@ export interface AddItemPayload {
   unit_price: number;
   product_title?: string;
   image_url?: string;
+  weight?: number;
 }
 export interface AddItemResponse {
   id: number;

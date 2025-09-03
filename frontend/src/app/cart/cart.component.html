@@ -1,4 +1,4 @@
-<section class="cart" aria-labelledby="cartTitle" *ngIf="loaded(); else loading">
+<section class="cart" aria-labelledby="cartTitle" role="region" *ngIf="loaded(); else loading">
   <h1 id="cartTitle" class="page-title">Mon panier</h1>
 
   <ng-container *ngIf="items().length; else empty">
@@ -12,7 +12,7 @@
           <img
             *ngIf="it.image_url; else placeholder"
             [src]="it.image_url"
-            [alt]="it.product_title"
+            [alt]="it.product_title || 'Image du produit'"
             loading="lazy"
           />
           <ng-template #placeholder>
@@ -21,7 +21,7 @@
         </div>
 
         <div class="meta">
-          <h2 class="title">{{ it.product_title }}</h2>
+          <h2 class="title" id="title-{{it.id}}">{{ it.product_title }}</h2>
 
           <div class="unit">
             <span class="label">Prix unitaire</span>
@@ -36,16 +36,25 @@
               type="button"
               (click)="decr(it)"
               [disabled]="optimisticQty(it) <= 1"
-              aria-label="Diminuer la quantité"
+              [attr.aria-label]="'Diminuer la quantité de ' + it.product_title"
+              [attr.aria-controls]="'qty-' + it.id"
             >
               −
             </button>
-            <output class="q" aria-live="polite">{{ optimisticQty(it) }}</output>
+            <output 
+              class="q" 
+              [id]="'qty-' + it.id" 
+              aria-live="polite" 
+              role="status"
+            >
+              {{ optimisticQty(it) }}
+            </output>
             <button
               class="btn icon"
               type="button"
               (click)="incr(it)"
-              aria-label="Augmenter la quantité"
+              [attr.aria-label]="'Augmenter la quantité de ' + it.product_title"
+              [attr.aria-controls]="'qty-' + it.id"
             >
               +
             </button>
@@ -54,7 +63,8 @@
               class="btn link danger"
               type="button"
               (click)="remove(it)"
-              aria-label="Supprimer l’article du panier"
+              [attr.aria-label]="'Supprimer ' + it.product_title + ' du panier'"
+              [attr.aria-describedby]="'title-' + it.id"
             >
               Supprimer
             </button>
@@ -70,33 +80,33 @@
       </article>
     </div>
 
-    <aside class="summary" aria-labelledby="summaryTitle">
+    <aside class="summary" aria-labelledby="summaryTitle" role="region">
       <h2 id="summaryTitle" class="sr-only">Résumé du panier</h2>
       <div class="row">
-        <span>Sous‑total</span>
-        <strong aria-live="polite">
+        <span>Sous-total</span>
+        <output aria-live="polite" role="status">
           {{ subtotal() | currency : 'EUR' : 'symbol' : '1.2-2' }}
-        </strong>
+        </output>
       </div>
       <p class="hint">Les frais de livraison seront calculés à l’étape suivante.</p>
 
       <nav class="actions" aria-label="Actions du panier">
-        <a routerLink="/" class="btn ghost">Continuer mes achats</a>
-        <a routerLink="/delivery" class="btn primary">Passer la commande</a>
+        <a routerLink="/" class="btn ghost" aria-label="Continuer mes achats sur la boutique">Continuer mes achats</a>
+        <a routerLink="/delivery" class="btn primary" aria-label="Passer à la livraison et au paiement">Passer la commande</a>
       </nav>
     </aside>
   </ng-container>
 </section>
 
 <ng-template #empty>
-  <div class="empty">
+  <div class="empty" role="status" aria-live="polite">
     <p>Votre panier est vide.</p>
-    <a routerLink="/" class="btn primary">Découvrir les produits</a>
+    <a routerLink="/" class="btn primary" aria-label="Découvrir les produits et commencer mes achats">Découvrir les produits</a>
   </div>
 </ng-template>
 
 <ng-template #loading>
-  <div class="loading">Chargement du panier…</div>
+  <div class="loading" role="status" aria-live="polite">Chargement du panier…</div>
 </ng-template>
 
 <!-- SEO: données structurées basiques (Breadcrumb) -->
