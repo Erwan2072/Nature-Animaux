@@ -1,20 +1,26 @@
 import { Component, ChangeDetectionStrategy, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, FormsModule],
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NavbarComponent {
   activeMenu: string | null = null;
-  burgerMenuOpen: boolean = false; //  Gestion du menu burger
+  burgerMenuOpen: boolean = false;
 
-  //  Définition des catégories dynamiques
+  // 🔹 Champ lié à la recherche
+  searchTerm: string = '';
+
+  constructor(private router: Router) {}
+
+  // Catégories
   animals = [
     {
       name: 'chien',
@@ -78,44 +84,52 @@ export class NavbarComponent {
     }
   ];
 
-  //  Ouvre ou ferme le menu déroulant des catégories
+  /** 🔹 Ouvrir/fermer un sous-menu (desktop + mobile) */
   toggleMenu(category: string) {
-    if (this.burgerMenuOpen) {
-      //  Mode mobile : Affiche le sous-menu dans le menu burger
-      this.activeMenu = this.activeMenu === category ? null : category;
-    } else {
-      //  Mode desktop : Affiche le sous-menu au survol/clic
-      this.activeMenu = this.activeMenu === category ? null : category;
-    }
+    // ouvre ou ferme le menu choisi
+    this.activeMenu = this.activeMenu === category ? null : category;
   }
 
-  //  Ferme les menus déroulants ET le menu burger quand on clique sur une sous-catégorie
+
+  /** 🔹 Fermer tout */
   closeMenu() {
     this.activeMenu = null;
-    this.burgerMenuOpen = false; //  Ferme aussi le menu burger
+    this.burgerMenuOpen = false;
   }
 
-  //  Gère l'affichage du menu burger
+  /** 🔹 Ouvrir/fermer le burger */
   toggleBurgerMenu() {
     this.burgerMenuOpen = !this.burgerMenuOpen;
     if (!this.burgerMenuOpen) {
-      this.activeMenu = null; //  Ferme les sous-menus si on ferme le burger
+      this.activeMenu = null;
     }
   }
 
-  //  Ferme les menus quand on clique en dehors (uniquement si le clic est à l'extérieur du menu)
+  /** 🔹 Fermer quand on clique à l’extérieur */
   @HostListener('document:click', ['$event'])
   onClickOutside(event: Event) {
     const target = event.target as HTMLElement;
-
-    // Vérifie si l'élément cliqué est DANS un menu, un bouton burger ou un sous-menu
     if (
-      !target.closest('.category-item') &&
+      !target.closest('.animal-btn') &&   // ✅ mobile
+      !target.closest('.category-btn') && // ✅ desktop
+      !target.closest('.subcategory-btn') && // ✅ sous-catégories
       !target.closest('.burger-icon') &&
       !target.closest('.burger-menu')
     ) {
-      this.activeMenu = null;
-      this.burgerMenuOpen = false;
+      this.closeMenu();
+    }
+  }
+
+  /** 🔹 Sélection d’une sous-catégorie */
+  selectCategory(animal: string, category: string): void {
+    this.router.navigate(['/products'], { queryParams: { animal, category } });
+    this.closeMenu();
+  }
+
+  /** 🔹 Recherche */
+  onSearch(): void {
+    if (this.searchTerm.trim() !== '') {
+      this.router.navigate(['/products'], { queryParams: { search: this.searchTerm } });
     }
   }
 }

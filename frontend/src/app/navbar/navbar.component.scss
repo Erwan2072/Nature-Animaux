@@ -1,12 +1,14 @@
 @use "sass:color";
 
-/*  Définition des couleurs locales */
+/* 🎨 Définition des couleurs locales */
 $primary-color: #8BC34A;
 $secondary-color: #ffcdce;
 $background-gradient: linear-gradient(to bottom, rgb(131, 240, 198), #9AD9E2);
 $text-color: #333;
 
-/*  CONTENEUR DES CATÉGORIES */
+/* ============================
+   BARRE CATÉGORIES (DESKTOP)
+   ============================ */
 .category-bar {
   position: fixed;
   top: 60px;
@@ -23,7 +25,6 @@ $text-color: #333;
   border-radius: 20px;
 }
 
-/*  Ajuste la barre pour mobile */
 @media screen and (max-width: 768px) {
   .category-bar {
     top: 120px;
@@ -32,7 +33,7 @@ $text-color: #333;
   }
 }
 
-/*  STYLE DES BOUTONS DES CATÉGORIES */
+/* Boutons catégories desktop */
 .category-item {
   position: relative;
   display: inline-block;
@@ -59,8 +60,7 @@ $text-color: #333;
   box-shadow: 6px 6px 0px $secondary-color;
 }
 
-
-/*  Affichage du menu quand actif */
+/* Dropdown desktop */
 .category-item:hover .dropdown,
 .category-item:focus-within .dropdown {
   opacity: 1;
@@ -68,84 +68,67 @@ $text-color: #333;
   pointer-events: auto;
 }
 
-/*  STYLE DU MENU DÉROULANT */
 .dropdown {
-	position: absolute;
-	top: 170%;
-	left: 0;
-	background: $secondary-color; /* Rose pastel */
-	border: 2px solid $primary-color; /*  Liseré vert */
-	border-radius: 10px;
-	box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-	display: flex;
-	flex-direction: column;
-	padding: 10px;
-	z-index: 100;
-	min-width: 150px; /*  Ajuste la largeur minimale */
-	width: 150%; /*  Fait en sorte que le menu s'adapte à la largeur du parent */
-  }
-
- /*  Boutons à l'intérieur du menu */
-.dropdown a {
-	display: flex; /*  Permet un bon alignement */
-	align-items: center; /*  Centre verticalement */
-	justify-content: center; /*  Centre horizontalement */
-	text-decoration: none;
-	color: #310000;
-	font-weight: bold;
-	background-color: $secondary-color;
-	padding: 10px 15px;
-	text-align: center;
-	width: 100%; /*  Remplit toute la largeur du menu */
-	border: 0.2px solid $primary-color; /*  Liseré vert */
-	white-space: nowrap; /*  Empêche le texte de passer à la ligne */
-	overflow: hidden; /*  Cache tout débordement */
-	text-overflow: ellipsis; /*  Ajoute "..." si le texte dépasse */
-	box-sizing: border-box; /*  Évite que le padding ne casse l'alignement */
-  }
-
-  /*  Ajustement pour s'assurer que le texte ne se coupe pas */
-  .dropdown {
-	min-width: 180px; /*  Ajuste la largeur minimale du menu */
-	width: auto; /*  Adapte la largeur au texte */
-  }
-
-  .dropdown a:not(:last-child) {
-	border-bottom: 1px solid color.adjust($primary-color, $lightness: -10%); /*  Fine ligne entre les éléments */
-  }
-
-  .dropdown a:hover {
-	background-color: $primary-color;
-	color: #310000;
-  }
-
-  /*  STYLE DE LA BARRE DE RECHERCHE */
-.category-search {
-	padding: 8px 15px;
-	border-radius: 20px;
-	border: 2px solid color.adjust($primary-color, $lightness: -10%);
-	background-color: $secondary-color;
-	font-size: 1rem;
-	outline: none;
-	width: 180px;
-	box-shadow: 4px 4px 0px $primary-color;
-  }
-
-  .category-search::placeholder {
-	color: #555;
-	font-style: italic;
-  }
-
-
-/*MENU BURGER*/
-/*  Cache la category-bar sur mobile */
-@media screen and (max-width: 1024px) {
-  .category-bar {
-    display: none;
-  }
+  position: absolute;
+  top: 110%;
+  left: 0;
+  background: $secondary-color;
+  border: 2px solid $primary-color;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  z-index: 100;
+  min-width: 180px;
+  width: auto;
 }
 
-/*  Icône du menu burger */
+.dropdown .subcategory-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: #310000;
+  font-weight: bold;
+  background-color: $secondary-color;
+  padding: 10px 15px;
+  text-align: center;
+  width: 100%;
+  border: 0.2px solid $primary-color;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-sizing: border-box;
+}
+
+.dropdown .subcategory-btn:hover {
+  background-color: $primary-color;
+  color: #310000;
+}
+
+/* Barre recherche */
+.category-search {
+  padding: 8px 15px;
+  border-radius: 20px;
+  border: 2px solid color.adjust($primary-color, $lightness: -10%);
+  background-color: $secondary-color;
+  font-size: 1rem;
+  outline: none;
+  width: 180px;
+  box-shadow: 4px 4px 0px $primary-color;
+}
+
+.category-search::placeholder {
+  color: #555;
+  font-style: italic;
+}
+
+/* ============================
+   MENU BURGER (MOBILE/TABLET)
+   ============================ */
+
+/* Icône burger */
 .burger-icon {
   position: fixed;
   top: 90px;
@@ -154,152 +137,127 @@ $text-color: #333;
   height: 50px;
   background-color: $primary-color;
   border-radius: 5px;
-  display: flex;
+  display: none;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   cursor: pointer;
   z-index: 3100;
+
+  div {
+    width: 30px;
+    height: 4px;
+    background-color: #310000;
+    margin: 5px 0;
+    transition: all 0.3s ease-in-out;
+  }
+
+  &.open div:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+  }
+  &.open div:nth-child(2) {
+    opacity: 0;
+  }
+  &.open div:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+  }
 }
 
-.burger-icon div {
-  width: 30px;
-  height: 4px;
-  background-color: #310000;
-  margin: 5px 0;
-  transition: all 0.3s ease-in-out;
-}
-
-/*  Transforme l'icône en croix quand le menu est ouvert */
-.burger-icon.open div:nth-child(1) {
-  transform: translateY(8px) rotate(45deg);
-}
-
-.burger-icon.open div:nth-child(2) {
-  opacity: 0;
-}
-
-.burger-icon.open div:nth-child(3) {
-  transform: translateY(-8px) rotate(-45deg);
-}
-
-/*  Menu burger */
+/* Menu burger container */
 .burger-menu {
   position: fixed;
   top: 0;
-  right: -100%; /* Caché par défaut */
+  right: -100%;
   width: 70%;
-  max-width: 300px;
+  max-width: 320px;
   height: 100vh;
   background-color: rgba(50, 50, 50, 0.95);
-  box-shadow: -5px 0px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: -5px 0px 10px rgba(0, 0, 0, 0.3);
   transition: right 0.3s ease-in-out;
-  display: flex;
   flex-direction: column;
-  align-items: flex-start;
   padding: 20px;
   z-index: 3000;
-  overflow-y: auto; /*  Permet de scroller si le menu devient trop long */
+  overflow-y: auto;
+
+  &.open {
+    right: 0;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 60px 0 0;
+    width: 100%;
+
+    li {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 10px;
+
+      /* Boutons principaux (animaux) */
+      .animal-btn {
+        background-color: $primary-color;
+        color: #310000;
+        font-weight: bold;
+        font-style: italic;
+        border: 2px solid color.adjust($primary-color, $lightness: -10%);
+        padding: 10px 15px;
+        border-radius: 8px;
+        cursor: pointer;
+        text-align: left;
+        transition: all 0.3s ease-in-out;
+        width: 100%;
+
+        &:hover {
+          background-color: color.adjust($primary-color, $lightness: -10%);
+          color: white;
+        }
+      }
+
+      /* Sous-menu (Angular gère l’affichage avec *ngIf) */
+      .dropdown {
+        flex-direction: column;
+        margin-top: 5px;
+        background: $secondary-color;
+        border: 2px solid $primary-color;
+        border-radius: 8px;
+        padding: 5px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+
+        button {
+          background-color: $secondary-color;
+          border: none;
+          padding: 10px;
+          font-weight: bold;
+          color: #310000;
+          text-align: left;
+          cursor: pointer;
+          border-bottom: 1px solid color.adjust($primary-color, $lightness: -10%);
+          transition: background 0.3s ease-in-out;
+
+          &:hover {
+            background-color: $primary-color;
+            color: white;
+          }
+
+          &:last-child {
+            border-bottom: none;
+          }
+        }
+      }
+    }
+  }
 }
 
-/*  Le menu s'affiche quand ouvert */
-.burger-menu.open {
-  right: 0;
-}
-
-/*  Style des catégories principales (Animaux) dans le menu burger */
-.burger-menu ul {
-  list-style: none;
-  padding: 0;
-  margin: 50px 0 0;
-  width: 100%;
-}
-
-.burger-menu ul li {
-  width: 100%;
-  text-align: left;
-  padding: 10px;
-}
-
-/*  Style des catégories principales (Animaux) */
-.burger-menu ul li a {
-  color: white !important; /*  Texte en blanc */
-  font-weight: bold;
-  text-decoration: none;
-  padding: 12px 15px;
-  display: block;
-  transition: background 0.3s ease-in-out, color 0.3s ease-in-out;
-  border-radius: 5px;
-}
-
-/*  Changement de couleur au survol */
-.burger-menu ul li a:hover,
-.burger-menu ul li.active > a {
-  background-color: $primary-color; /*  Fond vert */
-  color: #310000 !important; /*  Texte marron pour contraste */
-}
-
-/*  Affiche les sous-menus dans le menu burger */
-.burger-menu .category-item {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
-/*  Sous-menu (Catégories) */
-.burger-menu .dropdown {
-  display: none; /* Caché par défaut */
-  background: $secondary-color;
-  border: 2px solid $primary-color;
-  border-radius: 10px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-  padding: 5px;
-  width: 100%;
-}
-
-/*  Affichage du sous-menu quand actif */
-.burger-menu .category-item.active .dropdown {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-}
-
-/*  Ajuste le style des liens dans les sous-menus */
-.burger-menu .dropdown a {
-  display: block;
-  padding: 10px 15px;
-  color: #310000;
-  font-weight: bold;
-  text-align: left;
-  text-decoration: none;
-  border-bottom: 1px solid color.adjust($primary-color, $lightness: -10%);
-}
-
-/*  Survol des sous-catégories */
-.burger-menu .dropdown a:hover {
-  background-color: $primary-color;
-  color: white !important;
-  border-radius: 5px;
-}
-
-/*  Cache le menu burger sur PC et ne l'affiche que sur mobile/tablette */
-.burger-icon,
-.burger-menu {
-  display: none;
-}
-
-/*  Affiche le menu burger uniquement en version mobile/tablette */
+/* Responsive : afficher burger en mobile */
 @media screen and (max-width: 1024px) {
   .burger-icon {
-    display: flex; /*  Affiche l'icône du menu burger */
+    display: flex;
   }
-
   .burger-menu {
-    display: flex; /*  Rend le menu burger fonctionnel */
-    flex-direction: column;
+    display: flex;
   }
-
-  /*  Cache la category-bar pour afficher uniquement le menu burger */
   .category-bar {
     display: none;
   }

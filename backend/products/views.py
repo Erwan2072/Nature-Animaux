@@ -117,12 +117,25 @@ def product_list(request):
     try:
         paginator = PageNumberPagination()
         paginator.page_size = 10
-        products = list(products_collection.find({}))
+
+        # 🔍 Récupération des filtres dans l’URL
+        animal = request.GET.get("animal")
+        category = request.GET.get("category")
+
+        filters = {}
+        if animal:
+            filters["animal"] = animal
+        if category:
+            filters["category"] = category
+
+        # 🐾 On applique les filtres si présents
+        products = list(products_collection.find(filters))
 
         for product in products:
             product["_id"] = str(product["_id"])
             product["title"] = product.get("title", "Produit sans titre")
             product["category"] = product.get("category", "Catégorie inconnue")
+            product["animal"] = product.get("animal", "non défini")  # ✅ Ajout du champ animal
             product["imageUrl"] = product.get("imageUrl") or "assets/default-image.jpg"
 
             # Nettoyage des variations
@@ -139,7 +152,7 @@ def product_list(request):
 
             # Prix principal : le plus bas trouvé dans les variations
             valid_prices = [v["price"] for v in cleaned_variations if isinstance(v["price"], (int, float))]
-            product["price"] = min(valid_prices) if valid_prices else None  # pas de string ici
+            product["price"] = min(valid_prices) if valid_prices else None
 
         # Pagination
         paginated = paginator.paginate_queryset(products, request)
@@ -148,7 +161,7 @@ def product_list(request):
 
     except Exception as e:
         logger.exception("❌ Erreur product_list")
-        return Response({"error": str(e)}, status=500)   # renvoie le message exact
+        return Response({"error": str(e)}, status=500)
 
 
 

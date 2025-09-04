@@ -1,46 +1,68 @@
 <!--  Icône du menu burger (visible seulement sur mobile et tablette) -->
-<div class="burger-icon" (click)="toggleBurgerMenu()" [class.open]="burgerMenuOpen">
-	<div></div>
-	<div></div>
-	<div></div>
+<div class="burger-icon"
+     (click)="toggleBurgerMenu()"
+     [class.open]="burgerMenuOpen"
+     role="button"
+     aria-label="Ouvrir ou fermer le menu"
+     tabindex="0">
+  <div></div>
+  <div></div>
+  <div></div>
 </div>
 
 <!--  Menu burger qui affiche la category-bar en version mobile -->
-<nav class="burger-menu" [class.open]="burgerMenuOpen">
-	<ul>
-		<li *ngFor="let animal of animals" [class.active]="activeMenu === animal.name">
-			<!--  Affichage des catégories principales -->
-			<a (click)="toggleMenu(animal.name)">
-				{{ animal.label }}
-			</a>
+<nav class="burger-menu"
+     [class.open]="burgerMenuOpen"
+     aria-label="Menu mobile catégories">
+  <ul>
+    <li *ngFor="let animal of animals" [class.active]="activeMenu === animal.name">
+      <!-- Catégories principales -->
+      <button (click)="toggleMenu(animal.name)"
+              [attr.aria-expanded]="activeMenu === animal.name"
+              class="animal-btn">
+        {{ animal.label }}
+      </button>
 
-			<!--  Affichage des sous-catégories -->
-			<div class="dropdown" *ngIf="activeMenu === animal.name">
-				<a *ngFor="let category of animal.categories"
-				   [routerLink]="category.link ? ['/products', animal.name, category.link] : []"
-				   (click)="closeMenu()">
-					{{ category.label }}
-				</a>
-			</div>
-		</li>
-	</ul>
+      <!-- Sous-catégories -->
+      <div class="dropdown" *ngIf="activeMenu === animal.name">
+        <button *ngFor="let category of animal.categories"
+                (click)="selectCategory(animal.name, category.label)"
+                class="subcategory-btn">
+          {{ category.label }}
+        </button>
+      </div>
+    </li>
+  </ul>
 </nav>
 
-<!--  Barre des Catégories (Affichée uniquement en desktop) -->
-<nav class="category-bar" [class.show]="!burgerMenuOpen">
-	<!-- Boucle sur les catégories principales -->
-	<div class="category-item" *ngFor="let animal of animals">
-		<a class="category-btn" (click)="toggleMenu(animal.name)">{{ animal.label }}</a>
-		<div class="dropdown" *ngIf="activeMenu === animal.name">
-			<!-- Boucle sur les sous-catégories -->
-			<a *ngFor="let category of animal.categories"
-			   [routerLink]="category.link ? ['/products', animal.name, category.link] : []"
-			   (click)="closeMenu()">
-				{{ category.label }}
-			</a>
-		</div>
-	</div>
 
-	<!--  Barre de recherche -->
-	<input type="text" class="category-search" placeholder="🔍 Rechercher...">
+<!--  Barre des Catégories (Affichée uniquement en desktop) -->
+<nav class="category-bar"
+     [class.show]="!burgerMenuOpen"
+     aria-label="Menu desktop catégories">
+  <!-- Catégories principales -->
+  <div class="category-item" *ngFor="let animal of animals">
+    <button class="category-btn"
+            (click)="toggleMenu(animal.name)"
+            [attr.aria-expanded]="activeMenu === animal.name">
+      {{ animal.label }}
+    </button>
+
+    <div class="dropdown" *ngIf="activeMenu === animal.name">
+      <!-- Sous-catégories -->
+      <button *ngFor="let category of animal.categories"
+              (click)="selectCategory(animal.name, category.label)"
+              class="subcategory-btn">
+        {{ category.label }}
+      </button>
+    </div>
+  </div>
+
+  <!--  Barre de recherche -->
+  <input type="text"
+         class="category-search"
+         placeholder="🔍 Rechercher..."
+         aria-label="Rechercher un produit"
+         [(ngModel)]="searchTerm"
+         (keyup.enter)="onSearch()">
 </nav>

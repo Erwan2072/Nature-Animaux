@@ -1,46 +1,52 @@
 <div class="product-list">
 
-    <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+  <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
 
-    <!--  Filtres déplacés sous le logo -->
-    <div class="filters-container">
-        <h3>Filtrer par catégorie</h3>
-        <div *ngFor="let category of categories">
-            <input type="checkbox"
-                   [checked]="selectedCategories.includes(category)"
-                   (change)="toggleCategoryFilter(category)">
-            <label>{{ category }}</label>
-        </div>
+  <!-- 🔹 Filtres par marque (sous la navbar) -->
+  <div class="filters-container">
+    <h3>Filtrer par marque</h3>
+    <div *ngFor="let brand of brands">
+      <input 
+        type="checkbox"
+        [checked]="selectedBrands.includes(brand)"
+        (change)="toggleBrandFilter(brand)"
+        id="brand-{{ brand }}" />
+      <label [for]="'brand-' + brand">{{ brand }}</label>
     </div>
+  </div>
 
-    <!--  Affichage des produits -->
-    <div *ngIf="filteredProducts.length > 0; else noProducts" class="products-container">
-        <div *ngFor="let product of filteredProducts; trackBy: trackByProductId"
-             class="product-card"
-             (click)="goToProduct(product.id)"
-             style="cursor: pointer;">
+  <!-- 🔹 Affichage des produits -->
+  <div *ngIf="filteredProducts.length > 0; else noProducts" class="products-container">
+    <div *ngFor="let product of filteredProducts; trackBy: trackByProductId"
+         class="product-card"
+         (click)="goToProduct(product.id)"
+         style="cursor: pointer;">
 
-            <!--  Vérifie et affiche l'image du produit -->
-            <img [src]="product.imageUrl && product.imageUrl.trim() !== '' ? product.imageUrl : 'assets/default-product.jpg'"
-                    [alt]="product.title || 'Produit sans titre'"
-                    class="product-image">
+      <!-- Vérifie et affiche l'image du produit -->
+      <img [src]="product.imageUrl && product.imageUrl.trim() !== '' ? product.imageUrl : 'assets/default-product.jpg'"
+           [alt]="product.title || 'Produit sans titre'"
+           class="product-image">
 
+      <!-- Titre du produit -->
+      <h3>{{ product.title || 'Produit sans titre' }}</h3>
 
-            <!--  Affichage du titre -->
-            <h3>{{ product.title || 'Produit sans titre' }}</h3>
+      <!-- Marque -->
+      <p class="product-brand">
+        {{ product.brand || 'Marque inconnue' }}
+      </p>
 
-            <!--  Affichage du prix basé sur les variations -->
-            <p class="product-price" *ngIf="getMinPrice(product) !== null">
-                À partir de {{ getMinPrice(product) }} €
-            </p>
-            <p class="product-outofstock" *ngIf="getMinPrice(product) === null">
-                Prix non disponible
-            </p>
-        </div>
+      <!-- Prix basé sur les variations -->
+      <p class="product-price" *ngIf="getMinPrice(product) !== null">
+        À partir de {{ getMinPrice(product) }} €
+      </p>
+      <p class="product-outofstock" *ngIf="getMinPrice(product) === null">
+        Prix non disponible
+      </p>
     </div>
+  </div>
 
-    <ng-template #noProducts>
-        <p>Aucun produit disponible pour cette catégorie.</p>
-    </ng-template>
+  <ng-template #noProducts>
+    <p>Aucun produit disponible pour cette catégorie.</p>
+  </ng-template>
 
 </div>

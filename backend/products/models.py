@@ -6,7 +6,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 class Product:
-    def __init__(self, title=None, category=None, sub_category=None,
+    def __init__(self, title=None, animal=None, category=None, sub_category=None,
                  brand=None, color=None, description=None,
                  variations=None, image_url=None, product_id=None):
         """
@@ -14,6 +14,7 @@ class Product:
         """
         self._id = product_id
         self.title = title
+        self.animal = animal
         self.category = category
         self.sub_category = sub_category
         self.brand = brand
@@ -26,6 +27,7 @@ class Product:
         try:
             product_data = {
                 "title": self.title or "Produit sans titre",
+                "animal": self.animal,
                 "category": self.category,
                 "sub_category": self.sub_category,
                 "brand": self.brand,

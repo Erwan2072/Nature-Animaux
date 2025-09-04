@@ -47,24 +47,33 @@ export class ApiService {
     return throwError(() => new Error(error.message || "Erreur API"));
   }
 
-  // Obtenir tous les produits avec pagination
-  getProducts(page: number = 1): Observable<any> {
-    const url = `${this.baseUrl}/products/`;
-    const params = new HttpParams().set('page', page.toString());
+  // Obtenir tous les produits avec pagination + filtres animal/category
+getProducts(page: number = 1, animal?: string, category?: string): Observable<any> {
+  const url = `${this.baseUrl}/products/`;
 
-    return this.getHeaders().pipe(
-      switchMap(headers => this.http.get(url, { headers, params })),
-      map((response: any) => {
-        console.log("Produits reçus :", response.results);
-        return {
-          products: response.results || [],
-          next: response.next || null,
-          previous: response.previous || null
-        };
-      }),
-      catchError(this.handleError)
-    );
+  let params = new HttpParams().set('page', page.toString());
+
+  if (animal) {
+    params = params.set('animal', animal.toLowerCase()); // ⚠ toujours en minuscule
   }
+  if (category) {
+    params = params.set('category', category);
+  }
+
+  return this.getHeaders().pipe(
+    switchMap(headers => this.http.get(url, { headers, params })),
+    map((response: any) => {
+      console.log("Produits reçus :", response.results);
+      return {
+        products: response.results || [],
+        next: response.next || null,
+        previous: response.previous || null
+      };
+    }),
+    catchError(this.handleError)
+  );
+}
+
 
   // Récupérer un produit spécifique
   getProductById(id: string): Observable<any> {

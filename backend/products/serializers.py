@@ -29,6 +29,9 @@ class ProductSerializer(serializers.Serializer):
         max_length=255, required=False, allow_blank=True, allow_null=True,
         default="Produit sans titre"
     )
+    animal = serializers.CharField(   # ✅ Ajout du champ animal
+        max_length=50, required=False, allow_blank=True, allow_null=True, default="non défini"
+    )
     imageUrl = serializers.CharField(  # ⚡ garde bien "imageUrl" car ton front l'utilise
         max_length=500, required=False, allow_blank=True, allow_null=True, default=""
     )
@@ -70,13 +73,14 @@ class ProductSerializer(serializers.Serializer):
     def create(self, validated_data):
         """ Création d'un produit """
         variations_data = validated_data.pop('variations', [])
-        print("📥 Variations reçues (create) :", variations_data)  # 🔎 Debug
+        print("📥 Variations reçues (create) :", variations_data)
 
         product_data = validated_data
         product_data['variations'] = variations_data
 
         product_data.setdefault("title", "Produit sans titre")
         product_data.setdefault("imageUrl", "assets/default-image.jpg")
+        product_data.setdefault("animal", "non défini")  # ✅ Ajout par défaut
 
         result = products_collection.insert_one(product_data)
         product_data['_id'] = str(result.inserted_id)
@@ -100,6 +104,8 @@ class ProductSerializer(serializers.Serializer):
             update_data["title"] = "Produit sans titre"
         if "imageUrl" in update_data and not update_data["imageUrl"]:
             update_data["imageUrl"] = "assets/default-image.jpg"
+        if "animal" in update_data and not update_data["animal"]:
+            update_data["animal"] = "non défini"
 
         products_collection.update_one({'_id': product_id}, {'$set': update_data})
         updated_product = products_collection.find_one({'_id': product_id})
