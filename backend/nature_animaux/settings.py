@@ -214,3 +214,7 @@ CSRF_COOKIE_HTTPONLY = True
 BOXTAL_CLIENT_ID = env("BOXTAL_CLIENT_ID", default="")
 BOXTAL_CLIENT_SECRET = env("BOXTAL_CLIENT_SECRET", default="")
 BOXTAL_BASE_URL = env("BOXTAL_BASE_URL", default="https://api.boxtal.build")
+
+# Stripe configuration
+STRIPE_PUBLIC_KEY = os.getenv("STRIPE_PUBLIC_KEY")
+STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY")

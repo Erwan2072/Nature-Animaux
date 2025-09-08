@@ -68,7 +68,7 @@ class DeleteDeliveryChoiceView(generics.DestroyAPIView):
 
 
 # ----------------------------
-# 🚚 Mock dynamique du calcul livraison
+# Mock dynamique du calcul livraison
 # ----------------------------
 class MockDeliveryOptionsView(APIView):
     """
@@ -99,7 +99,7 @@ class MockDeliveryOptionsView(APIView):
             # Valeur par défaut → poids du CartItem
             weight = float(item.weight) if item.weight else 0
 
-            print(f"🛒 Item: {item.product_title} | Qty={item.quantity} | Poids enregistré={item.weight}")
+            print(f"Item: {item.product_title} | Qty={item.quantity} | Poids enregistré={item.weight}")
 
             # Si pas de poids dans le CartItem, tenter côté Mongo
             if weight == 0:
@@ -111,7 +111,7 @@ class MockDeliveryOptionsView(APIView):
                     )
                     if variation and "weight" in variation:
                         weight = float(variation["weight"])
-                        print(f"👉 Fallback Mongo trouvé : {weight}")
+                        print(f"Fallback Mongo trouvé : {weight}")
 
             total_weight += weight * item.quantity
 
@@ -126,7 +126,7 @@ class MockDeliveryOptionsView(APIView):
                 "weight": weight,
             })
 
-        print(f"📦 TOTAL WEIGHT calculé = {total_weight}")
+        print(f"TOTAL WEIGHT calculé = {total_weight}")
 
         if total_weight == 0:
             total_weight = 1  # fallback si aucun poids trouvé

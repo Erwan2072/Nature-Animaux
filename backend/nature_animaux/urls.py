@@ -35,6 +35,7 @@ urlpatterns = [
     path("api/", include('cart.urls', namespace='cart')),
     path("api/orders/", include("orders.urls")),
     path("api/", include("deliveries.urls")),
+    #path("payments/", include("payments.urls")),
 
     # Documentation Swagger & Redoc
     path('swagger.json', schema_view.without_ui(cache_timeout=0), name='schema-json'),
