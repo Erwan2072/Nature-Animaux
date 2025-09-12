@@ -110,9 +110,9 @@ export class NavbarComponent {
   onClickOutside(event: Event) {
     const target = event.target as HTMLElement;
     if (
-      !target.closest('.animal-btn') &&   // ✅ mobile
-      !target.closest('.category-btn') && // ✅ desktop
-      !target.closest('.subcategory-btn') && // ✅ sous-catégories
+      !target.closest('.animal-btn') &&   // mobile
+      !target.closest('.category-btn') && // desktop
+      !target.closest('.subcategory-btn') && // sous-catégories
       !target.closest('.burger-icon') &&
       !target.closest('.burger-menu')
     ) {
