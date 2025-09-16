@@ -147,7 +147,7 @@ Main objectives:
 
 ##  Database
 
-![Database Diagram](./docs/images/database.png)
+![Database Diagram](./docs/images/Database.png)
 
 - **PostgreSQL**: handles users and administrators.  
 - **MongoDB**: manages products with flexible catalog storage.  
