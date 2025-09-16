@@ -5,7 +5,7 @@
 <details>
 <summary>🇫🇷 Lire en Français</summary>
 
-## 📌 Présentation du projet
+## Présentation du projet
 
 Nature & Animaux est un site e-commerce dédié aux produits naturels et animaliers.  
 Le projet vise à remplacer l’ancien site basé sur Wix pour réduire les coûts et offrir plus de liberté technique.  
@@ -20,7 +20,7 @@ Les objectifs principaux :
 
 ---
 
-## 🛠️ Stack Technique
+## Stack Technique
 
 - **Frontend** : Angular (mode standalone, responsive mobile/tablette/desktop).  
 - **Backend** : Django (API REST).  
@@ -30,13 +30,13 @@ Les objectifs principaux :
 
 ---
 
-## 📂 Architecture
+## Architecture
 
 ![Diagramme d’architecture](./docs/images/architecture.png)
 
 ---
 
-## 🗄️ Base de données
+## Base de données
 
 ![Diagramme BDD](./docs/images/Database.png)
 
