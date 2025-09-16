@@ -221,4 +221,4 @@ Erwan Lebreton – Fullstack Developer (Frontend & Backend).
 
 Yoann Gaubert – Project Manager (Nature & Animaux).
 
-</details> ```
+</details>
