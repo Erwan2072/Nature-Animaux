@@ -1,6 +1,6 @@
 # 🌿 Nature & Animaux
 
-![Bannière du site](./docs/images/banner.png)
+![Bannière du site](./docs/images/Banner.png)
 
 <details>
 <summary>🇫🇷 Lire en Français</summary>
@@ -38,7 +38,7 @@ Les objectifs principaux :
 
 ## 🗄️ Base de données
 
-![Diagramme BDD](./docs/images/database.png)
+![Diagramme BDD](./docs/images/Database.png)
 
 - **PostgreSQL** : gestion des utilisateurs et des administrateurs.  
 - **MongoDB** : stockage des produits et gestion flexible du catalogue.  
