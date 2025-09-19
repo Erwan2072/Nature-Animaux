@@ -3,7 +3,7 @@
 	<div class="tabs">
 	  <button (click)="setActiveTab('profile')" [class.active]="activeTab === 'profile'">Profil</button>
 	  <button (click)="setActiveTab('address')" [class.active]="activeTab === 'address'">Adresse</button>
-	  <button (click)="setActiveTab('payment')" [class.active]="activeTab === 'payment'">Paiement</button>
+	  <!--<button (click)="setActiveTab('payment')" [class.active]="activeTab === 'payment'">Paiement</button>-->
 	</div>
 
 	<!--  Onglet Profil -->
@@ -11,6 +11,9 @@
 	  <form [formGroup]="accountForm" (ngSubmit)="saveProfile()">
 		<label>Email</label>
 		<input formControlName="email" type="email" placeholder="Votre email">
+
+		<!-- ✅ Bouton pour demander le changement d’email -->
+		<button type="button" class="validate-button" (click)="changeEmail()">Changer mon email</button>
 
 		<label>Prénom</label>
 		<input formControlName="firstName" type="text" placeholder="Votre prénom">
@@ -24,6 +27,9 @@
 		<button class="validate-button" type="submit"> Enregistrer</button>
 	  </form>
 
+	  <!-- ✅ Message retour API -->
+	  <p *ngIf="message" class="info-message">{{ message }}</p>
+
 	  <!--  Changement de mot de passe -->
 	  <h3>Changer de mot de passe</h3>
 	  <form [formGroup]="passwordForm" (ngSubmit)="changePassword()">
@@ -36,7 +42,6 @@
 		<label>Confirmer le mot de passe</label>
 		<input formControlName="confirmNewPassword" type="password" placeholder="Confirmez le mot de passe">
 
-		<!--  Message d'erreur si les mots de passe ne correspondent pas -->
 		<p *ngIf="passwordMismatch" class="error-message">❌ Les mots de passe ne correspondent pas.</p>
 
 		<button class="validate-button" type="submit">🔒 Modifier le mot de passe</button>
@@ -54,11 +59,9 @@
 		<label>Adresse</label>
 		<input formControlName="address" type="text" placeholder="Votre adresse">
 
-		<!--  Ajout du champ Complément d'adresse -->
 		<label>Complément d'adresse</label>
 		<input formControlName="addressComplement" type="text" placeholder="Bâtiment, étage, etc.">
 
-		<!--  Ajout du champ Interphone -->
 		<label>Interphone</label>
 		<input formControlName="intercom" type="text" placeholder="Code d'accès ou nom interphone">
 
@@ -72,8 +75,8 @@
 	  </form>
 	</div>
 
-	<!--  Onglet Paiement -->
-<div *ngIf="activeTab === 'payment'" class="tab-content">
+	<!--  Onglet Paiement 
+	<div *ngIf="activeTab === 'payment'" class="tab-content">
 	<form [formGroup]="paymentForm">
 	  <label>Numéro de Carte</label>
 	  <input formControlName="cardNumber" type="text" placeholder="1234 5678 9012 3456">
@@ -89,8 +92,9 @@
 
 	  <button class="validate-button" (click)="savePayment()"> Enregistrer le paiement</button>
 	</form>
+	-->
 
-	<!--  Cartes enregistrées -->
+	<!--  Cartes enregistrées 
 	<div *ngIf="savedCards.length > 0" class="saved-cards-container">
 	  <h3>Cartes enregistrées</h3>
 	  <div *ngFor="let card of savedCards; let i = index" class="saved-card">
@@ -102,4 +106,5 @@
 		<button class="delete-button" (click)="deleteCard(i)">🗑️ Supprimer la carte</button>
 	  </div>
 	</div>
-  </div>
+	-->
+</div>

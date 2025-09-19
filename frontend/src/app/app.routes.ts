@@ -93,6 +93,10 @@ export const routes: Routes = [
     loadComponent: () => import('./header/account/account.component').then(m => m.AccountComponent)
   },
   {
+    path: 'confirm-email/:token',
+    loadComponent: () => import('./confirm-email/confirm-email.component').then(m => m.ConfirmEmailComponent)
+  },
+  {
     path: 'orders',
     loadComponent: () => import('./header/orders/orders.component').then(m => m.OrdersComponent)
   },

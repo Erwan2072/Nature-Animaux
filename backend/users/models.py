@@ -35,9 +35,22 @@ class UserManager(BaseUserManager):
 
         return self.create_user(email, password, **extra_fields)
 
+
 class User(AbstractBaseUser, PermissionsMixin):
     """Modèle utilisateur personnalisé avec email comme identifiant unique."""
+
+    # Email principal (identifiant de connexion)
     email = models.EmailField(_("email address"), unique=True)
+    is_email_verified = models.BooleanField(default=False)  # ✅ email confirmé ou non
+
+    # Nouvel email en attente de confirmation
+    pending_email = models.EmailField(
+        _("pending email"),
+        blank=True,
+        null=True,
+        unique=False
+    )
+
     first_name = models.CharField(_("first name"), max_length=30, blank=True, null=True)
     last_name = models.CharField(_("last name"), max_length=30, blank=True, null=True)
     is_active = models.BooleanField(_("active"), default=True)

@@ -4,7 +4,7 @@ from datetime import timedelta
 import cloudinary
 import cloudinary.uploader
 import cloudinary.api
-import environ   # <--- AJOUT
+import environ
 
 # Base Directory
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -12,6 +12,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Initialisation de django-environ
 env = environ.Env()
 environ.Env.read_env(os.path.join(BASE_DIR, ".env"))  # charge .env
+environ.Env.read_env(os.path.join(BASE_DIR.parent, ".env"))
+
 
 SECRET_KEY = env("DJANGO_SECRET_KEY", default="django-insecure-3#&plqt0d!hvl+q98k8@^i+yy*762!t4ixe_===)(pkn#&4wua")
 
@@ -218,3 +220,18 @@ BOXTAL_BASE_URL = env("BOXTAL_BASE_URL", default="https://api.boxtal.build")
 # Stripe configuration
 #STRIPE_PUBLIC_KEY = os.getenv("STRIPE_PUBLIC_KEY")
 #STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY")
+
+# ==========================
+# Email configuration (.env)
+# ==========================
+
+EMAIL_BACKEND = env("EMAIL_BACKEND", default="django.core.mail.backends.smtp.EmailBackend")
+EMAIL_HOST = env("EMAIL_HOST", default="smtp.gmail.com")
+EMAIL_PORT = env.int("EMAIL_PORT", default=587)
+EMAIL_USE_TLS = env.bool("EMAIL_USE_TLS", default=True)
+EMAIL_HOST_USER = env("EMAIL_HOST_USER", default="")
+EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD", default="")
+DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default=EMAIL_HOST_USER)
+
+# URL frontend (Angular) pour les liens d'activation
+FRONTEND_URL = env("FRONTEND_URL", default="http://localhost:4200")

@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { HttpClient } from '@angular/common/http'; //  Importation d'HttpClient
+import { HttpClient } from '@angular/common/http';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-account',
@@ -18,26 +19,28 @@ export class AccountComponent implements OnInit {
   paymentForm!: FormGroup;
   passwordForm!: FormGroup;
   passwordMismatch: boolean = false;
-  apiUrl: string = 'https://api.tonsite.com/users'; //  URL API à modifier selon ton backend
+  apiUrl: string = 'http://127.0.0.1:8000/users'; // ✅ corrigé vers ton backend
+  message: string = ''; // ✅ pour afficher les retours utilisateur
 
-  //  Liste des pays pour le champ "Pays"
   countries: string[] = [
     "Afghanistan", "Afrique du Sud", "Albanie", "Algérie", "Allemagne", "Andorre", "Angola",
     "France", "Canada", "États-Unis", "Royaume-Uni", "Japon", "Italie", "Espagne", "Brésil",
     "Russie", "Chine", "Inde", "Mexique", "Argentine", "Australie", "Nouvelle-Zélande"
   ];
 
-  //  Gestion des cartes enregistrées
   savedCards: { last4: string; cardName: string; cardExpiry: string }[] = [];
 
-  constructor(private fb: FormBuilder, private http: HttpClient) {}
+  constructor(
+    private fb: FormBuilder,
+    private http: HttpClient,
+    private authService: AuthService // ✅ injection du service
+  ) {}
 
   ngOnInit(): void {
     this.initForms();
-    this.loadUserData(); //  Charge les données utilisateur au démarrage
+    this.loadUserData();
   }
 
-  //  Initialisation des formulaires
   private initForms() {
     this.accountForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -71,25 +74,28 @@ export class AccountComponent implements OnInit {
     });
   }
 
-  //  Vérification de la correspondance des mots de passe
   private checkPasswordMatch() {
     const newPassword = this.passwordForm.get('newPassword')?.value;
     const confirmNewPassword = this.passwordForm.get('confirmNewPassword')?.value;
     this.passwordMismatch = newPassword !== confirmNewPassword;
   }
 
-  //  Change l'onglet actif
   setActiveTab(tab: string) {
     this.activeTab = tab;
   }
 
-  //  Chargement des données utilisateur depuis l'API
   loadUserData() {
-    this.http.get<any>(`${this.apiUrl}/me`).subscribe(
+    this.http.get<any>(`${this.apiUrl}/profile/`).subscribe(
       (data) => {
-        this.accountForm.patchValue(data.account);
-        this.addressForm.patchValue(data.address);
-        this.paymentForm.patchValue(data.payment);
+        this.accountForm.patchValue({
+          email: data.email,
+          firstName: data.first_name,
+          lastName: data.last_name,
+          phone: data.phone || '',
+          company: data.company || ''
+        });
+        this.addressForm.patchValue(data.address || {});
+        this.paymentForm.patchValue(data.payment || {});
         if (data.savedCards) {
           this.savedCards = data.savedCards;
         }
@@ -98,11 +104,10 @@ export class AccountComponent implements OnInit {
     );
   }
 
-  //  Sauvegarde des modifications (envoi des données au backend)
   saveProfile() {
     if (this.accountForm.valid) {
-      this.http.put(`${this.apiUrl}/update-profile`, this.accountForm.value).subscribe(
-        () => console.log(' Profil enregistré'),
+      this.http.patch(`${this.apiUrl}/profile/update/`, this.accountForm.value).subscribe(
+        () => this.message = 'Profil enregistré ✅',
         (error) => console.error('❌ Erreur lors de l\'enregistrement du profil', error)
       );
     }
@@ -111,7 +116,7 @@ export class AccountComponent implements OnInit {
   saveAddress() {
     if (this.addressForm.valid) {
       this.http.put(`${this.apiUrl}/update-address`, this.addressForm.value).subscribe(
-        () => console.log(' Adresse enregistrée'),
+        () => this.message = 'Adresse enregistrée ✅',
         (error) => console.error('❌ Erreur lors de l\'enregistrement de l\'adresse', error)
       );
     }
@@ -125,50 +130,50 @@ export class AccountComponent implements OnInit {
         cardExpiry: this.paymentForm.value.cardExpiry
       };
       this.savedCards.push(newCard);
-      console.log(' Paiement enregistré', this.savedCards);
 
       this.http.put(`${this.apiUrl}/update-payment`, this.paymentForm.value).subscribe(
-        () => console.log(' Paiement enregistré'),
+        () => this.message = 'Paiement enregistré ✅',
         (error) => console.error(' Erreur lors de l\'enregistrement du paiement', error)
       );
     }
   }
 
-  //  Modifier une carte
   editCard(index: number) {
     const card = this.savedCards[index];
     this.paymentForm.patchValue({
-      cardNumber: '', // On ne peut pas récupérer un numéro de carte complet pour des raisons de sécurité
+      cardNumber: '',
       cardName: card.cardName,
       cardExpiry: card.cardExpiry,
-      cardCVV: '' //  CVV doit être re-saisi
+      cardCVV: ''
     });
-    console.log('📝 Modification de la carte :', card);
   }
 
-
-  //  Supprimer une carte enregistrée
   deleteCard(index: number) {
-    this.savedCards.splice(index, 1); //  Supprime la carte localement
-
-    //  Envoie la suppression au backend
+    this.savedCards.splice(index, 1);
     this.http.delete(`${this.apiUrl}/delete-card/${index}`).subscribe(
-      () => console.log('Carte supprimée'),
+      () => this.message = 'Carte supprimée ✅',
       (error) => console.error('Erreur lors de la suppression de la carte', error)
     );
   }
 
-  //  Mise à jour du mot de passe
   changePassword() {
     this.checkPasswordMatch();
-
     if (this.passwordForm.valid && !this.passwordMismatch) {
       this.http.put(`${this.apiUrl}/change-password`, this.passwordForm.value).subscribe(
-        () => console.log('Mot de passe mis à jour'),
+        () => this.message = 'Mot de passe mis à jour ✅',
         (error) => console.error('Erreur lors de la mise à jour du mot de passe', error)
       );
     } else {
       console.warn('Erreur : les mots de passe ne correspondent pas.');
     }
+  }
+
+  // ✅ Nouvelle méthode : demande de changement d’email
+  changeEmail() {
+    const newEmail = this.accountForm.value.email;
+    this.authService.requestEmailChange(newEmail).subscribe({
+      next: (res) => this.message = res.message,
+      error: (err) => console.error('❌ Erreur lors du changement d’email', err)
+    });
   }
 }

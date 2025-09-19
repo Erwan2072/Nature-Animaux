@@ -1,0 +1,6 @@
+<div class="confirm-email-container">
+  <h2>Confirmation d'email</h2>
+  <p [ngClass]="{ 'success-message': status === 'success', 'error-message': status === 'error' }" role="alert">
+  {{ message }}
+</p>
+</div>
